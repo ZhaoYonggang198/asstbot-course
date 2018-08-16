@@ -11,6 +11,8 @@ import id from './modules/id'
 import inputValue from './modules/inputValue'
 import asr from './modules/asr'
 import curSurvey from './modules/curSurvey'
+import phone from './modules/coursetable/phone'
+import courses from './modules/coursetable/courses'
 
 Vue.use(Vuex)
 
@@ -28,7 +30,9 @@ export default new Vuex.Store({
     id,
     inputValue,
     asr,
-    curSurvey
+    curSurvey,
+    phone,
+    courses
   },
   strict: debug
 })

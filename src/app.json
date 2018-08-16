@@ -12,7 +12,10 @@
     "pages/surveyChat/main",
     "pages/surveyProfile/main",
     "pages/surveySubjects/main",
-    "pages/surveyTitleAndIntro/main"
+    "pages/surveyTitleAndIntro/main",
+    "pages/course/main",
+    "pages/courseinfo/main",
+    "pages/phone/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
