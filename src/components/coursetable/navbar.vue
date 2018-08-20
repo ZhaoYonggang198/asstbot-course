@@ -72,11 +72,11 @@ export default {
 <style scoped>
 .weui-navbar__slider {
   width: 3em;
-  background: #2b85e4!important
+  /* background: #2b85e4!important */
 }
 
 .weui-bar__item_on {
-  color:  #2b85e4!important;
+  /* color:  #2b85e4!important; */
 }
 
 .weui-navbar {

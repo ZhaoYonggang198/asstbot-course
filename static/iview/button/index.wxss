@@ -42,7 +42,7 @@
 
 .i-btn-primary {
   color: #fff !important;
-  background: #2d8cf0 !important
+  background: #1cb2b9 !important
 }
 
 .i-btn-ghost {

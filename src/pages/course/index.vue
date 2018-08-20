@@ -170,6 +170,6 @@ export default {
   display: flex;
 }
 .active-course {
-  border: solid 2rpx #2b85e4;
+  border: solid 3rpx #1cb2b9 !important;
 }
 </style>

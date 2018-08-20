@@ -3,7 +3,7 @@
     <view class="title-bg-color">
       <device-top-padding></device-top-padding>
     </view>
-    <image src="../../static/image/bot-title-bar.png" class="background"></image>
+    <image src="../../static/image/bot-title-bar.png" class="background"/>
     <view class="logo">
       <da-logo />
       <!-- <return-button v-else/> -->
