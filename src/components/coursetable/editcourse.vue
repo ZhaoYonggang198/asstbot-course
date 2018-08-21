@@ -53,7 +53,7 @@ export default {
       if (this.scene === 'add') {
         return `添加${intervalDesc}课程`
       } else {
-        return `编辑${intervalDesc}课程`
+        return `编辑课程`
       }
     },
     selectCourses () {

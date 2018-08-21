@@ -5,7 +5,7 @@
 // 此处主机域名修改成腾讯云解决方案分配的域名
 var host = 'https://xiaodamp.cn'
 
-var hostRoot = `${host}/asstbot`
+var hostRoot = `${host}/asst`
 
 export default {
   service: {

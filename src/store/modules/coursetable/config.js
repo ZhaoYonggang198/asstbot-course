@@ -12,25 +12,25 @@ export default {
     host,
 
     // 登录地址，用于建立会话
-    loginUrl: `${host}/mpapp/login`,
+    loginUrl: `${host}/api/course/login`,
 
     // 测试的请求地址，用于测试会话
-    requestUrl: `${host}/mpapp/user`,
+    requestUrl: `${host}/api/course/user`,
 
     // 测试的信道服务地址
-    tunnelUrl: `${host}/mpapp/tunnel`,
+    tunnelUrl: `${host}/api/course/tunnel`,
 
     // 上传图片接口
-    uploadUrl: `${host}/mpapp/upload`,
+    uploadUrl: `${host}/api/course/upload`,
 
-    openIdUrl: `${host}/mpapp/openid`,
+    openIdUrl: `${host}/asst/openid`,
 
-    courseUrl: `${host}/mpapp/course`,
+    courseUrl: `${host}/api/course/course`,
 
-    phoneUrl: `${host}/mpapp/phone`,
+    phoneUrl: `${host}/api/course/phone`,
 
-    requestCodeUrl: `${host}/phone/request/code`,
+    requestCodeUrl: `${host}/api/oauth/request/code`,
 
-    verifyCodeUrl: `${host}/phone/login`
+    verifyCodeUrl: `${host}/api/oauth/login`
   }
 }
