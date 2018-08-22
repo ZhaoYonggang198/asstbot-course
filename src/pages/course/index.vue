@@ -1,6 +1,6 @@
 <template lang="pug">
 view(class="page content")
-  title-bar(title="")
+  title-bar(title="课表")
   view(class="course-table")
     view(class="weui-tab")
       view(class="tab-title")
@@ -10,34 +10,37 @@ view(class="page content")
             :key="dayIdx" v-if="activeDay == dayIdx")
           scroll-view(scroll-y='true' style="height: auto")
             block(v-for="(interval, intervalIdx) in day.interval" :key="intervalIdx")
-              i-panel(:title="interval.name" class="interval" v-if="editmode")
-                i-cell-group
+              view(class="weui-cells__title") {{interval.name}}
+              view(class="weui-cells weui-cells_after-title")
+                block(v-if="!editmode")
                   block(v-if="interval.course.length>0")
-                    block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
-                      view(v-if="activeDay==dayIdx && activeInterval==intervalIdx && activeCourse==courseIdx"
-                        class="active-course")
-                        i-cell(:title="course" @iclick="toggleCourse(dayIdx, intervalIdx, courseIdx)")
+                    block(v-for="(course, k) in interval.course" :key="k")
+                      view(class="weui-cell")
+                        view(class="weui-cell__bd") {{course}}
+                  block(v-else)
+                    view(class="weui-cell")
+                      view(class="weui-cell__bd") 休息
+                block(v-else)
+                  block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
+                    view(class="active-course" v-if="activeDay==dayIdx && activeInterval==intervalIdx && activeCourse==courseIdx")
+                      view(class="weui-cell" @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
+                        view(class="weui-cell__bd") {{course}}
+                      view(class="weui-celll")
                         course-operation(:dayIdx="dayIdx" :intervalIdx="intervalIdx" :courseIdx="courseIdx"
                           @configdone="toggleCourse(dayIdx, intervalIdx, courseIdx)"
                           @editcourse="editCourse(dayIdx, intervalIdx, courseIdx)")
-                      block(v-else)
-                        i-cell(:title="course" is-link="true" @iclick="toggleCourse(dayIdx, intervalIdx, courseIdx)")
-                  i-cell(title="添加课程" @iclick="addcourse(dayIdx, intervalIdx)") 
-                    i-icon(type="add" slot="icon")
-              i-panel(:title="interval.name" class="interval" v-else)
-                i-cell-group
-                  block(v-if="interval.course.length>0")
-                    block(v-for="(course, k) in interval.course" :key="k")
-                      i-cell(:title="course")
-                  block(v-else)
-                    i-cell(title="休息")
-  view(class="weui-flex")
+                    view(class="weui-cell weui-cell_access" v-else @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
+                      view(class="weui-cell__bd") {{course}}
+                      view(class="weui-cell__ft weui-cell__ft_in-access")
+                  view(class="weui-cell weui-cell_link" @click="addcourse(dayIdx, intervalIdx)") 
+                    view(class="weui-cell__bd") 添加更多
+  view(class="weui-flex bottom-button")
     view(class="weui-flex__item")
-      i-button(type="ghost" size="small" @iclick="toggleEditMode") {{editbutton}}
+      button(size="small" @click="toggleEditMode") {{editbutton}}
     view(class="weui-flex__item")
-      i-button(open-type="share" size="small" type="ghost") 分享课表
+      button(open-type="share" type="ghost") 分享课表
     view(class="weui-flex__item")
-      i-button(type="primary" size="small" @iclick="bindphone") 关联小爱
+      button(type="primary"  @click="bindphone") 关联小爱
   editcourse(v-if="inediting" @editdone="editdone"
     :scene="scene" :day="editday" :interval="editinterval" :course="editcourse")
 </template>
@@ -172,4 +175,31 @@ export default {
 .active-course {
   border: solid 3rpx #1cb2b9 !important;
 }
+
+.bottom-button {
+  padding-top: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.bottom-button button {
+  font-size: 28rpx;
+  line-height: 2;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+}
+
+.weui-cells {
+  font-size: 28rpx;
+  background: #fff
+}
+
+.weui-cells:before {
+  border: none;
+}
+
+.weui-cells:after {
+  border: none;
+}
+
+
 </style>

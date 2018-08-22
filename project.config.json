@@ -5,13 +5,13 @@
 	},
 	"setting": {
 		"urlCheck": true,
-		"es6": false,
+		"es6": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.1.3",
+	"libVersion": "2.0.4",
 	"appid": "wx7354d1988386caee",
 	"projectname": "xiaoda-assistant-course",
 	"svr": "",
@@ -57,7 +57,7 @@
 					"id": 2,
 					"name": "问生活",
 					"pathName": "pages/courseinfo/main",
-					"query": "user=o44gY42aAkof0IDu0CThL_WqiYds",
+					"query": "user=oNijH5ZWW7iEm8z_gAWutEI8HUXU",
 					"scene": "1008"
 				},
 				{

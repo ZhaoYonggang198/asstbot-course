@@ -20,12 +20,12 @@ view(class="page")
     view(class="weui-flex")
       view(class="weui-flex__item")
         i-input(:value="inputCode" @change="codechange" type="number" maxlength="6" title="验证码" placeholder="请输入验证码")
-      i-button(type="info" size="small" :disabled="vcodeDisable" @iclick="requestCode") {{vcodeOperation}}
-  view(class="weui-flex")
+      i-button(size="small" :disabled="vcodeDisable" @iclick="requestCode") {{vcodeOperation}}
+  view(class="weui-flex bottom-button")
     view(class="weui-flex__item")
-      i-button(type="error" @iclick="formReset" size="small" :disabled='bindPhone.length === 0') 解绑
+      button(@click="formReset" size="small" :disabled='bindPhone.length === 0') 解绑
     view(class="weui-flex__item")
-      i-button(type="primary" @iclick="formSubmit" size="small" :disabled='sumbitDisable') 绑定
+      button(type="primary" @click="formSubmit" size="small" :disabled='sumbitDisable') 绑定
 </template>
 
 <script>
@@ -201,5 +201,16 @@ export default {
 .swiper-item image {
   height: 400rpx;
   width: 600rpx;
+}
+
+.bottom-button {
+  margin-bottom: 40rpx;
+}
+
+.bottom-button button {
+  font-size: 28rpx;
+  line-height: 2;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
 }
 </style>
