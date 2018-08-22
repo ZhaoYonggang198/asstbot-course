@@ -7,7 +7,7 @@ view(class="page content")
         nav-bar(:navItems="weekdays" :current="activeDay"  @tabActive="tabActive")/
       view(class="weui-tab__panel")
         swiper(@change="swiperchange" :current="activeDay" style="height: 100%")
-          swiper-item(v-for="(day, dayIdx) in courseInfo" :key="dayIdx")
+          swiper-item(v-for="(day, dayIdx) in courseInfo" :key="dayIdx" )
             view(class="weui-tab__content" )
               scroll-view(scroll-y='true' style="height: auto")
                 block(v-for="(interval, intervalIdx) in day.interval" :key="intervalIdx")
@@ -137,7 +137,11 @@ export default {
       this.editinterval = interval
     },
     toggleEditMode () {
-      this.editmode = !this.editmode
+      if (this.editmode) {
+        this.clearEditmode()
+      } else {
+        this.setEditmode()
+      }
     },
     configDone (day, interval, course) {
       this.toggleCourse(day, interval, course)
@@ -145,6 +149,16 @@ export default {
     },
     swiperchange (event) {
       this.activeDay = event.mp.detail.current
+      this.activeInterval = -1
+      this.activeCourse = -1
+    },
+    setEditmode () {
+      this.editmode = true
+      this.activeInterval = -1
+      this.activeCourse = -1
+    },
+    clearEditmode () {
+      this.editmode = false
       this.activeInterval = -1
       this.activeCourse = -1
     }
@@ -160,6 +174,7 @@ export default {
       this.activeDay = (weekday === 0 ? 6 : (weekday - 1))
     })
     this.inediting = false
+    this.clearEditmode()
   },
 
   onShareAppMessage: function () {
