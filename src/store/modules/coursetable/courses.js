@@ -69,7 +69,7 @@ var getBackEndCourse = function (frontEnd) {
   let backend = {}
   for (let dayIdx in weekdays) {
     backend[weekdays[dayIdx].backend] = {}
-    for (let intervalIdx in intervals) {
+    for (var intervalIdx in intervals) {
       backend[weekdays[dayIdx].backend][intervals[intervalIdx].backend] =
         frontEnd[dayIdx].interval[intervalIdx].course
     }

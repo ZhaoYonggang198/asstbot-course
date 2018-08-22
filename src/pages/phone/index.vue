@@ -131,6 +131,7 @@ export default {
               icon: 'success',
               mask: true
             })
+            wx.navigateBack()
           })
           .catch((err) => {
             console.log(err)

@@ -27,12 +27,12 @@ view(class="page content")
                         view(class="weui-cell__bd") {{course}}
                       view(class="weui-celll")
                         course-operation(:dayIdx="dayIdx" :intervalIdx="intervalIdx" :courseIdx="courseIdx"
-                          @configdone="toggleCourse(dayIdx, intervalIdx, courseIdx)"
+                          @configdone="configDone(dayIdx, intervalIdx, courseIdx)"
                           @editcourse="editCourse(dayIdx, intervalIdx, courseIdx)")
                     view(class="weui-cell weui-cell_access" v-else @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
                       view(class="weui-cell__bd") {{course}}
                       view(class="weui-cell__ft weui-cell__ft_in-access")
-                  view(class="weui-cell weui-cell_link" @click="addcourse(dayIdx, intervalIdx)") 
+                  view(class="weui-cell weui-cell_link" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval == -1") 
                     view(class="weui-cell__bd") 添加更多
   view(class="weui-flex bottom-button")
     view(class="weui-flex__item")
@@ -133,6 +133,10 @@ export default {
     },
     toggleEditMode () {
       this.editmode = !this.editmode
+    },
+    configDone (day, interval, course) {
+      this.toggleCourse(day, interval, course)
+      this.$store.dispatch('saveCourses', this.courseInfo)
     }
   },
 
@@ -151,7 +155,7 @@ export default {
 
   onShareAppMessage: function () {
     return {
-      path: `/pages/course/main?user=${this.openid}`
+      path: `/pages/courseinfo/main?user=${this.openid}`
     }
   }
 }

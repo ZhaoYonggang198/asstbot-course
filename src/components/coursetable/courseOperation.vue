@@ -22,21 +22,18 @@ export default {
       this.$store.commit('moveupCourse', {day: this.dayIdx,
         interval: this.intervalIdx,
         course: this.courseIdx})
-      this.$store.dispatch('saveCourses', this.courseInfo)
     },
     movedowncourse () {
       this.$emit('configdone')
       this.$store.commit('movedownCourse', {day: this.dayIdx,
         interval: this.intervalIdx,
         course: this.courseIdx})
-      this.$store.dispatch('saveCourses', this.courseInfo)
     },
     removecourse () {
       this.$emit('configdone')
       this.$store.commit('deleteCourse', {day: this.dayIdx,
         interval: this.intervalIdx,
         course: this.courseIdx})
-      this.$store.dispatch('saveCourses', this.courseInfo)
     }
   }
 }
