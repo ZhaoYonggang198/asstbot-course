@@ -61,7 +61,6 @@ export default {
     ...mapActions([
       'getCourses',
       'getOtherCourses',
-      'mergeCourses',
       'saveCourses'
     ]),
     tabActive (index) {
@@ -73,11 +72,13 @@ export default {
       })
     },
     mergecourse () {
+      console.log('mergecourse')
+      console.log(this.$store.getters.allCourses)
       if (this.$store.getters.allCourses.length > 0) {
         wx.showModal({
           title: '你的课表将会被覆盖',
-          content: '现在确认要继续吗？',
-          success: function (res) {
+          content: '确认要复制吗？',
+          success: (res) => {
             if (res.confirm) {
               this.copyCourses()
             }
@@ -112,6 +113,7 @@ export default {
           this.courseInfo = courses
         })
     }
+    this.getCourses()
   }
 }
 </script>

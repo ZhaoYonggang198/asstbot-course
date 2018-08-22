@@ -56,7 +56,7 @@
 				{
 					"id": 2,
 					"name": "问生活",
-					"pathName": "pages/courseinfo/main",
+					"pathName": "pages/sharedcourse/main",
 					"query": "user=oNijH5ZWW7iEm8z_gAWutEI8HUXU",
 					"scene": "1008"
 				},

@@ -34,13 +34,16 @@ view(class="page content")
                       view(class="weui-cell__ft weui-cell__ft_in-access")
                   view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval == -1") 
                     view(class="weui-cell__bd") 添加更多
-  view(class="weui-flex bottom-button")
+  view(class="weui-flex bottom-button" v-if="!editmode")
     view(class="weui-flex__item")
-      button(size="small" @click="toggleEditMode") {{editbutton}}
+      button(class="button" size="small" @click="toggleEditMode") 编辑课程
+    view(class="weui-flex__item" )
+      button(class="button" open-type="share" type="ghost") 分享课表
     view(class="weui-flex__item")
-      button(open-type="share" type="ghost") 分享课表
+      button(class="button" type="primary"  @click="bindphone") 关联小爱
+  view(class="weui-flex bottom-button" v-else)
     view(class="weui-flex__item")
-      button(type="primary"  @click="bindphone") 关联小爱
+      button(class="weui-btn" type="primary" @click="toggleEditMode") 完成编辑
   editcourse(v-if="inediting" @editdone="editdone"
     :scene="scene" :day="editday" :interval="editinterval" :course="editcourse")
 </template>
@@ -184,9 +187,15 @@ export default {
   margin-bottom: 40rpx;
 }
 
-.bottom-button button {
+.bottom-button .button {
   font-size: 28rpx;
   line-height: 2;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+}
+
+.bottom-button .weui-btn {
+  font-size: 28rpx;
   margin-left: 20rpx;
   margin-right: 20rpx;
 }
