@@ -32,7 +32,7 @@ view(class="page content")
                     view(class="weui-cell weui-cell_access" v-else @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
                       view(class="weui-cell__bd") {{course}}
                       view(class="weui-cell__ft weui-cell__ft_in-access")
-                  view(class="weui-cell weui-cell_link" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval == -1") 
+                  view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval == -1") 
                     view(class="weui-cell__bd") 添加更多
   view(class="weui-flex bottom-button")
     view(class="weui-flex__item")
@@ -204,5 +204,8 @@ export default {
   border: none;
 }
 
+.add-more {
+  color: #586C94
+}
 
 </style>
