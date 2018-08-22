@@ -27,13 +27,13 @@ export default {
       type: Object,
       default: ['选项一', '选项二', '选项三']
     },
-    defaultIndex: {
+    current: {
       type: Number,
       default: 0
     }
   },
   watch: {
-    defaultIndex: function (val) {
+    current: function (val) {
       this.activeIndex = val
       this.$emit('tabActive', val)
     }

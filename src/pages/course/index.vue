@@ -4,36 +4,37 @@ view(class="page content")
   view(class="course-table")
     view(class="weui-tab")
       view(class="tab-title")
-        nav-bar(:navItems="weekdays" :defaultIndex="curDay" @tabActive="tabActive")/
+        nav-bar(:navItems="weekdays" :current="activeDay"  @tabActive="tabActive")/
       view(class="weui-tab__panel")
-        view(class="weui-tab__content" v-for="(day, dayIdx) in courseInfo"
-            :key="dayIdx" v-if="activeDay == dayIdx")
-          scroll-view(scroll-y='true' style="height: auto")
-            block(v-for="(interval, intervalIdx) in day.interval" :key="intervalIdx")
-              view(class="weui-cells__title") {{interval.name}}
-              view(class="weui-cells weui-cells_after-title")
-                block(v-if="!editmode")
-                  block(v-if="interval.course.length>0")
-                    block(v-for="(course, k) in interval.course" :key="k")
-                      view(class="weui-cell")
-                        view(class="weui-cell__bd") {{course}}
-                  block(v-else)
-                    view(class="weui-cell")
-                      view(class="weui-cell__bd") 休息
-                block(v-else)
-                  block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
-                    view(class="active-course" v-if="activeDay==dayIdx && activeInterval==intervalIdx && activeCourse==courseIdx")
-                      view(class="weui-cell" @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
-                        view(class="weui-cell__bd") {{course}}
-                      view(class="weui-celll")
-                        course-operation(:dayIdx="dayIdx" :intervalIdx="intervalIdx" :courseIdx="courseIdx"
-                          @configdone="configDone(dayIdx, intervalIdx, courseIdx)"
-                          @editcourse="editCourse(dayIdx, intervalIdx, courseIdx)")
-                    view(class="weui-cell weui-cell_access" v-else @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
-                      view(class="weui-cell__bd") {{course}}
-                      view(class="weui-cell__ft weui-cell__ft_in-access")
-                  view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval == -1") 
-                    view(class="weui-cell__bd") 添加更多
+        swiper(@change="swiperchange" :current="activeDay" style="height: 100%")
+          swiper-item(v-for="(day, dayIdx) in courseInfo" :key="dayIdx")
+            view(class="weui-tab__content" )
+              scroll-view(scroll-y='true' style="height: auto")
+                block(v-for="(interval, intervalIdx) in day.interval" :key="intervalIdx")
+                  view(class="weui-cells__title") {{interval.name}}
+                  view(class="weui-cells weui-cells_after-title")
+                    block(v-if="!editmode")
+                      block(v-if="interval.course.length>0")
+                        block(v-for="(course, k) in interval.course" :key="k")
+                          view(class="weui-cell")
+                            view(class="weui-cell__bd") {{course}}
+                      block(v-else)
+                        view(class="weui-cell")
+                          view(class="weui-cell__bd") 休息
+                    block(v-else)
+                      block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
+                        view(class="active-course" v-if="activeDay==dayIdx && activeInterval==intervalIdx && activeCourse==courseIdx")
+                          view(class="weui-cell" @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
+                            view(class="weui-cell__bd") {{course}}
+                          view(class="weui-celll")
+                            course-operation(:dayIdx="dayIdx" :intervalIdx="intervalIdx" :courseIdx="courseIdx"
+                              @configdone="configDone(dayIdx, intervalIdx, courseIdx)"
+                              @editcourse="editCourse(dayIdx, intervalIdx, courseIdx)")
+                        view(class="weui-cell weui-cell_access" v-else @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
+                          view(class="weui-cell__bd") {{course}}
+                          view(class="weui-cell__ft weui-cell__ft_in-access")
+                      view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval == -1") 
+                        view(class="weui-cell__bd") 添加更多
   view(class="weui-flex bottom-button" v-if="!editmode")
     view(class="weui-flex__item")
       button(class="button" size="small" @click="toggleEditMode") 编辑课程
@@ -140,6 +141,9 @@ export default {
     configDone (day, interval, course) {
       this.toggleCourse(day, interval, course)
       this.$store.dispatch('saveCourses', this.courseInfo)
+    },
+    swiperchange (event) {
+      this.activeDay = event.mp.detail.current
     }
   },
 
@@ -150,7 +154,7 @@ export default {
     this.getCourses().then(() => {
       var date = new Date()
       var weekday = date.getDay()
-      this.curDay = (weekday === 0 ? 6 : (weekday - 1))
+      this.activeDay = (weekday === 0 ? 6 : (weekday - 1))
     })
     this.inediting = false
   },

@@ -4,19 +4,20 @@ view(class="page content")
   view(class="course-table")
     view(class="weui-tab")
       view(class="tab-title")
-        nav-bar(:navItems="weekdays" :defaultIndex="curDay" @tabActive="tabActive")/
+        nav-bar(:navItems="weekdays" :current="activeDay" @tabActive="tabActive")/
       view(class="weui-tab__panel")
-        view(class="weui-tab__content" v-for="(day, index) in courseInfo"
-            :key="index" v-if="activeDay == index")
-          scroll-view(scroll-y='true' style="height: auto")
-            block(v-for="(interval, j) in day.interval" :key="j")
-              i-panel(:title="interval.name" class="interval")
-                i-cell-group
-                  block(v-if="interval.course.length>0")
-                    block(v-for="(course, k) in interval.course" :key="k")
-                      i-cell(:title="course")
-                  block(v-else)
-                    i-cell(title="休息")
+        swiper(@change="swiperchange" :current="activeDay" style="height: 100%")
+          swiper-item(v-for="(day, dayIdx) in courseInfo" :key="dayIdx")
+            view(class="weui-tab__content" )
+              scroll-view(scroll-y='true' style="height: auto")
+                block(v-for="(interval, j) in day.interval" :key="j")
+                  i-panel(:title="interval.name" class="interval")
+                    i-cell-group
+                      block(v-if="interval.course.length>0")
+                        block(v-for="(course, k) in interval.course" :key="k")
+                          i-cell(:title="course")
+                      block(v-else)
+                        i-cell(title="休息")
   view(class="weui-flex bottom-button")
     view(class="weui-flex__item")
       button(size="small" @click="gotocourse") 回到主页    
@@ -72,8 +73,6 @@ export default {
       })
     },
     mergecourse () {
-      console.log('mergecourse')
-      console.log(this.$store.getters.allCourses)
       if (this.$store.getters.allCourses.length > 0) {
         wx.showModal({
           title: '你的课表将会被覆盖',
@@ -99,6 +98,9 @@ export default {
             url: '/pages/course/main'
           })
         })
+    },
+    swiperchange (event) {
+      this.activeDay = event.mp.detail.current
     }
   },
 
