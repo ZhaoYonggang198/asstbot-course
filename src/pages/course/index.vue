@@ -141,7 +141,6 @@ export default {
   },
 
   created () {
-
   },
 
   onLoad () {
@@ -155,7 +154,7 @@ export default {
 
   onShareAppMessage: function () {
     return {
-      path: `/pages/courseinfo/main?user=${this.openid}`
+      path: `/pages/sharedcourse/main?user=${this.openid}`
     }
   }
 }

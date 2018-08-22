@@ -73,11 +73,29 @@ export default {
       })
     },
     mergecourse () {
-      this.$store.commit('mergeCourses', this.courseInfo)
+      if (this.$store.getters.allCourses.length > 0) {
+        wx.showModal({
+          title: '你的课表将会被覆盖',
+          content: '现在确认要继续吗？',
+          success: function (res) {
+            if (res.confirm) {
+              this.copyCourses()
+            }
+          },
+          fail: (err) => {
+            console.log('comfirm continue on survey : ' + JSON.stringify(err))
+          }
+        })
+      } else {
+        this.copyCourses()
+      }
+    },
+    copyCourses () {
+      this.$store.commit('copyCourses', this.courseInfo)
       this.saveCourses(this.owncourseInfo)
         .then(() => {
           wx.reLaunch({
-            url: '/pages/index/main'
+            url: '/pages/course/main'
           })
         })
     }

@@ -140,6 +140,10 @@ const mutations = {
     state.courseInfo[day].interval[interval].course.splice(course, 0, value)
   },
 
+  copyCourses (state, courseInfo) {
+    state.courseInfo = courseInfo
+  },
+
   mergeCourses (state, courseInfo) {
     var allCourses = __allCourses(state)
     if (allCourses.length === 0) {

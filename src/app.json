@@ -14,7 +14,7 @@
     "pages/surveySubjects/main",
     "pages/surveyTitleAndIntro/main",
     "pages/course/main",
-    "pages/courseinfo/main",
+    "pages/sharedcourse/main",
     "pages/phone/main"
   ],
   "window": {
