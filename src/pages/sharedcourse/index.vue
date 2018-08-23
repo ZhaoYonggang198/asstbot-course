@@ -1,23 +1,16 @@
 <template lang="pug">
+include ../../pug/template.pug
+
 view(class="page content")
   title-bar(title="你朋友的课表")
-  view(class="course-table")
-    view(class="weui-tab")
-      view(class="tab-title")
-        nav-bar(:navItems="weekdays" :current="activeDay" @tabActive="tabActive")/
-      view(class="weui-tab__panel")
-        swiper(@change="swiperchange" :current="activeDay" style="height: 100%")
-          swiper-item(v-for="(day, dayIdx) in courseInfo" :key="dayIdx")
-            view(class="weui-tab__content" )
-              scroll-view(scroll-y='true' style="height: auto")
-                block(v-for="(interval, j) in day.interval" :key="j")
-                  i-panel(:title="interval.name" class="interval")
-                    i-cell-group
-                      block(v-if="interval.course.length>0")
-                        block(v-for="(course, k) in interval.course" :key="k")
-                          i-cell(:title="course")
-                      block(v-else)
-                        i-cell(title="休息")
+  +navbar-swiper
+    block(v-if="interval.course.length>0")
+      block(v-for="(course, k) in interval.course" :key="k")
+        view(class="weui-cell")
+          +course-info
+    block(v-else)
+      view(class="weui-cell")
+        view(class="weui-cell__bd") 休息
   view(class="weui-flex bottom-button")
     view(class="weui-flex__item")
       button(size="small" @click="gotocourse") 回到主页    
@@ -145,4 +138,6 @@ export default {
   margin-left: 20rpx;
   margin-right: 20rpx;
 }
+
+@import '../../pug/course.css';
 </style>

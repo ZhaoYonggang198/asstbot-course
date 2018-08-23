@@ -2,13 +2,36 @@
 view
   i-popup(visible="true" @ok="confirm" @cancel="cancel" :title="title")
     view(style="text-align: left")
-        view(class="input-wrapper")
-          input(:value="coursename" class="weui-input" placeholder="请输入课程名" focus="true" :error="error"
-            @input="change")
+        view(class="weui-cells")
+          view(class="weui-cell")
+            view(class="weui-cell__hd")
+              view(class="weui-label") 课程名
+            view(class="weui-cell__bd")
+              input(:value="currentCourse.name" class="weui-input" placeholder="请输入课程名" focus="true" :error="error"
+                @input="nameChange")
           i-cell-group(class="select-course" v-if="showSelectCourse")
             block(v-for="(item, index) in selectCourses" :key="item")
               i-cell(:title="item" @iclick="select(item)") 
-                view(class="choose-item" slot="icon")        
+                view(class="choose-item" slot="icon")
+          view(class="weui-cell")
+            view(class="weui-cell__hd")
+              view(class="weui-label") 时段
+            view(class="weui-cell__bd weui-flex")
+              view(class="weui-flex__item time-wrapper")
+                picker(mode='time' start="00:00" end="23:59" :value="currentCourse.startTime" @change="startTimeChange")
+                  view(v-if="currentCourse.startTime") {{currentCourse.startTime}}
+                  view(v-else) 未指定
+              view(class="weui-flex__item time-wrapper") ~
+              view(class="weui-flex__item time-wrapper")
+                picker(mode='time' start="00:00" end="23:59" :value="currentCourse.endTime" @change="endTimeChange")
+                  view(v-if="currentCourse.endTime") {{currentCourse.endTime}}
+                  view(v-else) 未指定
+          view(class="weui-cell")
+            view(class="weui-cell__hd")
+              view(class="weui-label") 地点
+            view(class="weui-cell__bd")
+              input(:value="currentCourse.location" class="weui-input" placeholder="请输入地点" focus="" :error="error"
+                @input="locationChange")
   i-message#message
 </template>
 
@@ -17,7 +40,7 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      coursename: '',
+      currentCourse: {},
       showSelectCourse: true
     }
   },
@@ -57,19 +80,19 @@ export default {
       }
     },
     selectCourses () {
-      if (this.coursename === undefined) {
+      if (this.currentCourse.name === undefined) {
         return []
       }
       return this.$store.getters.allCourses.filter((course) => {
-        return this.coursename !== course &&
-          course.indexOf(this.coursename) !== -1
+        return this.currentCourse.name !== course &&
+          course.indexOf(this.currentCourse.name) !== -1
       }).splice(0, 5)
     }
   },
   methods: {
     confirm () {
       if (this.scene === 'config') {
-        if (this.coursename === '') {
+        if (this.currentCourse.name === '') {
           this.$store.commit('deleteCourse', {
             day: this.day,
             interval: this.interval,
@@ -80,14 +103,14 @@ export default {
             day: this.day,
             interval: this.interval,
             course: this.course,
-            value: this.coursename})
+            value: this.currentCourse})
         }
       } else {
-        if (this.coursename !== '') {
+        if (this.currentCourse.name !== '') {
           this.$store.commit('appendCourse', {
             day: this.day,
             interval: this.interval,
-            value: this.coursename
+            value: this.currentCourse
           })
         }
       }
@@ -97,19 +120,37 @@ export default {
     cancel () {
       this.$emit('editdone')
     },
-    change (event) {
+    nameChange (event) {
       this.showSelectCourse = true
-      this.coursename = event.mp.detail.value
+      this.currentCourse.name = event.mp.detail.value
     },
     select (item) {
-      this.coursename = item
+      this.currentCourse.name = item
+    },
+
+    startTimeChange (event) {
+      this.currentCourse.startTime = event.mp.detail.value
+    },
+
+    endTimeChange (event) {
+      this.currentCourse.endTime = event.mp.detail.value
+    },
+
+    locationChange (event) {
+      this.currentCourse.location = event.mp.detail.value
     }
   },
   onLoad () {
     if (this.scene === 'add') {
-      this.coursename = ''
+      this.currentCourse = {
+        name: '',
+        location: '',
+        startTime: '',
+        endTime: ''
+      }
     } else {
-      this.coursename = this.courseInfo[this.day].interval[this.interval].course[this.course]
+      this.currentCourse = JSON.parse(JSON.stringify(
+        this.courseInfo[this.day].interval[this.interval].course[this.course]))
     }
     this.showSelectCourse = false
   }
@@ -128,12 +169,34 @@ export default {
 }
 .select-course {
   max-height: 100px;
-  box-shadow: 0px 3px 3px -2px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14), 0px 1px 8px 0px rgba(0,0,0,0.12) !important;
 }
 .weui-input {
-  padding: 10rpx 20rpx;
-  color: black;
-  display: block;
-  box-shadow: 0px 3px 3px -2px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14), 0px 1px 8px 0px rgba(0,0,0,0.12) !important;
+  font-size: 28rpx;
+  border-bottom: solid 1rpx #d6d8d8;
+}
+
+.time-wrapper {
+  text-align: center;
+  font-size: 28rpx;
+}
+
+.time-wrapper:first-child {
+  text-align: left;
+}
+
+.time-wrapper:last-child {
+  text-align: right;
+}
+
+.weui-cells:before {
+  border: none;
+}
+
+.weui-cells:after {
+  border: none;
+}
+
+.weui-cell:before {
+  display: none;
 }
 </style>

@@ -46,6 +46,33 @@ const intervals = [{
 }
 ]
 
+var getFrontEndCoursePerInterval = function (backendCourse, dayBackend, intervalBackend) {
+  let dayInfo = backendCourse[dayBackend]
+  if (!dayInfo) {
+    return []
+  }
+
+  let backendInfo = dayInfo[intervalBackend]
+  let backendAddition = dayInfo[intervalBackend + 'Info']
+
+  if (!backendInfo) {
+    return []
+  }
+
+  if (!backendAddition) {
+    return backendInfo.map((coursename) => {
+      return {
+        name: coursename,
+        location: '操场',
+        startTime: '01:00',
+        endTime: '02:00'
+      }
+    })
+  } else {
+    return backendAddition
+  }
+}
+
 var getFrontEndCourse = function (backendCourse) {
   let frontend = []
   for (let day of weekdays) {
@@ -55,9 +82,8 @@ var getFrontEndCourse = function (backendCourse) {
     for (let interval of intervals) {
       let intervalCourse = {}
       intervalCourse.name = interval.frontend
-      intervalCourse.course = backendCourse[day.backend]
-        ? (backendCourse[day.backend][interval.backend] || [])
-        : []
+      intervalCourse.course =
+        getFrontEndCoursePerInterval(backendCourse, day.backend, interval.backend)
       daycourse.interval.push(intervalCourse)
     }
     frontend.push(daycourse)
@@ -70,8 +96,12 @@ var getBackEndCourse = function (frontEnd) {
   for (let dayIdx in weekdays) {
     backend[weekdays[dayIdx].backend] = {}
     for (var intervalIdx in intervals) {
-      backend[weekdays[dayIdx].backend][intervals[intervalIdx].backend] =
+      backend[weekdays[dayIdx].backend][intervals[intervalIdx].backend + 'Info'] =
         frontEnd[dayIdx].interval[intervalIdx].course
+      backend[weekdays[dayIdx].backend][intervals[intervalIdx].backend] =
+        frontEnd[dayIdx].interval[intervalIdx].course.map((course) => {
+          return course.name
+        })
     }
   }
   return backend
@@ -88,8 +118,8 @@ function __allCourses (state) {
   courseInfo.map(day => {
     day.interval.map(interval => {
       interval.course.map(course => {
-        if (courses.indexOf(course) === -1) {
-          courses.push(course)
+        if (courses.indexOf(course.name) === -1) {
+          courses.push(course.name)
         }
       })
     })

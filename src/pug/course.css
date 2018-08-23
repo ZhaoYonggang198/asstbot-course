@@ -1,0 +1,22 @@
+.weui-cells {
+  font-size: 28rpx;
+  background: #fff
+}
+
+.weui-cells:before {
+  border: none;
+}
+
+.weui-cells:after {
+  border: none;
+}
+
+.add-more {
+  color: #586C94
+}
+
+.course-time {
+  line-height: 1.2;
+  font-size: 12px;
+  color: #80848f
+}
