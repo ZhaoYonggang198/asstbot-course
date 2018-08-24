@@ -26,6 +26,12 @@ const actions = {
         //   filename: filePath
         // },
         success: function (res) {
+          wx.removeSavedFile({
+            filePath,
+            fail: (err) => {
+              console.error(err)
+            }
+          })
           if (res.statusCode === 200) {
             var result = JSON.parse(res.data)
             if (result.result && !result.result.err_no) {
@@ -35,17 +41,16 @@ const actions = {
                 asr = asr.substr(0, asr.length - 1)
                 console.log(asr)
                 dispatch('sendSpeech', {url: hostRoot + result.url, asr, nlu: true})
+                resolve()
               } catch (err) {
                 reject(err)
               }
-              resolve()
             } else {
               reject(new Error('语音识别错误'))
             }
           } else {
             reject(new Error('文件上传失败'))
           }
-          resolve(res)
         },
         fail: function (error) {
           reject(error)
