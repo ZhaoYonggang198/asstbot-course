@@ -50,7 +50,8 @@ const urlMaping = {
   'show-survey': '/pages/display/main',
   'publish-survey': '/pages/publish/main',
   'show-survey-result': '/pages/detail/main',
-  'course-skill': '/pages/course/main'
+  'course-skill': '/pages/course/main',
+  'do-survey': '/pages/surveyChat/main'
 }
 
 export default {
