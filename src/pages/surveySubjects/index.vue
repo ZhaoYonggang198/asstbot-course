@@ -71,7 +71,7 @@
             <button class="weui-btn btn-font" type="default" @click="addConclusion"><i class="icon iconfont icon-add"></i>新结论 </button>
           </view>
           <view class="weui-flex__item btn-style-survey">
-            <button class="weui-btn btn-font" type="default" @click="selfTest"><i class="icon iconfont icon-live"></i>自测</button>
+            <button class="weui-btn btn-font" type="default" @click="selfTest" :disabled="disableShare"><i class="icon iconfont icon-live"></i>自测</button>
           </view>
           <view class="weui-flex__item btn-style-survey">
             <button class="weui-btn btn-font" type="primary" @click="toPublishPage" :disabled="disableShare"><i class="icon iconfont icon-share"></i>分享 </button>

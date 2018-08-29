@@ -23,7 +23,7 @@
         </block>
         <view class="weui-cell__bd">
           <view class="weui-input line-height-46 input-location" :class="correctAnswers[index]?'correct-answer':'' ">
-            111{{answer.value}}
+            {{answer.value}}
           </view>
         </view>
         <view class="weui-cell__ft height-92" v-if="surveyType=='quiz'" >

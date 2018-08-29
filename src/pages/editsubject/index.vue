@@ -283,6 +283,8 @@ export default {
     }
 
     this.typeIndex = this.typeRange.indexOf(this.subject.type)
+    this.isLegal = true
+    this.answersLegal = true
   }
 }
 </script>
