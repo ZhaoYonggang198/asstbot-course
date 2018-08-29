@@ -18,19 +18,19 @@ view
               view(class="weui-label") 时段
             view(class="weui-cell__bd weui-flex")
               view(class="weui-flex__item time-wrapper")
-                picker(mode='time' start="00:00" end="23:59" :value="currentCourse.startTime" @change="startTimeChange")
+                picker(mode='time' start="00:00" :end="currentCourse.endTime?currentCourse.endTime:'23:59'" :value="currentCourse.startTime" @change="startTimeChange")
                   view(v-if="currentCourse.startTime") {{currentCourse.startTime}}
                   view(v-else) 未指定
               view(class="weui-flex__item time-wrapper") ~
               view(class="weui-flex__item time-wrapper")
-                picker(mode='time' start="00:00" end="23:59" :value="currentCourse.endTime" @change="endTimeChange")
+                picker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:'00:00'" end="23:59" :value="currentCourse.endTime" @change="endTimeChange")
                   view(v-if="currentCourse.endTime") {{currentCourse.endTime}}
                   view(v-else) 未指定
           view(class="weui-cell")
             view(class="weui-cell__hd")
               view(class="weui-label") 地点
             view(class="weui-cell__bd")
-              input(:value="currentCourse.location" class="weui-input" placeholder="请输入地点" focus="" :error="error"
+              input(:value="currentCourse.location" class="weui-input" placeholder="请输入地点" :error="error"
                 @input="locationChange")
   i-message#message
 </template>
