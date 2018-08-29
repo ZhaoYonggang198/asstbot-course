@@ -2,7 +2,10 @@
 import config from '@/config.js'
 
 const url = config.service.imagePostUrl
+const videoUrl = config.service.videoPostUrl
 const hostRoot = config.service.hostRoot
+
+let uploadTask
 
 const state = {
 }
@@ -55,6 +58,27 @@ const actions = {
     })
   },
 
+  uploadVideo ({commit}, filePath) {
+    return new Promise((resolve, reject) => {
+      uploadTask = wx.uploadFile({
+        url: videoUrl,
+        filePath,
+        name: 'video',
+        success: (res) => {
+          const remoteUrl = `${hostRoot}/${JSON.parse(res.data).url}`
+          resolve(remoteUrl)
+        },
+        fail: (err) => {
+          reject(err)
+        }
+      })
+
+      uploadTask.onProgressUpdate((res) => {
+        console.log('上传进度', res.progress)
+      })
+    })
+  },
+
   selectImageToUpload ({dispatch}) {
     return new Promise((resolve, reject) => {
       wx.chooseImage({
@@ -70,6 +94,26 @@ const actions = {
         },
         fail: (err) => {
           reject(err)
+        }
+      })
+    })
+  },
+  selectVideoToUpload ({dispatch}) {
+    return new Promise((resolve, reject) => {
+      wx.chooseVideo({
+        sourceType: ['album', 'camera'],
+        maxDuration: 60,
+        camera: 'back',
+        success: function (res) {
+          if (res.size < 10 * 1024 * 1024) {
+            dispatch('uploadVideo', res.tempFilePath).then(res => {
+              resolve(res)
+            }).catch(err => {
+              reject(err)
+            })
+          } else {
+            resolve({errorMsg: '视频文件过大'})
+          }
         }
       })
     })

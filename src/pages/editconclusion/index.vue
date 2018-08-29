@@ -1,5 +1,5 @@
 <template>
-  <view class="page">  
+  <view class="page">
     <title-bar :title="survey.title"/>
     <view class="content">
       <view class="weui-cells__title">{{title}}</view>
@@ -13,7 +13,7 @@
 
               </view>
               <view class="weui-cell__ft">
-                <da-counter :number="conclusion.scoreRange.min" min="0" :max="conclusion.scoreRange.max" 
+                <da-counter :number="conclusion.scoreRange.min" min="0" :max="conclusion.scoreRange.max"
                   @changenumber="changeMinNumber"/>
               </view>
           </view>
@@ -36,7 +36,7 @@
           </view>
         </view>
         <view class="weui-cell">
-          <image-uploader :url="conclusion.imageUrl" @chooseImage="chooseTitleImage" @deleteImage="deleteImage"/>
+          <mediaBox :data="conclusion" @inputUrl="getSourseUrl" @chooseVideo="chooseTitleVideo" @chooseImage="chooseTitleImage" @choosePoster="choosePoster" @deleteMedia="deleteMedia" @setAudioName="setAudioName" @setAudioAuthor="setAudioAuthor" @setPoster="setPoster"/>
         </view>
         <view class="weui-cell weui-cell_input weui-cell_warn" v-if="!isLegal">
           <view class="weui-cell__bd">
@@ -57,7 +57,10 @@
 <script>
 import { mapState } from 'vuex'
 import imageUploader from '@/components/widget/imageUploader'
+
 import daCounter from '@/components/uicomponent/daCounter'
+
+import mediaBox from '@/components/widget/mediaBox'
 
 function getInitArray (max, value) {
   let arr = new Array(max)
@@ -120,20 +123,64 @@ export default {
   },
   components: {
     imageUploader,
-    daCounter
+    daCounter,
+    mediaBox
   },
   methods: {
     updateTitleValue (event) {
       this.conclusion.text = event.mp.detail.value
       this.verifyConclusion()
     },
-    deleteImage () {
+    deleteMedia (state) {
       this.conclusion.imageUrl = ''
+      this.conclusion.urlType = ''
+      if (this.conclusion.mediaInfo) {
+        this.conclusion.mediaInfo.poster = ''
+        this.conclusion.mediaInfo.name = ''
+        this.conclusion.mediaInfo.author = ''
+      }
       this.verifyConclusion()
+    },
+    getSourseUrl (url, state) {
+      this.conclusion.imageUrl = url
+      this.verifyConclusion()
+      switch (state) {
+        case 1:
+          this.conclusion.urlType = 'image'
+          break
+        case 2:
+          this.conclusion.urlType = 'video'
+          break
+        case 3:
+          this.conclusion.urlType = 'audio'
+          break
+      }
     },
     chooseTitleImage (url) {
       this.conclusion.imageUrl = url
+      this.conclusion.urlType = 'image'
       this.verifyConclusion()
+    },
+    chooseTitleVideo (url) {
+      this.conclusion.imageUrl = url
+      this.conclusion.urlType = 'video'
+      this.verifyConclusion()
+    },
+    choosePoster (poster) {
+      this.conclusion.mediaInfo = this.conclusion.mediaInfo ? this.conclusion.mediaInfo : {}
+      this.conclusion = {...this.conclusion, mediaInfo: {...this.conclusion.mediaInfo, poster: poster}}
+    },
+    setAudioName (name) {
+      this.conclusion.mediaInfo = this.conclusion.mediaInfo ? this.conclusion.mediaInfo : {}
+      this.conclusion = {...this.conclusion, mediaInfo: {...this.conclusion.mediaInfo, name: name}}
+    },
+    setAudioAuthor (author) {
+      this.conclusion.mediaInfo = this.conclusion.mediaInfo ? this.conclusion.mediaInfo : {}
+      this.conclusion = {...this.conclusion, mediaInfo: {...this.conclusion.mediaInfo, author: author}}
+    },
+    setPoster (poster) {
+      this.conclusion.mediaInfo = this.conclusion.mediaInfo ? this.conclusion.mediaInfo : {}
+      this.conclusion = {...this.conclusion, mediaInfo: {...this.conclusion.mediaInfo, poster: poster}}
     },
     changeMinNumber (event) {
       this.conclusion.scoreRange.min = event.number
@@ -177,7 +224,8 @@ export default {
           max: range.max
         },
         text: '',
-        imageUrl: ''
+        imageUrl: '',
+        videoUrl: ''
       }
       this.title = '新创建结论'
     } else {

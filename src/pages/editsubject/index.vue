@@ -1,5 +1,5 @@
 <template>
-  <view class="page">  
+  <view class="page">
     <title-bar :title="survey.title"/>
     <view class="content">
     <scoll-view scroll-y='true' class="scroll-style">
@@ -11,7 +11,7 @@
           </view>
         </view>
         <view class="weui-cell">
-          <image-uploader :url="subject.imageUrl" @chooseImage="chooseTitleImage" @deleteImage="deleteImage"/>
+          <mediaBox :data="subject" @inputUrl="getSourseUrl" @chooseVideo="chooseTitleVideo"  @chooseImage="chooseTitleImage" @choosePoster="choosePoster" @deleteMedia="deleteMedia" @setAudioName="setAudioName" @setAudioAuthor="setAudioAuthor" @setPoster="setPoster"/>
         </view>
         <view class="weui-cell weui-cell_input weui-cell_warn" v-if="!isLegal">
           <view class="weui-cell__bd">
@@ -55,6 +55,9 @@ import { mapState } from 'vuex'
 import editAnswer from '@/components/editAnswer'
 import textOrArea from '@/components/textOrArea'
 import imageUploader from '@/components/widget/imageUploader'
+import videoUploader from '@/components/widget/videoUploader'
+import switchBar from '@/components/widget/switchBar'
+import mediaBox from '@/components/widget/mediaBox'
 
 const subjectType = ['radio', 'checkbox', 'text', 'date', 'location', 'phone']
 const subjectTypeName = ['单选', '多选', '问答', '日期', '地点', '手机']
@@ -90,22 +93,70 @@ export default {
   components: {
     editAnswer,
     textOrArea,
-    imageUploader
+    imageUploader,
+    videoUploader,
+    switchBar,
+    mediaBox
   },
   methods: {
+    switchState (state) {
+      this.switchOn = state
+    },
     updateTitleValue (event) {
       console.log(event)
       this.subject.question = event.value
       this.verifySubject()
     },
-    deleteImage () {
+    deleteMedia (state) {
       this.subject.imageUrl = ''
+      this.subject.urlType = ''
+      if (this.subject.mediaInfo) {
+        this.subject.mediaInfo.poster = ''
+        this.subject.mediaInfo.name = ''
+        this.subject.mediaInfo.author = ''
+      }
       this.verifySubject()
     },
     chooseTitleImage (url) {
-      console.log('chooseTitleImage', url)
+      this.subject.imageUrl = url
+      this.subject.urlType = 'image'
+      this.verifySubject()
+    },
+    chooseTitleVideo (url) {
+      this.subject.imageUrl = url
+      this.subject.urlType = 'video'
+      this.verifySubject()
+    },
+    choosePoster (poster) {
+      this.subject.mediaInfo = this.subject.mediaInfo ? this.subject.mediaInfo : {}
+      this.subject = {...this.subject, mediaInfo: {...this.subject.mediaInfo, poster: poster}}
+    },
+    setAudioName (name) {
+      this.subject.mediaInfo = this.subject.mediaInfo ? this.subject.mediaInfo : {}
+      this.subject = {...this.subject, mediaInfo: {...this.subject.mediaInfo, name: name}}
+    },
+    setAudioAuthor (author) {
+      this.subject.mediaInfo = this.subject.mediaInfo ? this.subject.mediaInfo : {}
+      this.subject = {...this.subject, mediaInfo: {...this.subject.mediaInfo, author: author}}
+    },
+    setPoster (poster) {
+      this.subject.mediaInfo = this.subject.mediaInfo ? this.subject.mediaInfo : {}
+      this.subject = {...this.subject, mediaInfo: {...this.subject.mediaInfo, poster: poster}}
+    },
+    getSourseUrl (url, state) {
       this.subject.imageUrl = url
       this.verifySubject()
+      switch (state) {
+        case 1:
+          this.subject.urlType = 'image'
+          break
+        case 2:
+          this.subject.urlType = 'video'
+          break
+        case 3:
+          this.subject.urlType = 'audio'
+          break
+      }
     },
     subjectTypeChange (event) {
       this.typeIndex = event.mp.detail.value
@@ -191,7 +242,6 @@ export default {
         this.verifyAnswer(answer)
         ret = ret & answer.islegal
       })
-      console.log('answer is', this.subject.answers)
       return ret
     },
 
@@ -208,6 +258,7 @@ export default {
       } else {
         this.$store.commit('updateCurSubject', {index: option.subject, subject: this.subject})
       }
+      console.log(this.survey)
       this.$store.dispatch('saveCurSurvey', this.survey)
         .then(() => {
           wx.navigateBack()
@@ -223,7 +274,9 @@ export default {
         type: 'radio',
         question: '',
         imageUrl: '',
-        answers: []
+        urlType: '',
+        answers: [],
+        MediaInfo: {}
       }
     } else {
       this.subject = JSON.parse(JSON.stringify(this.survey.subjects[option.subject]))
