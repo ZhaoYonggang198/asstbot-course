@@ -9,7 +9,7 @@ view(class="page")
     swiper-item
       view(class="swiper-item")
         image(src="/static/image/xiaoaimin.png")
-        view(class="page__desc") 对着小爱音箱说“小爱同学，打开我的课表”可以在音箱上使用课程表功能
+        view(class="page__desc") 对着小爱音箱说“小爱同学，打开课表”可以在音箱上使用课程表功能
     swiper-item
       view(class="swiper-item")
         image(src="/static/image/xiaoai.png")
