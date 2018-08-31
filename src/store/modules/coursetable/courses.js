@@ -63,9 +63,9 @@ var getFrontEndCoursePerInterval = function (backendCourse, dayBackend, interval
     return backendInfo.map((coursename) => {
       return {
         name: coursename,
-        location: '操场',
-        startTime: '01:00',
-        endTime: '02:00'
+        location: '',
+        startTime: '',
+        endTime: ''
       }
     })
   } else {
