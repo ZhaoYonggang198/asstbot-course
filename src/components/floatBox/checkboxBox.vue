@@ -10,14 +10,14 @@
                 <image class="image" mode="aspectFit" :src="option.imageUrl"></image>
               </view>
               <view class="value image-value" v-if="option.caption">{{option.caption}}</view>
+              <view class="weui-flex__item checked" v-if="checkArr[index]">
+                <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+              </view>
             </block>
             <block v-else>
-              <view class="value valueBox checked">{{option.caption}}</view>
+              <view class="value valueBox" :class="{'checked-color': checkArr[index], 'un-checked-color': !checkArr[index]}">{{option.caption}}</view>
             </block>
           </view>
-          <!--<view class="weui-flex__item checked" v-if="checkArr[index]">-->
-            <!--<icon class="weui-icon-radio" type="success_no_circle" size="16" color="grey"></icon>-->
-          <!--</view>-->
         </view>
       </label>
       <!--<checkbox-group class="select-box" @change="selectOption">-->
@@ -170,8 +170,6 @@
     width: 100%;
     white-space: nowrap;
     padding:6rpx 20rpx;
-    background:#f2f2f2;
-    border:3rpx solid @select-btn-color;
     color: @select-btn-color;
     border-radius:35rpx;
     padding:10rpx 10rpx;
@@ -179,9 +177,16 @@
     box-shadow:0 0 0;
     font-weight:500;
   }
-  .no-image .checked-value {
-    background-color:#19a1a8;
-    color:#ffffff;
+  .no-image .checked-color {
+    color: #FFFFFF;
+    background-color: @select-btn-color;
+    border: none;
+  }
+
+  .no-image .un-checked-color {
+    color: @select-btn-color;
+    background:#f2f2f2;
+    border:3rpx solid @select-btn-color;
   }
   .no-image .checked {
     top: 0;
@@ -244,7 +249,7 @@
     -webkit-line-clamp:2;
   }
 
-  .checkMe .checked{
+  .checked-text{
     background-color: @select-btn-color;
     color: #FFFFFF;
   }
