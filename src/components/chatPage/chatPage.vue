@@ -31,7 +31,7 @@
       <command-area  @msgSendStatus="handleMsgSendStatus"
           :inputPromt="activeInputPromtMsg"
           :displayFinish="displayFinish" @keyBoardUp="keyBoardUp"
-          :needFocus="messageList.length && messageList.length>5"/>
+          :needFocus="messageList.length>5"/>
     </view>
   </block>
 </template>
