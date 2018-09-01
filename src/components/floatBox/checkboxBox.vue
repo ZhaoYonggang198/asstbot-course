@@ -259,6 +259,7 @@
   .image-value{
     text-align:center;
     font-size:28rpx;
+    font-weight:500;
     line-height: 50rpx;
     height: 100rpx;
     overflow:hidden;

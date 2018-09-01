@@ -2,9 +2,9 @@
   <scroll-view scroll-x="true">
     <view class="big-box">
       <view class="option-container light form-control" @touchstart="touchStart(option)" @touchmove="touchMove" @touchend="touchEnd" @touch="touchOn" @click="selectItem(option)" v-for="option in list.items" :key="option" :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
-        <block v-if="option.imageUrl">
-          <view class="image-box imageBox" :class="!option.caption.length?'image-box-1':''">
-            <image class="image" mode="aspectFit" :src="option.imageUrl"></image>
+        <block v-if="!havaImage">
+          <view class="image-box imageBox">
+            <image class="image" mode="aspectFit" :src="option.imageUrl" v-if="option.imageUrl"></image>
           </view>
           <view class="value image-value" v-if="option.caption">{{option.caption}}</view>
         </block>
@@ -84,6 +84,7 @@
   width:300rpx;
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
+  background-color: #f2f2f2;
 
 }
 .image-box-1{
@@ -97,7 +98,7 @@
   line-height: 300rpx;
   font-size: @font-size-tiny;
   color:#999;
-  background-color: #1c2438;
+  background-color: #f2f2f2;
 }
 .have{
   width:300rpx;
@@ -160,5 +161,7 @@
   display:-webkit-box;
   -webkit-box-orient:vertical;
   -webkit-line-clamp:2;
+  color: @select-btn-color;
+  font-weight:500;
 }
 </style>
