@@ -6,7 +6,7 @@
         <view class="weui-flex">
           <view class="weui-flex__item">
             <block v-if="!havaImage">
-              <view class="image-box imageBox" :class="!option.caption.length?'image-box-1':''">
+              <view class="image-box imageBox">
                 <image class="image" mode="aspectFit" :src="option.imageUrl"  v-if="option.imageUrl"></image>
               </view>
               <view class="value image-value" :class="{'checked-color': checkArr[index], 'un-checked-color': !checkArr[index]}">{{option.caption}}</view>
@@ -153,6 +153,7 @@
   }
   .haveimage .imageBox{
     display: block;
+    background-color: #f2f2f2;
   }
   .haveimage .value {
     width:100%;
@@ -240,7 +241,9 @@
   .haveimage .checked-color {
     color: #FFFFFF;
     background-color: @select-btn-color;
-    border: none;
+    /*border: none;*/
+    border-bottom-left-radius: 20rpx;
+    border-bottom-right-radius: 20rpx;
   }
 
   .haveimage .un-checked-color {
