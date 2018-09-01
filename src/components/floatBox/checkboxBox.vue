@@ -5,15 +5,15 @@
              :class="{'haveimage background-fff': !havaImage, 'no-image user-msg-box-color': havaImage, 'checkMe': checkArr[index]}" :for="'option' + index" @click="checked(index)" @touchstart="touchStart(option)" @touchmove="touchMove()" @touchend="touchEnd(option)">
         <view class="weui-flex">
           <view class="weui-flex__item">
-            <block v-if="option.imageUrl">
+            <block v-if="!havaImage">
               <view class="image-box imageBox" :class="!option.caption.length?'image-box-1':''">
-                <image class="image" mode="aspectFit" :src="option.imageUrl"></image>
+                <image class="image" mode="aspectFit" :src="option.imageUrl"  v-if="option.imageUrl"></image>
               </view>
-              <view class="value image-value" v-if="option.caption">{{option.caption}}</view>
-              <view class="weui-flex__item checked" v-if="checkArr[index]">
-                <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
-              </view>
+              <view class="value image-value" :class="{'checked-color': checkArr[index], 'un-checked-color': !checkArr[index]}">{{option.caption}}</view>
             </block>
+              <!--<view class="weui-flex__item checked" v-if="checkArr[index]">-->
+                <!--<icon class="weui-icon-radio checked-icon" type="success_no_circle" size="16" color="#ffffff"></icon>-->
+              <!--</view>-->
             <block v-else>
               <view class="value valueBox" :class="{'checked-color': checkArr[index], 'un-checked-color': !checkArr[index]}">{{option.caption}}</view>
             </block>
@@ -140,7 +140,7 @@
   .image{
     width:100%;
     height: 100%;
-    background-color: #1c2438;
+    background-color: #f2f2f2;
   }
   .haveimage{
     width:300rpx;
@@ -149,6 +149,7 @@
     border: 1rpx solid #dadada;
     margin-left: 20rpx;
     position: relative;
+    border: 1px solid #dadada;
   }
   .haveimage .imageBox{
     display: block;
@@ -160,6 +161,7 @@
   .no-image{
     width: auto;
     border-radius: 10rpx;
+    /*border: 1px solid #dadada;*/
     padding:5rpx;
     margin-left: 30rpx;
   }
@@ -234,6 +236,20 @@
     top: 10rpx;
     right: 10rpx;
   }
+
+  .haveimage .checked-color {
+    color: #FFFFFF;
+    background-color: @select-btn-color;
+    border: none;
+  }
+
+  .haveimage .un-checked-color {
+    color: @select-btn-color;
+    background:#fff;
+    border-bottom-left-radius: 20rpx;
+    border-bottom-right-radius: 20rpx;
+    /*border:3rpx solid @select-btn-color;*/
+  }
   .background-fff{
     background: #fff;
   }
@@ -249,8 +265,12 @@
     -webkit-line-clamp:2;
   }
 
-  .checked-text{
-    background-color: @select-btn-color;
-    color: #FFFFFF;
+  .checked-icon {
+    width:20px;
+    height:20px;
+    background:rgba(0,0,0,.2);
+    border-radius:50%;
+    text-align:center;
+    line-height:20px;
   }
 </style>
