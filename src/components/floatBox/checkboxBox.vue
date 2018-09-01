@@ -12,12 +12,12 @@
               <view class="value image-value" v-if="option.caption">{{option.caption}}</view>
             </block>
             <block v-else>
-              <view class="value valueBox">{{option.caption}}</view>
+              <view class="value valueBox checked">{{option.caption}}</view>
             </block>
           </view>
-          <view class="weui-flex__item checked" v-if="checkArr[index]">
-            <icon class="weui-icon-radio" type="success_no_circle" size="16" ></icon>
-          </view>
+          <!--<view class="weui-flex__item checked" v-if="checkArr[index]">-->
+            <!--<icon class="weui-icon-radio" type="success_no_circle" size="16" color="grey"></icon>-->
+          <!--</view>-->
         </view>
       </label>
       <!--<checkbox-group class="select-box" @change="selectOption">-->
@@ -123,7 +123,9 @@
   }
 </script>
 
-<style scoped>
+
+<style lang="less" scoped>
+  @import "../../../static/base.less";
   .image-box{
     overflow: hidden;
     height:300rpx;
@@ -168,13 +170,36 @@
     width: 100%;
     white-space: nowrap;
     padding:6rpx 20rpx;
+    background:#f2f2f2;
+    border:3rpx solid @select-btn-color;
+    color: @select-btn-color;
+    border-radius:35rpx;
+    padding:10rpx 10rpx;
+    text-align:center;
+    box-shadow:0 0 0;
+    font-weight:500;
+  }
+  .no-image .checked-value {
+    background-color:#19a1a8;
+    color:#ffffff;
+  }
+  .no-image .checked {
+    top: 0;
+    right: 10rpx;
   }
   .select-box{
     display: none;
   }
-  .checkMe{
-     border: 1rpx solid #1cb2b9;
+  .no-image .checkMe{
+     /*border: 1rpx solid @p-dark-color;*/
+    background-color: @select-btn-color;
+    color: #FFFFFF;
   }
+
+  .haveimage .checkMe{
+    border: 1rpx solid @p-dark-color;
+  }
+
   .checkMe:after{
     content:'';
     /*position: absolute;*/
@@ -217,5 +242,10 @@
     display:-webkit-box;
     -webkit-box-orient:vertical;
     -webkit-line-clamp:2;
+  }
+
+  .checkMe .checked{
+    background-color: @select-btn-color;
+    color: #FFFFFF;
   }
 </style>
