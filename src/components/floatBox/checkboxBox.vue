@@ -7,7 +7,7 @@
           <view class="weui-flex__item">
             <block v-if="option.imageUrl">
               <view class="image-box imageBox" :class="!option.caption.length?'image-box-1':''">
-                <image class="image" mode="aspectFill" :src="option.imageUrl"></image>
+                <image class="image" mode="aspectFit" :src="option.imageUrl"></image>
               </view>
               <view class="value image-value" v-if="option.caption">{{option.caption}}</view>
             </block>
@@ -138,6 +138,7 @@
   .image{
     width:100%;
     height: 100%;
+    background-color: #1c2438;
   }
   .haveimage{
     width:300rpx;

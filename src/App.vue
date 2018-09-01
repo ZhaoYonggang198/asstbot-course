@@ -230,7 +230,7 @@ page{
 }
 
 .user-msg-box-color {
-  background-color: @s-msg-color !important;
+  /*background-color: @s-msg-color !important;*/
 }
 
 .warn-color {

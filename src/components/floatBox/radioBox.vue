@@ -4,7 +4,7 @@
       <view class="option-container light form-control" @touchstart="touchStart(option)" @touchmove="touchMove" @touchend="touchEnd" @touch="touchOn" @click="selectItem(option)" v-for="option in list.items" :key="option" :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
         <block v-if="option.imageUrl">
           <view class="image-box imageBox" :class="!option.caption.length?'image-box-1':''">
-            <image class="image" mode="aspectFill" :src="option.imageUrl"></image>
+            <image class="image" mode="aspectFit" :src="option.imageUrl"></image>
           </view>
           <view class="value image-value" v-if="option.caption">{{option.caption}}</view>
         </block>
@@ -84,6 +84,7 @@
   width:300rpx;
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
+
 }
 .image-box-1{
   border-radius: 20rpx;
@@ -96,6 +97,7 @@
   line-height: 300rpx;
   font-size: @font-size-tiny;
   color:#999;
+  background-color: #1c2438;
 }
 .have{
   width:300rpx;
@@ -114,17 +116,27 @@
 }
 .no-image{
   width: auto;
-  border-radius: 10rpx;
+  border-radius: 30rpx;
   padding:5rpx;
   margin-left: 30rpx;
+  background-color: #f2f2f2;
 }
 .no-image>.image-box{
   display: none;
 }
+
 .no-image>.value{
   width: 100%;
   white-space: nowrap;
   padding:6rpx 20rpx;
+  background:#f2f2f2;
+  border:3rpx solid @select-btn-color;
+  color: @select-btn-color;
+  border-radius:35rpx;
+  padding:10rpx 10rpx;
+  text-align:center;
+  box-shadow:0 0 0;
+  font-weight:500;
 }
 .have .valueBox{
   display: flex;
