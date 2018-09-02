@@ -2,10 +2,10 @@
   <scroll-view scroll-x="true">
     <view class="big-box">
       <label class="option-container light form-control" v-for="(option, index) in list.items" :key="option"
-             :class="{'haveimage background-fff': !havaImage, 'no-image user-msg-box-color': havaImage, 'checkMe': checkArr[index]}" :for="'option' + index" @click="checked(index)" @touchstart="touchStart(option)" @touchmove="touchMove()" @touchend="touchEnd(option)">
+             :class="{'haveimage background-fff': !pureTextList, 'no-image user-msg-box-color': pureTextList, 'checkMe': checkArr[index]}" :for="'option' + index" @click="checked(index)" @touchstart="touchStart(option)" @touchmove="touchMove()" @touchend="touchEnd(option)">
         <view class="weui-flex">
           <view class="weui-flex__item">
-            <block v-if="!havaImage">
+            <block v-if="!pureTextList">
               <view class="image-box imageBox">
                 <image class="image" mode="aspectFit" :src="option.imageUrl"  v-if="option.imageUrl"></image>
               </view>
@@ -45,7 +45,7 @@
     name: 'radioBox',
     props: ['list'],
     computed: {
-      havaImage: state => {
+      pureTextList: state => {
         let a = state.list.items.find(item => !!item.imageUrl === true)
         return a === undefined
       }
@@ -146,7 +146,6 @@
     width:300rpx;
     border-radius: 20rpx;
     height:400rpx;
-    border: 1rpx solid #dadada;
     margin-left: 20rpx;
     position: relative;
     border: 1px solid #dadada;
