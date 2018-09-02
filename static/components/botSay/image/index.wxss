@@ -2,4 +2,5 @@
   width:400rpx;
   margin-left: 20rpx;
   border-radius: 20rpx;
+  height: 100%;
 }

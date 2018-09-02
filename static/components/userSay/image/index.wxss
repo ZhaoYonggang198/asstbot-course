@@ -19,6 +19,7 @@
   width: 400rpx;
   margin-right: 10rpx;
   border-radius: 20rpx;
+  hight: 100%;
 }
 .wrapper {
   display: flex;
