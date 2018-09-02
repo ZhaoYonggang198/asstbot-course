@@ -9,22 +9,14 @@
               <view class="image-box imageBox">
                 <image class="image" mode="aspectFit" :src="option.imageUrl"  v-if="option.imageUrl"></image>
               </view>
-              <view class="value image-value" :class="{'checked-color': checkArr[index], 'un-checked-color': !checkArr[index]}">{{option.caption}}</view>
+              <!--<view class="value image-value" :class="[checkArr[index] ? 'checked-color':'un-checked-color']">{{option.caption}}</view>-->
             </block>
-              <!--<view class="weui-flex__item checked" v-if="checkArr[index]">-->
-                <!--<icon class="weui-icon-radio checked-icon" type="success_no_circle" size="16" color="#ffffff"></icon>-->
-              <!--</view>-->
-            <block v-else>
-              <view class="value valueBox" :class="{'checked-color': checkArr[index], 'un-checked-color': !checkArr[index]}">{{option.caption}}</view>
-            </block>
+            <!--<block v-else>-->
+              <view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color', pureTextList ? 'valueBox' : 'image-value']">{{option.caption}}</view>
+            <!--</block>-->
           </view>
         </view>
       </label>
-      <!--<checkbox-group class="select-box" @change="selectOption">-->
-        <!--<view class="selectRadio" v-for="(option, index) in list.items" :key="option">-->
-          <!--<checkbox  :id="'option' + index" class="radioItem" :value="index"></checkbox>-->
-        <!--</view>-->
-      <!--</checkbox-group>-->
     </view>
   </scroll-view>
 </template>
@@ -172,23 +164,27 @@
     width: 100%;
     white-space: nowrap;
     padding:6rpx 20rpx;
-    color: @select-btn-color;
     border-radius:35rpx;
     padding:10rpx 10rpx;
     text-align:center;
     box-shadow:0 0 0;
     font-weight:500;
   }
-  .no-image .checked-color {
+  .checked-color {
     color: #FFFFFF;
     background-color: @select-btn-color;
     border: none;
   }
 
-  .no-image .un-checked-color {
+  .un-checked-color {
     color: @select-btn-color;
     background:#f2f2f2;
     border:3rpx solid @select-btn-color;
+  }
+
+  .haveimage .un-checked-color {
+    background:#fff;
+    border: none;
   }
   .no-image .checked {
     top: 0;
@@ -237,21 +233,6 @@
     right: 10rpx;
   }
 
-  .haveimage .checked-color {
-    color: #FFFFFF;
-    background-color: @select-btn-color;
-    /*border: none;*/
-    border-bottom-left-radius: 20rpx;
-    border-bottom-right-radius: 20rpx;
-  }
-
-  .haveimage .un-checked-color {
-    color: @select-btn-color;
-    background:#fff;
-    border-bottom-left-radius: 20rpx;
-    border-bottom-right-radius: 20rpx;
-    /*border:3rpx solid @select-btn-color;*/
-  }
   .background-fff{
     background: #fff;
   }
@@ -266,6 +247,8 @@
     display:-webkit-box;
     -webkit-box-orient:vertical;
     -webkit-line-clamp:2;
+    border-bottom-left-radius: 20rpx;
+    border-bottom-right-radius: 20rpx;
   }
 
   .checked-icon {
