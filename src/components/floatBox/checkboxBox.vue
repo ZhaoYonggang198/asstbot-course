@@ -10,7 +10,8 @@
                 <image class="image" mode="aspectFit" :src="option.imageUrl"  v-if="option.imageUrl"></image>
               </view>
             </block>
-              <view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color', pureTextList ? 'valueBox' : 'image-value']">{{option.caption}}</view>
+              <view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color']">{{option.caption}}</view>
+              <!--<view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color', pureTextList ? 'valueBox' : 'image-value']">{{option.caption}}</view>-->
           </view>
         </view>
       </label>
@@ -40,7 +41,8 @@
         return a === undefined
       }
       // textLineCount (content) {
-      //   return getLineCount(width, fontSize, content)
+      //   // return getLineCount(width, font-size, content)
+      //   return getLineCount(300, 28, content)
       // }
     },
     methods: {
@@ -147,10 +149,7 @@
     display: block;
     background-color: #f2f2f2;
   }
-  .haveimage .value {
-    width:100%;
-    word-wrap: break-word;
-  }
+
   .no-image{
     width: auto;
     border-radius: 10rpx;
@@ -161,15 +160,31 @@
   .no-image .image-box{
     display: none;
   }
+  .value{
+    font-size: 28rpx;
+    width:100%;
+    text-align:center;
+    font-weight:500;
+  }
   .no-image .value{
-    width: 100%;
     white-space: nowrap;
     padding:6rpx 20rpx;
     border-radius:35rpx;
     padding:10rpx 10rpx;
-    text-align:center;
     box-shadow:0 0 0;
-    font-weight:500;
+  }
+
+  .haveimage .value {
+    word-wrap: break-word;
+    line-height: 50rpx;
+    height: 100rpx;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    border-bottom-left-radius: 20rpx;
+    border-bottom-right-radius: 20rpx;
   }
   .checked-color {
     color: #FFFFFF;
@@ -194,19 +209,15 @@
   .select-box{
     display: none;
   }
-  .haveimage .valueBox{
-    display: flex;
-    align-items: center;
-    justify-items: center;
-    justify-content: center;
-    align-content: center;
-    width: 300rpx;
-    height: 400rpx;
-  }
-
-  .value{
-    font-size: 28rpx;
-  }
+  /*.haveimage .valueBox{*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-items: center;*/
+    /*justify-content: center;*/
+    /*align-content: center;*/
+    /*width: 300rpx;*/
+    /*height: 400rpx;*/
+  /*}*/
 
   .haveimage .checked {
     position: absolute;
@@ -214,19 +225,19 @@
     right: 10rpx;
   }
 
-  .image-value{
-    text-align:center;
-    font-size:28rpx;
-    font-weight:500;
-    line-height: 50rpx;
-    height: 100rpx;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    display:-webkit-box;
-    -webkit-box-orient:vertical;
-    -webkit-line-clamp:2;
-    border-bottom-left-radius: 20rpx;
-    border-bottom-right-radius: 20rpx;
-  }
+  /*.image-value{*/
+    /*text-align:center;*/
+    /*font-size:28rpx;*/
+    /*font-weight:500;*/
+    /*line-height: 50rpx;*/
+    /*height: 100rpx;*/
+    /*overflow:hidden;*/
+    /*text-overflow:ellipsis;*/
+    /*display:-webkit-box;*/
+    /*-webkit-box-orient:vertical;*/
+    /*-webkit-line-clamp:2;*/
+    /*border-bottom-left-radius: 20rpx;*/
+    /*border-bottom-right-radius: 20rpx;*/
+  /*}*/
 
 </style>
