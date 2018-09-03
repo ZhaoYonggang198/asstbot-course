@@ -19,12 +19,8 @@
   width: 400rpx;
   margin-right: 10rpx;
   border-radius: 20rpx;
-  hight: 100%;
 }
-.wrapper {
-  display: flex;
-  flex-direction: row-reverse;
-}
+
 .word-text{
 padding-bottom: 10px;
 padding-right: 10px;
