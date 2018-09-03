@@ -25,9 +25,10 @@
 padding-bottom: 10px;
 padding-right: 10px;
 }
-.outgoing {
+.outgoing-img {
   height: 100px;
   width: 100px;
+  background: transparent;
   border: solid 1px beige;
 }
 .image{

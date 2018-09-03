@@ -1,5 +1,5 @@
   <view class="wrapper word-text">
-    <image bindlongpress="previewImage" mode="widthFix" wx:if="url" src="{{url}}" class="outgoing image"/>
+    <image bindlongpress="previewImage" mode="widthFix" wx:if="url" src="{{url}}" class="outgoing-img image"/>
     <view  wx:else class="outgoing right-item" style="height: auto;width: auto;margin-right: -10rpx">
       您已取消上传
     </view>
