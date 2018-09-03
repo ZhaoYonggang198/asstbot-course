@@ -1,5 +1,5 @@
 <template>
-<view style="border-radius:0!important;">
+<block>
   <record-status :recordStatus="recordStatus"></record-status>
   <view class="input-widget form-control secondary-color" :class="recordStatus=='readyToRecord'?'':'dark'"
           style="border-radius:0!important; border:none"
@@ -7,7 +7,7 @@
             @touchcancel="cancelRecord"
             @touchmove="recordOperation"
             @touchend="stopRecord">{{recordOperationText}}</view>
-</view>
+</block>
 </template>
 <script>
 const recorderManager = wx.getRecorderManager()
@@ -117,15 +117,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .input-widget {
   margin: 0!important;
   height: 100%;
   max-height: 80rpx;
   line-height: 80rpx;
   box-sizing: border-box;
-  text-align:center;
-  text-decoration:none;
-
+  text-align: center;
+}
+.button::after {
+  border-radius: 0;
 }
 </style>

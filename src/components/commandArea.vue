@@ -12,9 +12,9 @@
       <block>
         <view class="weui-flex__item"  v-if="!voiceMode">
 
-          <input class="word-textarea primary-color revert textarea-style-2"  adjust-position="true" :value="currentMessage" :cursorSpacing="14" 
+          <input class="word-textarea primary-color revert textarea-style-2"  adjust-position="true" :value="currentMessage" :cursorSpacing="14"
           :maxlength="textLength" :placeholder="placehodlerText" :type="textType"
-          confirm-type="send" confirm-hold="true" 
+          confirm-type="send" confirm-hold="true"
           @input="valueInput" @confirm="confirm" @focus="textFocus" @blur="textBlur"/>
 
         </view>
@@ -23,9 +23,9 @@
         </view>
       </block>
     <view class="placeholder">
-    <button class="input-widget form-control secondary-color buttonSend" size="small" formType="submit" :disabled="(currentMessage=='') && !items.length">
-      <i class="icon iconfont icon-arrows"></i>
-    </button>
+      <button class="input-widget form-control secondary-color buttonSend" size="small" formType="submit" :disabled="(currentMessage=='') && !items.length">
+        <i class="icon iconfont icon-arrows"></i>
+      </button>
     </view>
     </view>
     <device-padding></device-padding>
@@ -194,7 +194,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "../../static/base.less";
 
 .input-widget {
@@ -203,9 +203,11 @@ export default {
   max-height: 80rpx;
   line-height: 80rpx;
   box-sizing: border-box;
+  border-radius: 0;
 }
 .input-widget:disabled{
   padding-left: 20px;
+  border-radius: 0;
 }
   .height-line-height{
     /*height: 80rpx;*/
@@ -275,11 +277,16 @@ export default {
   .placeholder{
     display: flex;
     align-items: flex-end;
+    border: none;
+    border-radius: 0;
   }
   .textarea-style-2{
     line-height: 40rpx;
   }
   .textarea-style-1{
     line-height: 80rpx;
+  }
+  button::after {
+    border-radius: 0;
   }
 </style>
