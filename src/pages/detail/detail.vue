@@ -39,8 +39,7 @@
               </view>
               </view>
               <view class="weui-cell__ft" v-if="result.imageUrl">
-              <!--<user-say-image :url="result.imageUrl"></user-say-image>-->
-                <image bindlongpress="previewImage" :data-item="result.imageUrl" src="result.imageUrl" class="image" mode="aspectFit"/>
+              <user-say-image :url="result.imageUrl"></user-say-image>
               <view class="answer-correct"  v-if="surveyType==='exam' && result.correct">
                 <i class="icon iconfont icon-right" v-if="result.correct"></i>
                 <i class="icon iconfont icon-close" v-else></i>
@@ -52,7 +51,7 @@
                 <swiper indicator-dots="true" class="swiper">
                   <block v-for="(result, j) in item.results"  :key="j">
                     <swiper-item style="border-radius: 20rpx">
-                      <user-say-image :url="result.imageUrl"></user-say-image>
+                      <user-say-image :url="result.imageUrl" mode="aspectFit"></user-say-image>
                       <view class="value image-value" v-if="result.value">{{result.value}}</view>
                     </swiper-item>
                   </block>
