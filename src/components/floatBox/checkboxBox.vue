@@ -2,18 +2,15 @@
   <scroll-view scroll-x="true">
     <view class="big-box">
       <label class="option-container light form-control" v-for="(option, index) in list.items" :key="option"
-             :class="{'haveimage background-fff': !pureTextList, 'no-image user-msg-box-color': pureTextList, 'checkMe': checkArr[index]}" :for="'option' + index" @click="checked(index)" @touchstart="touchStart(option)" @touchmove="touchMove()" @touchend="touchEnd(option)">
+             :class="[pureTextList ? 'no-image' : 'haveimage']" :for="'option' + index" @click="checked(index)" @touchstart="touchStart(option)" @touchmove="touchMove()" @touchend="touchEnd(option)">
         <view class="weui-flex">
           <view class="weui-flex__item">
             <block v-if="!pureTextList">
               <view class="image-box imageBox">
                 <image class="image" mode="aspectFit" :src="option.imageUrl"  v-if="option.imageUrl"></image>
               </view>
-              <!--<view class="value image-value" :class="[checkArr[index] ? 'checked-color':'un-checked-color']">{{option.caption}}</view>-->
             </block>
-            <!--<block v-else>-->
               <view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color', pureTextList ? 'valueBox' : 'image-value']">{{option.caption}}</view>
-            <!--</block>-->
           </view>
         </view>
       </label>
@@ -22,6 +19,7 @@
 </template>
 
 <script>
+  // import { getLineCount } from "@/utils/layout"
   export default {
     data () {
       return {
@@ -41,6 +39,9 @@
         let a = state.list.items.find(item => !!item.imageUrl === true)
         return a === undefined
       }
+      // textLineCount (content) {
+      //   return getLineCount(width, fontSize, content)
+      // }
     },
     methods: {
       selectOption (e) {
@@ -193,26 +194,6 @@
   .select-box{
     display: none;
   }
-  .no-image .checkMe{
-     /*border: 1rpx solid @p-dark-color;*/
-    background-color: @select-btn-color;
-    color: #FFFFFF;
-  }
-
-  .haveimage .checkMe{
-    border: 1rpx solid @p-dark-color;
-  }
-
-  .checkMe:after{
-    content:'';
-    /*position: absolute;*/
-    /*width:310rpx;*/
-    /*height: 410rpx;*/
-    /*top:-5rpx;*/
-    /*left:-5rpx;*/
-    /*border:1rpx solid #1cb2b9;*/
-    /*border-radius: 20rpx;*/
-  }
   .haveimage .valueBox{
     display: flex;
     align-items: center;
@@ -251,12 +232,4 @@
     border-bottom-right-radius: 20rpx;
   }
 
-  .checked-icon {
-    width:20px;
-    height:20px;
-    background:rgba(0,0,0,.2);
-    border-radius:50%;
-    text-align:center;
-    line-height:20px;
-  }
 </style>
