@@ -214,9 +214,6 @@
     right: 10rpx;
   }
 
-  .background-fff{
-    background: #fff;
-  }
   .image-value{
     text-align:center;
     font-size:28rpx;
