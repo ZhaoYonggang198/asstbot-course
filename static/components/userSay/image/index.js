@@ -7,6 +7,10 @@ Component({
     url: {
       type: String,
       value: ''
+    },
+    mode: {
+      type: String,
+      value: ''
     }
   },
 
