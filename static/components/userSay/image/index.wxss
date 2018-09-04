@@ -29,7 +29,7 @@ padding-right: 10px;
   height: 100px;
   width: 100px;
   background: transparent;
-  border: solid 1px beige;
+  border: solid 1px #dadada;
 }
 .image{
   border-radius: 20rpx;
