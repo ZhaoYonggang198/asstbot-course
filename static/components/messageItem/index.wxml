@@ -9,7 +9,7 @@
             <divider />
           </block>
         </block>
-        <view class="weui-flex bot-message" wx:else>
+        <view class="weui-flex bot-message" wx:elif="{{msg.show}}">
           <view class="left-item">
             <view class="avatar-wrapper">
               <!--<image :src="bodAvatar" class="small-avatar" v-if="i==0"/>-->
@@ -18,7 +18,7 @@
             </view>
             <view class="content">
               <bot-say-message msg="{{msg}}" bindloadDone="loadDone" wx:if="{{!lastBotMsg || i < received}}"
-                 bindbuttonListEvent="buttonListEvent" bindpreviewImage="previewImage"/>
+                 bindbuttonListEvent="buttonListEvent" bindpreviewImage="previewImage" id="{{i}}"/>
               <view wx:if="{{lastBotMsg && i == received}}">
                 <bot-say-receiving/>
               </view>

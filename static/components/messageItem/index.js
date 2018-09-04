@@ -42,6 +42,13 @@ Component({
       this.triggerEvent('previewImage')
     },
     buttonListEvent (event) {
+      console.log(event)
+      if (event.detail.disappear) {
+        let index = event.currentTarget.id
+        this.setData({
+          [`displayIncomingMsgs[${index}].show`]: false
+        })
+      }
       this.triggerEvent('buttonListEvent', event.detail)
     }
   },
@@ -57,6 +64,9 @@ Component({
       msg.type === 'video' ||
       msg.type === 'divider' ||
       msg.type === 'button-list'
+    }).map((msg) => {
+      msg.show = true
+      return msg
     })
     this.setData({
       outgoing: messages.from !== undefined,

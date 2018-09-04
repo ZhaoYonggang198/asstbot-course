@@ -22,16 +22,16 @@ Component({
    */
   methods: {
     click (event) {
+      console.log(event)
       let item = event.currentTarget.dataset.item
       this.triggerEvent('buttonListEvent',
         { buttonList: this.properties.message,
-          item
+          item,
+          disappear: !!this.properties.message.once
         })
-      console.log(this.properties.message)
       if (this.properties.message.once) {
         this.setData({ show: false })
       }
-      console.log(this.data)
     }
   }
 })
