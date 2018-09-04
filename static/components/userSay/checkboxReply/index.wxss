@@ -14,6 +14,7 @@
 }
 .right-item{
   max-width: 70%;
+  min-width: 32rpx;
 }
 .image{
   width:400rpx;

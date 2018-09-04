@@ -13,6 +13,8 @@
 }
 .right-item{
   max-width: 70%;
+  min-width: 50rpx;
+  text-align: center;
 }
   .flex-1{
     flex: 1;
