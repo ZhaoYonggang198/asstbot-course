@@ -76,9 +76,11 @@
       }
     },
     created () {
-      this.list.items.map(item => {
-        this.multiLineFlags = [...this.multiLineFlags, getLineCount(300, 28, item.caption) > 1]
-      })
+      if (this.list.items) {
+        this.list.items.map(item => {
+          this.multiLineFlags = [...this.multiLineFlags, getLineCount(300, 28, item.caption) > 1]
+        })
+      }
     }
   }
 </script>
