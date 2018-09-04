@@ -15,28 +15,28 @@
       <view class="content">
         <scroll-view scroll-y="true" class="weui-cells weui-cells_after-title" style="height: 100%">
           <view v-for="item in surveyAnswers" :key="item.id" class="detail-cell">
-            <view class="weui-cell__bd">
-              <bot-say-text :content="item.question" v-if="item.question"></bot-say-text>
+            <view class="weui-cell__bd" v-if="item.question">
+              <bot-say-text :content="item.question"></bot-say-text>
             </view>
             <view class="weui-cell__bd">
               <bot-say-image :content="item.questionUrl" v-if="item.questionUrl" @loadDone="imageLoadEnd"></bot-say-image>
             </view>
             <block v-if="item.userSay!=null && item.needSwipper == false">
               <view class="weui-cell__ft">
-              <user-say-text :content="item.userSay" v-if="item.userSay"></user-say-text>
-              <view class="answer-correct"  v-if="surveyType==='exam'">
-                <i class="icon iconfont icon-right" v-if="item.correct"></i>
-                <i class="icon iconfont icon-close" v-else></i>
-              </view>
+                <user-say-text style="width:70%" :content="item.userSay"></user-say-text>
+                <view class="answer-correct"  v-if="surveyType==='exam'">
+                  <i class="icon iconfont icon-right" v-if="item.correct"></i>
+                  <i class="icon iconfont icon-close" v-else></i>
+                </view>
               </view>
             </block>
             <block v-if="item.needSwipper == false" v-for="(result, i) in item.results" :key="i">
-              <view class="weui-cell__ft">
-              <user-say-text :content="result.value"></user-say-text>
-              <view class="answer-correct"  v-if="surveyType==='exam' && result.correct">
-                <i class="icon iconfont icon-right" v-if="result.correct"></i>
-                <i class="icon iconfont icon-close" v-else></i>
-              </view>
+              <view class="weui-cell__ft" v-if="result.value">
+                <user-say-text style="width:70%" :content="result.value"></user-say-text>
+                <view class="answer-correct"  v-if="surveyType==='exam' && result.correct">
+                  <i class="icon iconfont icon-right" v-if="result.correct"></i>
+                  <i class="icon iconfont icon-close" v-else></i>
+                </view>
               </view>
               <view class="weui-cell__ft" v-if="result.imageUrl">
               <user-say-image :url="result.imageUrl"></user-say-image>
@@ -51,7 +51,7 @@
                 <swiper indicator-dots="true" class="swiper">
                   <block v-for="(result, j) in item.results"  :key="j">
                     <swiper-item style="border-radius: 20rpx">
-                      <user-say-image :url="result.imageUrl"></user-say-image>
+                      <user-say-image :url="result.imageUrl" mode="aspectFit"></user-say-image>
                       <view class="value image-value" v-if="result.value">{{result.value}}</view>
                     </swiper-item>
                   </block>
@@ -141,6 +141,9 @@ export default {
     imageLoadEnd (event) {
       this.scrollToView = ''
       this.scrollToView = 'bottom'
+    },
+    previewImage (url) {
+
     }
   },
   components: {
@@ -272,7 +275,8 @@ export default {
 }
 
 .swiper{
-  width:400rpx;
+  width: 300rpx;
+  height: 400rpx;
   display:inline-block;
   margin-right:10rpx;
 }

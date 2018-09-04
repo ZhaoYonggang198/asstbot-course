@@ -20,18 +20,16 @@
   margin-right: 10rpx;
   border-radius: 20rpx;
 }
-.wrapper {
-  display: flex;
-  flex-direction: row-reverse;
-}
+
 .word-text{
 padding-bottom: 10px;
 padding-right: 10px;
 }
-.outgoing {
+.outgoing-img {
   height: 100px;
   width: 100px;
-  border: solid 1px beige;
+  background: transparent;
+  border: solid 1px #dadada;
 }
 .image{
   border-radius: 20rpx;

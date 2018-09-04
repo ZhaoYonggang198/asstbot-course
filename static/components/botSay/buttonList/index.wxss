@@ -1,2 +1,24 @@
 @import '/static/style/weui.wxss';
 @import '/static/style/main.wxss';
+
+.inline-btn {
+  min-width: 46rpx;
+  white-space:nowrap;
+
+  margin-left: 10rpx;
+
+  background:#f2f2f2;
+  /*border:2rpx solid #1cb2b9;*/
+  border: 1px solid #dadada;
+  color:#818796;
+  box-shadow:0 0 0;
+
+  text-align:center;
+  font-weight:500;
+
+  height: 46rpx;
+  font-size: 26rpx;
+  padding:10rpx 10rpx;
+  border-radius:46rpx;
+  line-height: 46rpx;
+}

@@ -1,11 +1,12 @@
 <template>
 <block>
   <record-status :recordStatus="recordStatus"></record-status>
-  <button class="input-widget form-control secondary-color" :class="recordStatus=='readyToRecord'?'':'dark'"
+  <view class="input-widget form-control secondary-color" :class="recordStatus=='readyToRecord'?'':'dark'"
+          style="border-radius:0!important; border:none"
             @touchstart="startRecord"
             @touchcancel="cancelRecord"
             @touchmove="recordOperation"
-            @touchend="stopRecord">{{recordOperationText}}</button>
+            @touchend="stopRecord">{{recordOperationText}}</view>
 </block>
 </template>
 <script>
@@ -116,12 +117,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .input-widget {
   margin: 0!important;
   height: 100%;
   max-height: 80rpx;
   line-height: 80rpx;
   box-sizing: border-box;
+  text-align: center;
+}
+.button::after {
+  border-radius: 0;
 }
 </style>
