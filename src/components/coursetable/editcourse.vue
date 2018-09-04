@@ -9,21 +9,25 @@ view
             view(class="weui-cell__bd")
               input(:value="currentCourse.name" class="weui-input" placeholder="请输入课程名" focus="true" :error="error"
                 @input="nameChange")
-          i-cell-group(class="select-course" v-if="showSelectCourse")
+          view(class="select-course" v-if="showSelectCourse")
             block(v-for="(item, index) in selectCourses" :key="item")
-              i-cell(:title="item" @iclick="select(item)") 
-                view(class="choose-item" slot="icon")
+              view(class="weui-cell" @click="select(item)")
+                view(class="weui-cell__hd")
+                  view(class="weui-label")          
+                view(class="weui-cell__bd") 
+                  icon(class="weui-icon-checkbox_circle" type="circle" size="16")
+                  view {{item}}
           view(class="weui-cell")
             view(class="weui-cell__hd")
               view(class="weui-label") 时段
             view(class="weui-cell__bd weui-flex")
               view(class="weui-flex__item time-wrapper")
-                picker(mode='time' :start="minStartTime" :end="currentCourse.endTime?currentCourse.endTime:maxStartTime" :value="currentCourse.startTime" @change="startTimeChange")
+                timepicker(mode='time' :start="minStartTime" :end="currentCourse.endTime?currentCourse.endTime:maxStartTime" :value="currentCourse.startTime?currentCourse.startTime:minStartTime" @change="startTimeChange")
                   view(v-if="currentCourse.startTime") {{currentCourse.startTime}}
                   view(v-else) 未指定
               view(class="weui-flex__item time-wrapper") ~
               view(class="weui-flex__item time-wrapper")
-                picker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime" :end="maxEndTime" :value="currentCourse.endTime" @change="endTimeChange")
+                timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime" :end="maxEndTime" :value="currentCourse.endTime?currentCourse.endTime:minEndTime" @change="endTimeChange")
                   view(v-if="currentCourse.endTime") {{currentCourse.endTime}}
                   view(v-else) 未指定
           view(class="weui-cell")
@@ -90,7 +94,7 @@ export default {
     },
     minStartTime () {
       if (this.courseInfo[this.day].interval[this.interval].name === '上午') {
-        return '00:00'
+        return '03:00'
       } else if (this.courseInfo[this.day].interval[this.interval].name === '下午') {
         return '12:00'
       } else {
@@ -108,7 +112,7 @@ export default {
     },
     minEndTime () {
       if (this.courseInfo[this.day].interval[this.interval].name === '上午') {
-        return '00:00'
+        return '03:00'
       } else if (this.courseInfo[this.day].interval[this.interval].name === '下午') {
         return '12:00'
       } else {
@@ -198,7 +202,8 @@ export default {
   width: 15rpx;
   height: 15rpx;
   border-radius: 50%;
-  background: #999
+  background: #999;
+  margin-right: 40rpx;
 }
 .input-wrapper {
   position: relative
@@ -234,5 +239,17 @@ export default {
 
 .weui-cell:before {
   display: none;
+}
+
+.select-course .weui-cell {
+  padding-top: 5rpx;
+  padding-bottom: 5rpx;
+  color: #666;
+  font-size: 26rpx;
+}
+
+.select-course .weui-cell__bd {
+  display: flex;
+  flex-direction: row;
 }
 </style>

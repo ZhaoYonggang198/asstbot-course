@@ -4,6 +4,7 @@
   "usingComponents": {
     "i-button": "/static/iview/button/index",
     "i-popup": "/static/iview/popup/index",
-    "i-input": "/static/iview/input/index"
+    "i-input": "/static/iview/input/index",
+    "timepicker": "/static/components/timepicker/index"
   }
 }
