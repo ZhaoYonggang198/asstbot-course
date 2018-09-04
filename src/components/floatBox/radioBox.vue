@@ -172,9 +172,11 @@
 .one-line-text {
   line-height: 100rpx;
   -webkit-line-clamp:1;
+  text-align: center;
 }
 .two-line-text {
   line-height: 50rpx;
   -webkit-line-clamp:2;
+  text-align: left;
 }
 </style>
