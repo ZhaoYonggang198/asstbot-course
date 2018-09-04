@@ -6,7 +6,7 @@
           <view class="image-box imageBox">
             <image class="image" mode="aspectFit" :src="option.imageUrl" v-if="option.imageUrl"></image>
           </view>
-          <view class="value image-value" v-if="option.caption">{{option.caption}}</view>
+          <view class="value image-value" :class="[multiLineFlags[index] ? 'two-line-text':'one-line-text']" v-if="option.caption">{{option.caption}}</view>
         </block>
         <block v-else>
           <view class="value valueBox">{{option.caption}}</view>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+  import { getLineCount } from '@/utils/layout'
   export default {
     data () {
       return {
@@ -25,7 +26,8 @@
         touchStartTime: '',
         touchEndTime: '',
         touchMoveTime: '',
-        timeout: ''
+        timeout: '',
+        multiLineFlags: []
       }
     },
     name: 'radioBox',
@@ -72,6 +74,11 @@
           this.timeout = ''
         }
       }
+    },
+    created () {
+      this.list.items.map(item => {
+        this.multiLineFlags = [...this.multiLineFlags, getLineCount(300, 28, item.caption) > 1]
+      })
     }
   }
 </script>
@@ -154,14 +161,20 @@
 .image-value{
   text-align:center;
   font-size:28rpx;
-  line-height: 50rpx;
   height: 100rpx;
   overflow:hidden;
   text-overflow:ellipsis;
   display:-webkit-box;
   -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
   color: @select-btn-color;
   font-weight:500;
+}
+.one-line-text {
+  line-height: 100rpx;
+  -webkit-line-clamp:1;
+}
+.two-line-text {
+  line-height: 50rpx;
+  -webkit-line-clamp:2;
 }
 </style>

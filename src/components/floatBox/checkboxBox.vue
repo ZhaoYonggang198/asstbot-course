@@ -10,7 +10,7 @@
                 <image class="image" mode="aspectFit" :src="option.imageUrl"  v-if="option.imageUrl"></image>
               </view>
             </block>
-              <view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color']">{{option.caption}}</view>
+              <view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color', multiLineFlags[index] ? 'two-line-text':'one-line-text']">{{option.caption}}</view>
               <!--<view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color', pureTextList ? 'valueBox' : 'image-value']">{{option.caption}}</view>-->
           </view>
         </view>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  // import { getLineCount } from "@/utils/layout"
+  import { getLineCount } from '@/utils/layout'
   export default {
     data () {
       return {
@@ -30,7 +30,8 @@
         touchMoveTime: '',
         touchEndTime: '',
         timeout: '',
-        checkArrIndex: []
+        checkArrIndex: [],
+        multiLineFlags: []
       }
     },
     name: 'radioBox',
@@ -40,9 +41,9 @@
         let a = state.list.items.find(item => !!item.imageUrl === true)
         return a === undefined
       }
-      // textLineCount (content) {
+      // isMultiLine () {
       //   // return getLineCount(width, font-size, content)
-      //   return getLineCount(300, 28, content)
+      //   return getLineCount(300, 28, content) > 1
       // }
     },
     methods: {
@@ -113,6 +114,7 @@
     created () {
       this.list.items.map(item => {
         this.checkArr = [...this.checkArr, false]
+        this.multiLineFlags = [...this.multiLineFlags, getLineCount(300, 28, item.caption) > 1]
       })
     }
   }
@@ -176,16 +178,25 @@
 
   .haveimage .value {
     word-wrap: break-word;
-    line-height: 50rpx;
     height: 100rpx;
     overflow:hidden;
     text-overflow:ellipsis;
     display:-webkit-box;
     -webkit-box-orient:vertical;
-    -webkit-line-clamp:2;
     border-bottom-left-radius: 20rpx;
     border-bottom-right-radius: 20rpx;
   }
+
+  .haveimage .two-line-text {
+    line-height: 50rpx;
+    -webkit-line-clamp:2;
+  }
+
+  .haveimage .one-line-text {
+    line-height: 100rpx;
+    -webkit-line-clamp:1;
+  }
+
   .checked-color {
     color: #FFFFFF;
     background-color: @select-btn-color;
