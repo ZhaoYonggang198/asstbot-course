@@ -16,16 +16,16 @@ view(class="page")
         view(class="page__desc") 在这里绑定手机，并在小爱音箱绑定同一个手机，可以在音箱上使用小程序上创建的课程表
     
   i-panel(:title="bindPhone?'已绑定手机：' + bindPhone:''" class="form")
-    i-input(:value="inputPhone" @change="phonechange" type="number" maxlength="11" title="手机号" placeholder="请输入手机号")
-    view(class="weui-flex")
-      view(class="weui-flex__item")
-        i-input(:value="inputCode" @change="codechange" type="number" maxlength="6" title="验证码" placeholder="请输入验证码")
-      i-button(size="small" :disabled="vcodeDisable" @iclick="requestCode") {{vcodeOperation}}
-  view(class="weui-flex bottom-button")
+    block(v-if="!bindPhone")
+      i-input(:value="inputPhone" @change="phonechange" type="number" maxlength="11" title="手机号" placeholder="请输入手机号")
+      view(class="weui-flex")
+        view(class="weui-flex__item")
+          i-input(:value="inputCode" @change="codechange" type="number" maxlength="6" title="验证码" placeholder="请输入验证码")
+        i-button(size="small" :disabled="vcodeDisable" @iclick="requestCode" v-if="sumbitDisable") {{vcodeOperation}}
+        i-button(type="primary" @iclick="formSubmit" size="small" v-else) 绑定
+  view(class="weui-flex bottom-button" v-if="bindPhone")
     view(class="weui-flex__item")
       button(@click="formReset" size="small" :disabled='bindPhone.length === 0') 解绑
-    view(class="weui-flex__item")
-      button(type="primary" @click="formSubmit" size="small" :disabled='sumbitDisable') 绑定
 </template>
 
 <script>
@@ -175,7 +175,7 @@ export default {
 }
 
 .page .form {
-  flex: 1
+
 }
 
 .button-area .weui-flex {
@@ -205,10 +205,11 @@ export default {
 }
 
 .bottom-button {
+  margin-top: 40rpx;
   margin-bottom: 40rpx;
 }
 
-.bottom-button button {
+button {
   font-size: 28rpx;
   line-height: 2;
   margin-left: 20rpx;
