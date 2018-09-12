@@ -5,7 +5,7 @@ view(class="page")
     swiper-item
       view(class="swiper-item")
         image(src="/static/image/xiaoai.png")
-        view(class="page__desc") 绑定手机可以帮助在小爱智能音箱上更方便地使用我的课表技能
+        view(class="page__desc") 绑定手机可以帮助在小爱智能音箱上更方便地使用"课表"技能
     swiper-item
       view(class="swiper-item")
         image(src="/static/image/xiaoaimin.png")
@@ -126,12 +126,16 @@ export default {
           .then(() => {
             this.inputPhone = ''
             this.inputCode = ''
-            wx.showToast({
+            wx.showModal({
               title: '绑定成功',
-              icon: 'success',
-              mask: true
+              content: '在小爱音箱app搜索"课表"技能并绑定同一手机号，可以在小爱音箱上使用课程表功能',
+              showCancel: false,
+              confirmText: '确定',
+              confirmColor: '#3CC51F',
+              success: res => {
+                wx.navigateBack()
+              }
             })
-            wx.navigateBack()
           })
           .catch((err) => {
             console.log(err)
