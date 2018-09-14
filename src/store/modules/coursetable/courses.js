@@ -130,6 +130,54 @@ function __allCourses (state) {
 const getters = {
   allCourses: state => {
     return __allCourses(state)
+  },
+  allLocations: state => {
+    const courseInfo = state.courseInfo
+    var location = []
+    courseInfo.map(day => {
+      day.interval.map(interval => {
+        interval.course.map(course => {
+          if (course.location && location.indexOf(course.location) === -1) {
+            location.push(course.location)
+          }
+        })
+      })
+    })
+    return location
+  },
+  allLocationOfCourse: state => {
+    const courseInfo = state.courseInfo
+    var locationOfCourse = []
+
+    courseInfo.map(day => {
+      day.interval.map(interval => {
+        interval.course.map(course => {
+          if (course.location) {
+            let sameLocationExisted = (
+              locationOfCourse.filter((item) => {
+                return item.name === course.name && item.location === course.location
+              }).length !== 0
+            )
+            if (!sameLocationExisted) {
+              locationOfCourse.push({name: course.name, location: course.location})
+            }
+          }
+        })
+      })
+    })
+    return locationOfCourse
+  },
+  canditateInterval: (state) => (day, interval) => {
+    const courseInfo = state.courseInfo
+    let courseNo = courseInfo[day].interval[interval].course.length
+
+    for (let i in courseInfo) {
+      let course = courseInfo[i].interval[interval].course[courseNo]
+      if (course && course.startTime && course.endTime) {
+        return {startTime: course.startTime, endTime: course.endTime}
+      }
+    }
+    return {startTime: '', endTime: ''}
   }
 }
 

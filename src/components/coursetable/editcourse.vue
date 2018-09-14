@@ -9,9 +9,9 @@ view
             view(class="weui-cell__bd")
               input(:value="currentCourse.name" class="weui-input" placeholder="请输入课程名" focus="true" :error="error"
                 @input="nameChange")
-          view(class="select-course" v-if="showSelectCourse")
+          view(class="select-list" v-if="showSelectCourse")
             block(v-for="(item, index) in selectCourses" :key="item")
-              view(class="weui-cell" @click="select(item)")
+              view(class="weui-cell" @click="courseSelected(item)")
                 view(class="weui-cell__hd")
                   view(class="weui-label")          
                 view(class="weui-cell__bd") 
@@ -36,6 +36,14 @@ view
             view(class="weui-cell__bd")
               input(:value="currentCourse.location" class="weui-input" placeholder="请输入地点" :error="error"
                 @input="locationChange")
+          view(class="select-list")
+            block(v-for="(item, index) in selectLocation" :key="item")
+              view(class="weui-cell" @click="locationSelected(item)")
+                view(class="weui-cell__hd")
+                  view(class="weui-label")          
+                view(class="weui-cell__bd") 
+                  icon(class="weui-icon-checkbox_circle" type="circle" size="16")
+                  view {{item}}
   i-message#message
 </template>
 
@@ -45,7 +53,8 @@ export default {
   data () {
     return {
       currentCourse: {},
-      showSelectCourse: true
+      showSelectCourse: true,
+      selectLocation: []
     }
   },
   props: {
@@ -129,6 +138,29 @@ export default {
       }
     }
   },
+  watch: {
+    'currentCourse.name': function (newVal) {
+      if (!newVal) {
+        return
+      }
+
+      let locations = this.$store.getters.allLocationOfCourse
+        .filter((item) => {
+          return item.name === newVal
+        })
+        .map((item) => {
+          return item.location
+        })
+
+      this.selectLocation = locations
+    },
+    'currentCourse.location': function (newVal) {
+      let locations = this.$store.getters.allLocations.filter((item) => {
+        return item !== newVal && item.indexOf(newVal) !== -1
+      }).splice(0, 5)
+      this.selectLocation = locations
+    }
+  },
   methods: {
     confirm () {
       if (this.scene === 'config') {
@@ -164,7 +196,7 @@ export default {
       this.showSelectCourse = true
       this.currentCourse.name = event.mp.detail.value
     },
-    select (item) {
+    courseSelected (item) {
       this.currentCourse.name = item
     },
 
@@ -178,21 +210,26 @@ export default {
 
     locationChange (event) {
       this.currentCourse.location = event.mp.detail.value
+    },
+
+    locationSelected (item) {
+      this.currentCourse.location = item
     }
   },
   onLoad () {
     if (this.scene === 'add') {
+      let interval = this.$store.getters.canditateInterval(this.day, this.interval)
       this.currentCourse = {
         name: '',
         location: '',
-        startTime: '',
-        endTime: ''
+        ...interval
       }
+      this.showSelectCourse = true
     } else {
       this.currentCourse = JSON.parse(JSON.stringify(
         this.courseInfo[this.day].interval[this.interval].course[this.course]))
+      this.showSelectCourse = false
     }
-    this.showSelectCourse = false
   }
 }
 </script>
@@ -208,7 +245,7 @@ export default {
 .input-wrapper {
   position: relative
 }
-.select-course {
+.select-list {
   max-height: 100px;
 }
 .weui-input {
@@ -241,14 +278,14 @@ export default {
   display: none;
 }
 
-.select-course .weui-cell {
+.select-list .weui-cell {
   padding-top: 5rpx;
   padding-bottom: 5rpx;
   color: #666;
   font-size: 26rpx;
 }
 
-.select-course .weui-cell__bd {
+.select-list .weui-cell__bd {
   display: flex;
   flex-direction: row;
 }
