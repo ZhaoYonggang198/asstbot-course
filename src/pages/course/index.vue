@@ -1,9 +1,14 @@
 <template lang="pug">
 include ../../pug/template.pug
-
+  
 view(class="page content")
   title-bar(title="课表")
-  +navbar-swiper
+  block(v-if="courseMeta.needOddEvenWeek")
+    block(v-if="editmode")
+      current-week-config
+    block(v-else)
+      week-display-mode(@weekModeChange="chooseWeekMode")
+  +navbar-swiper("(day, dayIdx) in displayCourseInfo")
     block(v-if="!editmode")
       block(v-if="interval.course.length>0")
         block(v-for="(course, k) in interval.course" :key="k")
@@ -44,6 +49,8 @@ view(class="page content")
 import navBar from '@/components/coursetable/navbar'
 import courseOperation from '@/components/coursetable/courseOperation'
 import editcourse from '@/components/coursetable/editcourse'
+import currentWeekConfig from '@/components/coursetable/currentWeekConfig'
+import weekDisplayMode from '@/components/coursetable/weekDisplayMode'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -57,14 +64,17 @@ export default {
       editday: 0,
       editinterval: 0,
       editcourse: 0,
-      editmode: false
+      editmode: false,
+      weekmode: 'both',
+      displayCourseInfo: []
     }
   },
 
   computed: {
     ...mapState({
       courseInfo: state => state.courses.courseInfo,
-      openid: state => state.courses.openid
+      openid: state => state.courses.openid,
+      courseMeta: state => state.courses.courseMeta
     }),
     weekdays () {
       if (this.courseInfo.length === 0) {
@@ -76,13 +86,20 @@ export default {
     },
     editbutton () {
       return this.editmode ? '确认编辑' : '编辑课程'
+    },
+
+    displayCurrentWeek () {
+      let currentWeekOdd = this.$store.getters.currentWeekOdd ? '单周' : '双周'
+      return `本周为 ${currentWeekOdd}`
     }
   },
 
   components: {
     navBar,
     courseOperation,
-    editcourse
+    editcourse,
+    currentWeekConfig,
+    weekDisplayMode
   },
 
   methods: {
@@ -147,11 +164,30 @@ export default {
       this.editmode = true
       this.activeInterval = -1
       this.activeCourse = -1
+      this.setDisplayCourseInfo()
     },
     clearEditmode () {
       this.editmode = false
       this.activeInterval = -1
       this.activeCourse = -1
+      this.setDisplayCourseInfo()
+    },
+    chooseWeekMode (value) {
+      this.weekmode = value
+      this.setDisplayCourseInfo()
+    },
+    setDisplayCourseInfo () {
+      if (this.editmode) {
+        this.displayCourseInfo = this.courseInfo
+      } else {
+        this.displayCourseInfo = this.$store.getters.getDisplayCourse((course) => {
+          if (this.weekmode === 'both' || course.week === 'both') {
+            return true
+          } else {
+            return this.weekmode === course.week
+          }
+        })
+      }
     }
   },
 
@@ -163,6 +199,7 @@ export default {
       var date = new Date()
       var weekday = date.getDay()
       this.activeDay = (weekday === 0 ? 6 : (weekday - 1))
+      this.setDisplayCourseInfo()
     })
     this.inediting = false
     this.clearEditmode()
@@ -214,5 +251,8 @@ export default {
   margin-right: 20rpx;
 }
 
+.current-week {
+  font-size: 40rpx;
+}
 
 </style>

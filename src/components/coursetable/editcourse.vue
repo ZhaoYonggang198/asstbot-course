@@ -19,15 +19,26 @@ view
                   view {{item}}
           view(class="weui-cell")
             view(class="weui-cell__hd")
+              view(class="weui-label") 周次
+            view(class="weui-cell__bd")
+              weekmode-picker(:value="currentCourse.week" @change="weekmodeChange")
+          view(class="weui-cell")
+            view(class="weui-cell__hd")
               view(class="weui-label") 时段
             view(class="weui-cell__bd weui-flex")
               view(class="weui-flex__item time-wrapper")
-                timepicker(mode='time' :start="minStartTime" :end="currentCourse.endTime?currentCourse.endTime:maxStartTime" :value="currentCourse.startTime?currentCourse.startTime:minStartTime" @change="startTimeChange")
+                timepicker(mode='time' :start="minStartTime"
+                    :end="currentCourse.endTime?currentCourse.endTime:maxStartTime"
+                    :value="currentCourse.startTime?currentCourse.startTime:minStartTime"
+                    @change="startTimeChange")
                   view(v-if="currentCourse.startTime") {{currentCourse.startTime}}
                   view(v-else) 未指定
               view(class="weui-flex__item time-wrapper") ~
               view(class="weui-flex__item time-wrapper")
-                timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime" :end="maxEndTime" :value="currentCourse.endTime?currentCourse.endTime:minEndTime" @change="endTimeChange")
+                timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime"
+                    :end="maxEndTime"
+                    :value="currentCourse.endTime?currentCourse.endTime:minEndTime"
+                    @change="endTimeChange")
                   view(v-if="currentCourse.endTime") {{currentCourse.endTime}}
                   view(v-else) 未指定
           view(class="weui-cell")
@@ -49,6 +60,7 @@ view
 
 <script>
 import { mapState } from 'vuex'
+import weekmodePicker from './weekmodePicker'
 export default {
   data () {
     return {
@@ -56,6 +68,9 @@ export default {
       showSelectCourse: true,
       selectLocation: []
     }
+  },
+  components: {
+    weekmodePicker
   },
   props: {
     scene: {
@@ -214,6 +229,10 @@ export default {
 
     locationSelected (item) {
       this.currentCourse.location = item
+    },
+
+    weekmodeChange (event) {
+      this.currentCourse.week = event.value
     }
   },
   onLoad () {
@@ -222,6 +241,7 @@ export default {
       this.currentCourse = {
         name: '',
         location: '',
+        week: 'both',
         ...interval
       }
       this.showSelectCourse = true

@@ -1,17 +1,20 @@
 mixin course-info
+  view(class="weui-cell__hd")
+    view(v-if="course.week=='odd'") (单周)
+    view(v-else-if="course.week=='even'") (双周)
   view(class="weui-cell__bd")
     view(class="course-name") {{course.name}}
     view(class="course-time" v-if="course.startTime") {{course.startTime}}~{{course.endTime}}
   view(class="weui-cell__ft" v-if="course.location") {{course.location}}
 
-mixin navbar-swiper
+mixin navbar-swiper(vForParameter)
   view(class="course-table")
     view(class="weui-tab")
       view(class="tab-title")
         nav-bar(:navItems="weekdays" :current="activeDay"  @tabActive="tabActive")/
       view(class="weui-tab__panel")
         swiper(@change="swiperchange" :current="activeDay" style="height: 100%;")
-          swiper-item(v-for="(day, dayIdx) in courseInfo" :key="dayIdx" )
+          swiper-item(v-for=vForParameter :key="dayIdx" )
             view(class="weui-tab__content" style="height: 100%;")
               scroll-view(scroll-y='true' style="height: 100%; overflow:auto;")
                 block(v-for="(interval, intervalIdx) in day.interval" :key="intervalIdx")

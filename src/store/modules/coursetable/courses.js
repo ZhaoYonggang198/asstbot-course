@@ -1,5 +1,7 @@
 import wechat from './wechat'
 import config from './config.js'
+require('xiaoda-date')
+
 const url = config.service.courseUrl
 
 const weekdays = [{
@@ -55,7 +57,7 @@ var getFrontEndCoursePerInterval = function (backendCourse, dayBackend, interval
   let backendInfo = dayInfo[intervalBackend]
   let backendAddition = dayInfo[intervalBackend + 'Info']
 
-  if (!backendInfo) {
+  if (!backendInfo && !backendAddition) {
     return []
   }
 
@@ -65,11 +67,15 @@ var getFrontEndCoursePerInterval = function (backendCourse, dayBackend, interval
         name: coursename,
         location: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        week: 'both'
       }
     })
   } else {
-    return backendAddition
+    return backendAddition.map((course) => {
+      course.week = course.week || 'both'
+      return course
+    })
   }
 }
 
@@ -88,7 +94,7 @@ var getFrontEndCourse = function (backendCourse) {
     }
     frontend.push(daycourse)
   }
-  return frontend
+  return {meta: backendCourse.meta, courseInfo: frontend}
 }
 
 var getBackEndCourse = function (frontEnd) {
@@ -109,7 +115,11 @@ var getBackEndCourse = function (frontEnd) {
 
 const state = {
   courseInfo: [],
-  openid: ''
+  openid: '',
+  courseMeta: {
+    needOddEvenWeek: false,
+    sameOddWeek: true
+  }
 }
 
 function __allCourses (state) {
@@ -178,12 +188,55 @@ const getters = {
       }
     }
     return {startTime: '', endTime: ''}
+  },
+  currentWeekOdd: (state) => {
+    let xiaodaOddWeek = new Date().isOddWeek()
+    if (state.courseMeta.sameOddWeek) {
+      return xiaodaOddWeek
+    } else {
+      return !xiaodaOddWeek
+    }
+  },
+  getDisplayCourse: (state) => (filter) => {
+    let courseInfo = JSON.parse(JSON.stringify(state.courseInfo))
+    let displayCourseInfo = courseInfo.map((day) => {
+      let interval = day.interval.map(interval => {
+        let course = interval.course.filter(filter)
+        interval.course = course
+        return interval
+      })
+      day.interval = interval
+      return day
+    })
+    return displayCourseInfo
   }
 }
 
+function isExistOddEvenCourse (courseInfo) {
+  var exist = false
+  courseInfo.forEach((day) => {
+    day.interval.forEach((interval) => {
+      interval.course.forEach((course) => {
+        exist = course.week ? course.week !== 'both' : false
+      })
+    })
+  })
+  return exist
+}
+
+function __setCourses (state, courseInfo) {
+  state.courseInfo = courseInfo
+  state.courseMeta.needOddEvenWeek = isExistOddEvenCourse(courseInfo)
+}
+
 const mutations = {
+  setBackendCourses (state, {courseInfo, meta}) {
+    state.courseMeta.sameOddWeek = meta && meta.sameOddWeek ? meta.sameOddWeek : true
+    __setCourses(state, courseInfo)
+  },
+
   setCourses (state, courseInfo) {
-    state.courseInfo = courseInfo
+    __setCourses(state, courseInfo)
   },
 
   moveupCourse (state, {day, interval, course}) {
@@ -218,29 +271,35 @@ const mutations = {
     state.courseInfo[day].interval[interval].course.splice(course, 0, value)
   },
 
-  copyCourses (state, courseInfo) {
+  copyCourses (state, {courseInfo, meta}) {
     state.courseInfo = courseInfo
+    state.courseMeta.sameOddWeek = meta.sameOddWeek
   },
 
-  mergeCourses (state, courseInfo) {
-    var allCourses = __allCourses(state)
-    if (allCourses.length === 0) {
-      state.courseInfo = courseInfo
-    } else {
-      for (let dayidx in state.courseInfo) {
-        let day = courseInfo[dayidx]
-        for (let intervalidx in state.courseInfo[dayidx].interval) {
-          if (state.courseInfo[dayidx].interval[intervalidx].course.length === 0) {
-            state.courseInfo[dayidx].interval[intervalidx].course =
-              day.interval[intervalidx].course
-          }
-        }
-      }
-    }
-  },
+  // mergeCourses (state, courseInfo) {
+  //   var allCourses = __allCourses(state)
+  //   if (allCourses.length === 0) {
+  //     state.courseInfo = courseInfo
+  //   } else {
+  //     for (let dayidx in state.courseInfo) {
+  //       let day = courseInfo[dayidx]
+  //       for (let intervalidx in state.courseInfo[dayidx].interval) {
+  //         if (state.courseInfo[dayidx].interval[intervalidx].course.length === 0) {
+  //           state.courseInfo[dayidx].interval[intervalidx].course =
+  //             day.interval[intervalidx].course
+  //         }
+  //       }
+  //     }
+  //   }
+  // },
 
   setOpenId (state, openid) {
     state.openid = openid
+  },
+
+  setCurrentWeek (state, odd) {
+    let xiaoDaOdd = new Date().isOddWeek()
+    state.courseMeta.sameOddWeek = (xiaoDaOdd === odd)
   }
 }
 
@@ -269,11 +328,13 @@ const actions = {
   getOtherCourses ({commit}, openid) {
     return __getCourses(openid)
   },
+
   getCourses ({commit}) {
     return new Promise(function (resolve, reject) {
       wechat.getOpenId().then((openid) => {
         __getCourses(openid).then((courseInfo) => {
-          commit('setCourses', courseInfo)
+          console.log(courseInfo)
+          commit('setBackendCourses', courseInfo)
           commit('setOpenId', openid)
           resolve()
         }).catch((err) => {
@@ -285,16 +346,16 @@ const actions = {
     })
   },
 
-  mergeCourses ({commit}, otherOpenId) {
-    return new Promise((resolve, reject) => {
-      __getCourses(otherOpenId).then((courseInfo) => {
-        commit('mergeCourses', courseInfo)
-        resolve()
-      }).catch((err) => {
-        reject(err)
-      })
-    })
-  },
+  // mergeCourses ({commit}, otherOpenId) {
+  //   return new Promise((resolve, reject) => {
+  //     __getCourses(otherOpenId).then((courseInfo) => {
+  //       commit('mergeCourses', courseInfo)
+  //       resolve()
+  //     }).catch((err) => {
+  //       reject(err)
+  //     })
+  //   })
+  // },
 
   saveCourses ({commit}, courses) {
     var backendCourses = getBackEndCourse(courses)
@@ -306,7 +367,10 @@ const actions = {
             method: 'POST',
             data: {
               openid: openid,
-              courseTable: backendCourses
+              courseTable: {
+                meta: state.courseMeta,
+                ...backendCourses
+              }
             },
             success: function (response) {
               commit('setCourses', courses)

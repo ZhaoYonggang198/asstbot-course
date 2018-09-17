@@ -3,7 +3,7 @@ include ../../pug/template.pug
 
 view(class="page content")
   title-bar(title="你朋友的课表")
-  +navbar-swiper
+  +navbar-swiper("(day, dayIdx) in courseInfo")
     block(v-if="interval.course.length>0")
       block(v-for="(course, k) in interval.course" :key="k")
         view(class="weui-cell")
@@ -29,7 +29,9 @@ export default {
     return {
       curDay: 0,
       activeDay: 0,
-      courseInfo: []
+      courseInfo: [],
+      courseMeta: {},
+      weekmode: 'both'
     }
   },
 
@@ -84,7 +86,7 @@ export default {
       }
     },
     copyCourses () {
-      this.$store.commit('copyCourses', this.courseInfo)
+      this.$store.commit('copyCourses', {courseInfo: this.courseInfo, meta: this.courseMeta})
       this.saveCourses(this.owncourseInfo)
         .then(() => {
           wx.reLaunch({
@@ -105,7 +107,8 @@ export default {
     if (option.user) {
       this.getOtherCourses(option.user)
         .then((courses) => {
-          this.courseInfo = courses
+          this.courseInfo = courses.courseInfo
+          this.courseMeta = courses.meta
         })
     }
     this.getCourses()
