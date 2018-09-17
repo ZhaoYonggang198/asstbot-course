@@ -17,9 +17,7 @@ view(class="page content")
     view(class="weui-flex__item")
       button(size="small" open-type="share") 直接转发
     view(class="weui-flex__item")
-      button(size="small" type="primary" @click="mergecourse") 存入课表
-    //- view(class="weui-flex__item")
-    //-   i-button(type="ghost" size="small" @iclick="mergecourse") 合并课程
+      button(size="small" type="primary" @click="mergecourse") 存入我的课表
 </template>
 
 <script>
@@ -151,6 +149,8 @@ export default {
   line-height: 2;
   margin-left: 20rpx;
   margin-right: 20rpx;
+  padding-left: 10rpx;
+  padding-right: 10rpx;
 }
 
 @import '../../pug/course.css';
