@@ -23,5 +23,12 @@
 .course-time {
   line-height: 1.2;
   font-size: 12px;
-  color: #80848f
+  color: #80848f;
+  margin-right: 15rpx;
+  float: left;
+}
+
+.course-teacher {
+  color: #80848f;
+  float: left;
 }

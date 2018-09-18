@@ -4,7 +4,9 @@ mixin course-info
     view(v-else-if="course.week=='even'") (双周)
   view(class="weui-cell__bd")
     view(class="course-name") {{course.name}}
-    view(class="course-time" v-if="course.startTime") {{course.startTime}}~{{course.endTime}}
+    view(class="addition-info")
+      text(class="course-time" v-if="course.startTime") {{course.startTime}}~{{course.endTime}}
+      text(class="course-teacher"  v-if="course.teacher") {{course.teacher}}
   view(class="weui-cell__ft" v-if="course.location") {{course.location}}
 
 mixin navbar-swiper(vForParameter)

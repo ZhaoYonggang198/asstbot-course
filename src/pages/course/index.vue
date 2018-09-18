@@ -241,8 +241,8 @@ export default {
 .bottom-button .button {
   font-size: 28rpx;
   line-height: 2;
-  margin-left: 15rpx;
-  margin-right: 15rpx;
+  margin-left: 10rpx;
+  margin-right: 10rpx;
 }
 
 .bottom-button .weui-btn {

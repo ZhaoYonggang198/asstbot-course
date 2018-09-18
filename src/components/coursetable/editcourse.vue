@@ -15,7 +15,21 @@ view
                 view(class="weui-cell__hd")
                   view(class="weui-label")          
                 view(class="weui-cell__bd") 
-                  icon(class="weui-icon-checkbox_circle" type="circle" size="16")
+                  icon(class="weui-icon-checkbox_circle" type="circle" size="13")
+                  view {{item}}
+          view(class="weui-cell")
+            view(class="weui-cell__hd")
+              view(class="weui-label") 任课老师
+            view(class="weui-cell__bd")
+              input(:value="currentCourse.teacher" class="weui-input" placeholder="请输入老师的名字"
+                @input="teacherChange")
+          view(class="select-list")
+            block(v-for="(item, index) in selectTeacher" :key="item")
+              view(class="weui-cell" @click="teacherSelected(item)")
+                view(class="weui-cell__hd")
+                  view(class="weui-label")          
+                view(class="weui-cell__bd") 
+                  icon(class="weui-icon-checkbox_circle" type="circle" size="13")
                   view {{item}}
           view(class="weui-cell")
             view(class="weui-cell__hd")
@@ -53,7 +67,7 @@ view
                 view(class="weui-cell__hd")
                   view(class="weui-label")          
                 view(class="weui-cell__bd") 
-                  icon(class="weui-icon-checkbox_circle" type="circle" size="16")
+                  icon(class="weui-icon-checkbox_circle" type="circle" size="13")
                   view {{item}}
   i-message#message
 </template>
@@ -66,7 +80,8 @@ export default {
     return {
       currentCourse: {},
       showSelectCourse: true,
-      selectLocation: []
+      selectLocation: [],
+      selectTeacher: []
     }
   },
   components: {
@@ -165,15 +180,26 @@ export default {
         })
         .map((item) => {
           return item.location
-        })
+        }).splice(0, 5)
 
-      this.selectLocation = locations
+      if (locations.length === 1 && locations[0] === this.currentCourse.location) {
+        this.selectLocation = []
+      } else {
+        this.selectLocation = locations
+      }
+
+      let teachers = this.$store.getters.allTeacherOfCourse(newVal)
+      this.selectTeacher = teachers
     },
     'currentCourse.location': function (newVal) {
       let locations = this.$store.getters.allLocations.filter((item) => {
         return item !== newVal && item.indexOf(newVal) !== -1
       }).splice(0, 5)
       this.selectLocation = locations
+    },
+    'currentCourse.teacher': function (newVal) {
+      console.log(newVal)
+      this.selectTeacher = []
     }
   },
   methods: {
@@ -229,10 +255,20 @@ export default {
 
     locationSelected (item) {
       this.currentCourse.location = item
+      this.selectLocation = []
     },
 
     weekmodeChange (event) {
       this.currentCourse.week = event.value
+    },
+
+    teacherChange (event) {
+      this.currentCourse.teacher = event.mp.detail.value
+    },
+
+    teacherSelected (item) {
+      console.log('teacherSelected', item)
+      this.currentCourse = {...this.currentCourse, teacher: item}
     }
   },
   onLoad () {
@@ -242,6 +278,7 @@ export default {
         name: '',
         location: '',
         week: 'both',
+        tearch: '',
         ...interval
       }
       this.showSelectCourse = true
