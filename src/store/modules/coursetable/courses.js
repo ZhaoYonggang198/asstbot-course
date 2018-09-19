@@ -68,12 +68,14 @@ var getFrontEndCoursePerInterval = function (backendCourse, dayBackend, interval
         location: '',
         startTime: '',
         endTime: '',
-        week: 'both'
+        week: 'both',
+        teacher: ''
       }
     })
   } else {
     return backendAddition.map((course) => {
       course.week = course.week || 'both'
+      course.teacher = course.teacher || ''
       return course
     })
   }
@@ -188,6 +190,20 @@ const getters = {
       }
     }
     return {startTime: '', endTime: ''}
+  },
+  allTeacherOfCourse: (state) => (courseName) => {
+    let teacher = []
+    let courseInfo = state.courseInfo
+    courseInfo.forEach(day => {
+      day.interval.forEach(interval => {
+        interval.course.forEach(course => {
+          if (course.name === courseName && course.teacher !== '' && teacher.indexOf(course.teacher) === -1) {
+            teacher.push(course.teacher)
+          }
+        })
+      })
+    })
+    return teacher
   },
   currentWeekOdd: (state) => {
     let xiaodaOddWeek = new Date().isOddWeek()

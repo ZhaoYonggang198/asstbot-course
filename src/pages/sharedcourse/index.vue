@@ -13,11 +13,11 @@ view(class="page content")
         view(class="weui-cell__bd") 休息
   view(class="weui-flex bottom-button")
     view(class="weui-flex__item")
-      button(size="small" @click="gotocourse") 回到主页    
+      button(size="small" @click="gotocourse") 回到主页
     view(class="weui-flex__item")
-      button(size="small" type="primary" @click="mergecourse") 复制课程
-    //- view(class="weui-flex__item")
-    //-   i-button(type="ghost" size="small" @iclick="mergecourse") 合并课程
+      button(size="small" open-type="share") 直接转发
+    view(class="weui-flex__item")
+      button(size="small" type="primary" @click="mergecourse") 存入我的课表
 </template>
 
 <script>
@@ -96,6 +96,9 @@ export default {
     },
     swiperchange (event) {
       this.activeDay = event.mp.detail.current
+    },
+    sharecourse () {
+      console.log(this.$root.$mp.query)
     }
   },
 
@@ -112,6 +115,12 @@ export default {
         })
     }
     this.getCourses()
+  },
+
+  onShareAppMessage: function () {
+    return {
+      path: `/pages/sharedcourse/main?user=${this.$root.$mp.query.user}`
+    }
   }
 }
 </script>
@@ -140,6 +149,8 @@ export default {
   line-height: 2;
   margin-left: 20rpx;
   margin-right: 20rpx;
+  padding-left: 10rpx;
+  padding-right: 10rpx;
 }
 
 @import '../../pug/course.css';

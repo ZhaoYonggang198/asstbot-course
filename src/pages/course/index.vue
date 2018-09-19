@@ -37,7 +37,7 @@ view(class="page content")
     view(class="weui-flex__item" )
       button(class="button" open-type="share" type="ghost") 分享课表
     view(class="weui-flex__item")
-      button(class="button" type="primary"  @click="bindphone") 关联小爱
+      button(class="button" type="primary"  @click="bindphone") 关联小米音箱
   view(class="weui-flex bottom-button" v-else)
     view(class="weui-flex__item")
       button(class="weui-btn" type="primary" @click="toggleEditMode") 完成编辑
@@ -246,8 +246,8 @@ export default {
 .bottom-button .button {
   font-size: 28rpx;
   line-height: 2;
-  margin-left: 20rpx;
-  margin-right: 20rpx;
+  margin-left: 10rpx;
+  margin-right: 10rpx;
 }
 
 .bottom-button .weui-btn {
