@@ -13,6 +13,7 @@ import asr from './modules/asr'
 import curSurvey from './modules/curSurvey'
 import phone from './modules/coursetable/phone'
 import courses from './modules/coursetable/courses'
+import dueros from './modules/coursetable/dueros'
 
 Vue.use(Vuex)
 
@@ -32,7 +33,8 @@ export default new Vuex.Store({
     asr,
     curSurvey,
     phone,
-    courses
+    courses,
+    dueros
   },
   strict: debug
 })

@@ -17,7 +17,6 @@ export default {
     imageUrl: `${hostRoot}/image`,
     videoPostUrl: `${hostRoot}/vedio`,
     imagePostUrl: `${hostRoot}/image?compress=true`,
-    qrcodeUrl: `${hostRoot}/qrcode`,
-    duerosUserUrl: `${host}/api/course/dueros_user`,
+    qrcodeUrl: `${hostRoot}/qrcode`
   }
 }

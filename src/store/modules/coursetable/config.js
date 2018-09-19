@@ -28,9 +28,11 @@ export default {
     courseUrl: `${host}/api/course/course`,
 
     phoneUrl: `${host}/api/course/phone`,
-    
+
     requestCodeUrl: `${host}/api/oauth/request/code`,
 
-    verifyCodeUrl: `${host}/api/oauth/login`
+    verifyCodeUrl: `${host}/api/oauth/login`,
+
+    duerosUserUrl: `${host}/api/course/dueros_user`
   }
 }
