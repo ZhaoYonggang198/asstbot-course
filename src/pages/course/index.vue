@@ -51,6 +51,7 @@ import courseOperation from '@/components/coursetable/courseOperation'
 import editcourse from '@/components/coursetable/editcourse'
 import currentWeekConfig from '@/components/coursetable/currentWeekConfig'
 import weekDisplayMode from '@/components/coursetable/weekDisplayMode'
+import config from '@/config.js'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -194,7 +195,32 @@ export default {
   created () {
   },
 
-  onLoad () {
+  onLoad (option) {
+    var duerosId = option.scene
+    if (duerosId.indexOf('dueros') !== -1) {
+      console.log('qrcode scan from dueros, duerosId = ' + duerosId)
+      wechat.getOpenId()
+        .then((openid) => {
+          wx.request({
+            url: config.service.duerosUserUrl,
+            method: 'POST',
+            data: {
+              openid: openid,
+              duerosId : duerosId
+            },
+            success: function (response) {
+              console.log(`post dueros id ${duerosId} successful!`)
+              resolve(response)
+            },
+            fail: function (err) {
+              reject(err)
+            }
+          })
+        })
+        .catch((err) => {
+          reject(err)
+        })      
+    }
     this.getCourses().then(() => {
       var date = new Date()
       var weekday = date.getDay()

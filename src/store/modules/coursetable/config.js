@@ -28,7 +28,7 @@ export default {
     courseUrl: `${host}/api/course/course`,
 
     phoneUrl: `${host}/api/course/phone`,
-
+    
     requestCodeUrl: `${host}/api/oauth/request/code`,
 
     verifyCodeUrl: `${host}/api/oauth/login`
