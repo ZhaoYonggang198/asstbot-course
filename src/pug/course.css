@@ -22,7 +22,7 @@
 
 .course-time {
   line-height: 1.2;
-  font-size: 12px;
+  font-size: 13px;
   color: #80848f;
   margin-right: 15rpx;
   float: left;
@@ -31,4 +31,15 @@
 .course-teacher {
   color: #80848f;
   float: left;
+  font-size: 12px;
+}
+
+.course-name.odd:after{
+  content: "(单周)";
+  color: #80848f;
+}
+
+.course-name.even:after{
+  content: "(双周)";
+  color: #80848f;
 }

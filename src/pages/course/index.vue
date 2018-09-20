@@ -12,7 +12,7 @@ view(class="page content")
     block(v-if="!editmode")
       block(v-if="interval.course.length>0")
         block(v-for="(course, k) in interval.course" :key="k")
-          view(class="weui-cell")
+          view(class="weui-cell" @click="setEditmode")
             +course-info
       block(v-else)
         view(class="weui-cell")
@@ -196,7 +196,7 @@ export default {
 
   onLoad (option) {
     var duerosId = option.scene
-    if (duerosId.indexOf('dueros') !== -1) {
+    if (duerosId && duerosId.indexOf('dueros') !== -1) {
       console.log('qrcode scan from dueros, duerosId = ' + duerosId)
       this.$store.dispatch('toBindDuerosId', duerosId)
     }

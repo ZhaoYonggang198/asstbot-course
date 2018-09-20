@@ -1,9 +1,6 @@
 mixin course-info
-  view(class="weui-cell__hd")
-    view(v-if="course.week=='odd'") (单周)
-    view(v-else-if="course.week=='even'") (双周)
   view(class="weui-cell__bd")
-    view(class="course-name") {{course.name}}
+    view(class="course-name" :class="course.week") {{course.name}}
     view(class="addition-info")
       text(class="course-time" v-if="course.startTime") {{course.startTime}}~{{course.endTime}}
       text(class="course-teacher"  v-if="course.teacher") {{course.teacher}}

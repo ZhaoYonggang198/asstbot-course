@@ -96,7 +96,8 @@ var getFrontEndCourse = function (backendCourse) {
     }
     frontend.push(daycourse)
   }
-  return {meta: backendCourse.meta, courseInfo: frontend}
+  let meta = backendCourse.meta ? backendCourse.meta : {sameOddWeek: true}
+  return {meta, courseInfo: frontend}
 }
 
 var getBackEndCourse = function (frontEnd) {
