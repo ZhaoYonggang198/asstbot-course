@@ -19,7 +19,7 @@
         </wxc-panel>
         <wxc-panel>
           <button class="share-button" @click="publish">
-            <wxc-list icon="share" icon-color="#1cb2b9" title="分享到朋友圈"></wxc-list>
+            <wxc-list icon="share" icon-color="#1cb2b9" title="生成分享图片"></wxc-list>
           </button>
         </wxc-panel>
         <wxc-popup class="J_Popup" @clickOnThis="clickOnPopup">

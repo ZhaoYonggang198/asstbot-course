@@ -83,7 +83,7 @@ function comfirmSaveImageToPhotosAlbum (image) {
   return new Promise((resolve, reject) => {
     wx.showModal({
       title: '分享二维码已保存到系统相册',
-      content: '快去分享给朋友，让更多的朋友来参与吧',
+      content: '',
       success: function (res) {
         if (res.confirm) {
           console.log('用户点击确定')

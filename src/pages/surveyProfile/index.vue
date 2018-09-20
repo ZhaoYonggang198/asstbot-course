@@ -134,6 +134,12 @@ export default {
   onShow () {
     this.title = ''
     this.welcomeText = ''
+  },
+  onShareAppMessage: function () {
+    return {
+      title: '',
+      path: '/pages/index/main'
+    }
   }
 }
 </script>

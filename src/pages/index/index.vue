@@ -94,8 +94,7 @@ export default {
   onShareAppMessage: function () {
     return {
       title: '',
-      path: '/pages/index/main',
-      imageUrl: this.shareSurvey.avatarUrl
+      path: '/pages/index/main'
       // success: function (res) {
       //   console.log(res.shareTickets[0])
       //   wx.getShareInfo({

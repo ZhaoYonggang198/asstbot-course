@@ -57,6 +57,12 @@ export default {
           console.error(e)
         })
     }
+  },
+  onShareAppMessage: function () {
+    return {
+      title: '',
+      path: '/pages/index/main'
+    }
   }
 }
 </script>

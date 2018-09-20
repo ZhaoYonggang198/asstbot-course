@@ -285,6 +285,12 @@ export default {
     this.typeIndex = this.typeRange.indexOf(this.subject.type)
     this.isLegal = true
     this.answersLegal = true
+  },
+  onShareAppMessage: function () {
+    return {
+      title: '',
+      path: '/pages/index/main'
+    }
   }
 }
 </script>

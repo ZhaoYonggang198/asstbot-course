@@ -234,7 +234,9 @@ function isExistOddEvenCourse (courseInfo) {
   courseInfo.forEach((day) => {
     day.interval.forEach((interval) => {
       interval.course.forEach((course) => {
-        exist = course.week ? course.week !== 'both' : false
+        if (course.week && course.week !== 'both') {
+          exist = true
+        }
       })
     })
   })

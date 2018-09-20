@@ -36,35 +36,34 @@ export default {
   },
 
   methods: {
-    startChat () {
+    getLoadOption () {
       let option = this.option
       console.log('startChat, option:', option)
-      if (option.id) {
-        const scene = option.scene ? option.scene : 'publish'
-        this.$store.commit('talkToSurveyBot', {id: option.id, scene})
 
-        this.$store.dispatch('retrieveSurveyById', option.id)
-          .then((survey) => {
-            this.survey = survey
-            this.loadDone = true
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      } else if (option.scene) {
-        // 临时方案，适配二维码扫码后微信规定只能用scene传递参数，这时scene存的是survey id
-        const id = option.scene
-        const scene = 'publish'
-        this.$store.commit('talkToSurveyBot', {id: id, scene})
-        this.$store.dispatch('retrieveSurveyById', id)
-          .then((survey) => {
-            this.survey = survey
-            this.loadDone = true
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+      var scene
+      var id
+
+      if (option.id) {
+        scene = option.scene ? option.scene : 'publish'
+        id = option.id
+      } else {
+        id = option.scene
+        scene = 'publish'
       }
+      return {id, scene}
+    },
+    startChat () {
+      const option = this.getLoadOption()
+      this.$store.commit('talkToSurveyBot', option)
+
+      this.$store.dispatch('retrieveSurveyById', option.id)
+        .then((survey) => {
+          this.survey = survey
+          this.loadDone = true
+        })
+        .catch((err) => {
+          console.log(err)
+        })
 
       this.$store.dispatch('updateUserInfo')
         .then(() => {
@@ -123,6 +122,13 @@ export default {
             this.startChat()
           }
         })
+    }
+  },
+  onShareAppMessage: function () {
+    const option = this.getLoadOption()
+    return {
+      title: '',
+      path: `/pages/surveyChat/main?id=${option.id}`
     }
   }
 }

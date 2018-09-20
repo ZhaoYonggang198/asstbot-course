@@ -100,6 +100,12 @@
     },
     onUnload () {
       this.hasLoaded = false
+    },
+    onShareAppMessage: function () {
+      return {
+        title: '',
+        path: '/pages/index/main'
+      }
     }
   }
 </script>

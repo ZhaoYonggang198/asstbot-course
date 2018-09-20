@@ -81,7 +81,7 @@ const getters = {
       let subject = subjects[parseInt(questionId) - 1]
       let question = subject.question
       let questionUrl = (subject.imageUrl === '') ? null : subject.imageUrl
-      let correct = answers[index].correct === 'true'
+      let correct = answers[index].correct === true || answers[index].correct === 'true'
       let userSay = answers[index].user_say
       if (userSay) {
         ret.push({ id: index + 1, question, correct: correct, userSay, questionUrl, needSwipper: false })

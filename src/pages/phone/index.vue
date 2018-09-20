@@ -166,6 +166,12 @@ export default {
   onLoad () {
     this.inputPhone = ''
     this.inputCode = ''
+  },
+  onShareAppMessage: function () {
+    return {
+      title: '',
+      path: '/pages/index/main'
+    }
   }
 }
 </script>

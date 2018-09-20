@@ -58,7 +58,6 @@ Component({
     let displayIncomingMsgs = this.data.outgoing || !messages || !messages.msgs ? [] : messages.msgs.filter((msg) => {
       return msg.type === 'text' ||
       msg.type === 'getUserinfo' ||
-      msg.type === 'dialog-end' ||
       msg.type === 'image' ||
       msg.type === 'audio' ||
       msg.type === 'video' ||

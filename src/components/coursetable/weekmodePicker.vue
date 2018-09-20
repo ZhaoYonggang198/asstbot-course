@@ -31,6 +31,15 @@ export default {
   },
   watch: {
     value: function (newVal) {
+      this.updateIndex(newVal)
+    }
+  },
+  methods: {
+    handlePickerChange (event) {
+      let value = WEEK_MODE[event.mp.detail.value].value
+      this.$emit('change', {value})
+    },
+    updateIndex (newVal) {
       for (let i in WEEK_MODE) {
         if (WEEK_MODE[i].value === newVal) {
           this.index = i
@@ -39,11 +48,8 @@ export default {
       }
     }
   },
-  methods: {
-    handlePickerChange (event) {
-      let value = WEEK_MODE[event.mp.detail.value].value
-      this.$emit('change', {value})
-    }
+  onLoad () {
+    this.updateIndex(this.value)
   }
 }
 </script>

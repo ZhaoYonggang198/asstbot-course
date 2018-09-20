@@ -15,7 +15,7 @@ view(class="page content")
           view(class="weui-cell" @click="setEditmode")
             +course-info
       block(v-else)
-        view(class="weui-cell")
+        view(class="weui-cell" @click="setEditmode")
           view(class="weui-cell__bd") 休息
     block(v-else)
       block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
