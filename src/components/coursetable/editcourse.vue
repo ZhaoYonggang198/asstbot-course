@@ -3,34 +3,12 @@ view
   i-popup(visible="true" @ok="confirm" @cancel="cancel" :title="title")
     view(style="text-align: left")
         view(class="weui-cells")
-          view(class="weui-cell")
-            view(class="weui-cell__hd")
-              view(class="weui-label") 课程名
-            view(class="weui-cell__bd")
-              input(:value="currentCourse.name" class="weui-input" placeholder="请输入课程名" focus="true" :error="error"
-                @input="nameChange")
-          view(class="select-list" v-if="showSelectCourse")
-            block(v-for="(item, index) in selectCourses" :key="item")
-              view(class="weui-cell" @click="courseSelected(item)")
-                view(class="weui-cell__hd")
-                  view(class="weui-label")          
-                view(class="weui-cell__bd") 
-                  icon(class="weui-icon-checkbox_circle" type="circle" size="13")
-                  view {{item}}
-          view(class="weui-cell")
-            view(class="weui-cell__hd")
-              view(class="weui-label") 任课老师
-            view(class="weui-cell__bd")
-              input(:value="currentCourse.teacher" class="weui-input" placeholder="请输入老师的名字"
-                @input="teacherChange")
-          view(class="select-list")
-            block(v-for="(item, index) in selectTeacher" :key="item")
-              view(class="weui-cell" @click="teacherSelected(item)")
-                view(class="weui-cell__hd")
-                  view(class="weui-label")          
-                view(class="weui-cell__bd") 
-                  icon(class="weui-icon-checkbox_circle" type="circle" size="13")
-                  view {{item}}
+          select-input(inputId='name' label='课程名' placeholder="请输入课程名" 
+            :value="currentCourse.name" :currentfocus="focusItem" :selectlist="allCourses"
+            @change="nameChange" @focuson="selectInput('name')")
+          select-input(inputId='teacher' label='任课老师' placeholder="请输入老师名" 
+            :value="currentCourse.teacher" :currentfocus="focusItem" :selectlist="selectTeacher"
+            @change="teacherChange" @focuson="selectInput('teacher')")        
           view(class="weui-cell")
             view(class="weui-cell__hd")
               view(class="weui-label") 周次
@@ -55,37 +33,27 @@ view
                     @change="endTimeChange")
                   view(v-if="currentCourse.endTime") {{currentCourse.endTime}}
                   view(v-else) 未指定
-          view(class="weui-cell")
-            view(class="weui-cell__hd")
-              view(class="weui-label") 地点
-            view(class="weui-cell__bd")
-              input(:value="currentCourse.location" class="weui-input" placeholder="请输入地点" :error="error"
-                @input="locationChange")
-          view(class="select-list")
-            block(v-for="(item, index) in selectLocation" :key="item")
-              view(class="weui-cell" @click="locationSelected(item)")
-                view(class="weui-cell__hd")
-                  view(class="weui-label")          
-                view(class="weui-cell__bd") 
-                  icon(class="weui-icon-checkbox_circle" type="circle" size="13")
-                  view {{item}}
-  i-message#message
+          select-input(inputId='location' label='地点' placeholder="请输入上课地点" 
+            :value="currentCourse.location" :currentfocus="focusItem" :selectlist="selectLocation"
+            @change="locationChange" @focuson="selectInput('location')")   
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import weekmodePicker from './weekmodePicker'
+import selectInput from './selectInput'
 export default {
   data () {
     return {
       currentCourse: {},
-      showSelectCourse: true,
+      focusItem: 'name',
       selectLocation: [],
       selectTeacher: []
     }
   },
   components: {
-    weekmodePicker
+    weekmodePicker,
+    selectInput
   },
   props: {
     scene: {
@@ -109,6 +77,9 @@ export default {
     ...mapState({
       courseInfo: state => state.courses.courseInfo
     }),
+    ...mapGetters([
+      'allCourses'
+    ]),
     title () {
       if (!this.scene) {
         return ''
@@ -121,15 +92,6 @@ export default {
       } else {
         return `编辑课程`
       }
-    },
-    selectCourses () {
-      if (this.currentCourse.name === undefined) {
-        return []
-      }
-      return this.$store.getters.allCourses.filter((course) => {
-        return this.currentCourse.name !== course &&
-          course.indexOf(this.currentCourse.name) !== -1
-      }).splice(0, 5)
     },
     minStartTime () {
       if (this.courseInfo[this.day].interval[this.interval].name === '上午') {
@@ -174,29 +136,24 @@ export default {
         return
       }
 
-      let locations = this.$store.getters.allLocationOfCourse
+      let allLocationOfCourse = this.$store.getters.allLocationOfCourse
         .filter((item) => {
           return item.name === newVal
         })
         .map((item) => {
           return item.location
-        }).splice(0, 5)
+        })
 
-      if (locations.length === 1 && locations[0] === this.currentCourse.location) {
-        this.selectLocation = []
-      } else {
-        this.selectLocation = locations
-      }
+      let otherLocation = this.$store.getters.allLocations.filter((item) => {
+        return allLocationOfCourse.indexOf(item) === -1
+      })
+
+      this.selectLocation = [...allLocationOfCourse, ...otherLocation]
 
       let teachers = this.$store.getters.allTeacherOfCourse(newVal)
       this.selectTeacher = teachers
     },
-    'currentCourse.location': function (newVal) {
-      let locations = this.$store.getters.allLocations.filter((item) => {
-        return item !== newVal && item.indexOf(newVal) !== -1
-      }).splice(0, 5)
-      this.selectLocation = locations
-    },
+
     'currentCourse.teacher': function (newVal) {
       console.log(newVal)
       this.selectTeacher = []
@@ -235,10 +192,7 @@ export default {
     },
     nameChange (event) {
       this.showSelectCourse = true
-      this.currentCourse.name = event.mp.detail.value
-    },
-    courseSelected (item) {
-      this.currentCourse.name = item
+      this.currentCourse.name = event
     },
 
     startTimeChange (event) {
@@ -250,12 +204,7 @@ export default {
     },
 
     locationChange (event) {
-      this.currentCourse.location = event.mp.detail.value
-    },
-
-    locationSelected (item) {
-      this.currentCourse.location = item
-      this.selectLocation = []
+      this.currentCourse.location = event
     },
 
     weekmodeChange (event) {
@@ -263,12 +212,11 @@ export default {
     },
 
     teacherChange (event) {
-      this.currentCourse.teacher = event.mp.detail.value
+      this.currentCourse.teacher = event
     },
 
-    teacherSelected (item) {
-      console.log('teacherSelected', item)
-      this.currentCourse = {...this.currentCourse, teacher: item}
+    selectInput (event) {
+      this.focusItem = event
     }
   },
   onLoad () {
@@ -292,22 +240,8 @@ export default {
 </script>
 
 <style scoped>
-.choose-item {
-  width: 15rpx;
-  height: 15rpx;
-  border-radius: 50%;
-  background: #999;
-  margin-right: 40rpx;
-}
 .input-wrapper {
   position: relative
-}
-.select-list {
-  max-height: 100px;
-}
-.weui-input {
-  font-size: 28rpx;
-  border-bottom: solid 1rpx #d6d8d8;
 }
 
 .time-wrapper {
@@ -335,15 +269,6 @@ export default {
   display: none;
 }
 
-.select-list .weui-cell {
-  padding-top: 5rpx;
-  padding-bottom: 5rpx;
-  color: #666;
-  font-size: 26rpx;
-}
 
-.select-list .weui-cell__bd {
-  display: flex;
-  flex-direction: row;
-}
+
 </style>

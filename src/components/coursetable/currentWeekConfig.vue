@@ -3,7 +3,8 @@
     view(class="weui-cell__bd")
       current-week
     view(class="weui-cell__ft")
-      switch(:checked="currentWeekOdd" @change='valueChange')
+      switch(checked @change='valueChange' v-if="initOddStatus")
+      switch(@change='valueChange' v-else)
 </template>
 
 <script>
@@ -13,7 +14,7 @@ import currentWeek from './currentWeek'
 export default {
   data () {
     return {
-      isOdd: true
+      initOddStatus: true
     }
   },
   components: {
@@ -29,9 +30,13 @@ export default {
   },
   methods: {
     valueChange (event) {
-      this.$store.commit('setCurrentWeek', event.mp.detail.value)
+      this.isOdd = event.mp.detail.value
+      this.$store.commit('setCurrentWeek', this.event.mp.detail.value)
       this.$store.dispatch('saveCourses', this.courseInfo)
     }
+  },
+  onLoad () {
+    this.initOddStatus = this.$store.getters.currentWeekOdd
   }
 }
 </script>

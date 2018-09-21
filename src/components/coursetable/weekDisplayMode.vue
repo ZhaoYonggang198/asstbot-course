@@ -34,22 +34,11 @@ export default {
     choose (mode) {
       this.displayMode = mode
       this.$emit('weekModeChange', mode)
-      wx.setStorage({
-        key: 'displayBothWeek',
-        data: mode === 'both'
-      })
     }
   },
   onLoad () {
-    wx.getStorage({
-      key: 'displayBothWeek',
-      success: res => {
-        this.displayMode = res.data ? 'both' : (this.currentWeekOdd ? 'odd' : 'even')
-      },
-      fail: () => {
-        this.displayMode = 'both'
-      }
-    })
+    this.displayMode = this.currentWeekOdd ? 'odd' : 'even'
+    this.$emit('weekModeChange', this.displayMode)
   }
 }
 </script>

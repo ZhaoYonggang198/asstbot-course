@@ -86,11 +86,6 @@ export default {
     },
     editbutton () {
       return this.editmode ? '确认编辑' : '编辑课程'
-    },
-
-    displayCurrentWeek () {
-      let currentWeekOdd = this.$store.getters.currentWeekOdd ? '单周' : '双周'
-      return `本周为 ${currentWeekOdd}`
     }
   },
 
@@ -137,6 +132,8 @@ export default {
     },
     editdone () {
       this.inediting = false
+      this.activeInterval = -1
+      this.activeCourse = -1
     },
     addcourse (day, interval) {
       this.inediting = true
