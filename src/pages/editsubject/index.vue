@@ -193,6 +193,13 @@ export default {
 
     verifySubject () {
       this.isLegal = this.subject.question !== '' || this.subject.imageUrl !== ''
+      if (!this.isLegal) {
+        wx.showModal({
+          title: '请检查问卷',
+          content: '文字和图片不能同时为空',
+          showCancel: false
+        })
+      }
     },
 
     verifyAnswer (answer) {
@@ -200,10 +207,17 @@ export default {
         let reg = /^([1-9][0-9]{10})/
         answer.islegal = reg.test(answer.value)
         console.log('test result=>', answer.islegal)
-        answer.verifyResult = (answer.islegal) ? '' : '手机号码需要设置为11位'
+        answer.verifyResult = (answer.islegal) ? '' : '手机号码的正确格式为11位数字'
       } else {
         answer.islegal = answer.value !== '' || answer.imageUrl !== ''
         answer.verifyResult = (answer.islegal) ? '' : '答案: 文字和图片不能同时为空'
+      }
+      if (!answer.isLegal) {
+        wx.showModal({
+          title: '请检查问卷',
+          content: answer.verifyResult,
+          showCancel: false
+        })
       }
     },
 
@@ -218,15 +232,20 @@ export default {
       let ret = true
       if (this.subject.type === 'radio') {
         this.answersLegal = this.subject.answers.length >= 1
-        this.inlegalText = '单选题最少有一个选型'
+        this.inlegalText = '单选题最少要配置一个选项'
       } else if (this.subject.type === 'checkbox') {
         this.answersLegal = this.subject.answers.length >= 2
-        this.inlegalText = '多选题最少有二个选型'
+        this.inlegalText = '多选题最少要配置两个选项'
       } else {
         this.answersLegal = true
         this.inlegalText = ''
       }
       if (!this.answersLegal) {
+        wx.showModal({
+          title: '请检查问卷',
+          content: this.inlegalText,
+          showCancel: false
+        })
         return false
       } else if (this.survey.type === 'exam') {
         if (!this.hasCorrectAnswer()) {
@@ -234,6 +253,11 @@ export default {
           this.inlegalText = '没有有效的正确答案'
         }
         if (!this.answersLegal) {
+          wx.showModal({
+            title: '请检查问卷',
+            content: this.inlegalText,
+            showCancel: false
+          })
           return false
         }
       }
