@@ -114,7 +114,7 @@
     created () {
       this.list.items.map(item => {
         this.checkArr = [...this.checkArr, false]
-        this.multiLineFlags = [...this.multiLineFlags, getLineCount(300, 28, item.caption) > 1]
+        this.multiLineFlags = [...this.multiLineFlags, getLineCount(280, 28, item.caption) > 1]
       })
     }
   }
@@ -188,8 +188,9 @@
   }
 
   .haveimage .two-line-text {
-    line-height: 50rpx;
+    line-height: 40rpx;
     -webkit-line-clamp:2;
+    padding: 10rpx;
   }
 
   .haveimage .one-line-text {

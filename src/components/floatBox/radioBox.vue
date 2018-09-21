@@ -78,7 +78,7 @@
     created () {
       if (this.list.items) {
         this.list.items.map(item => {
-          this.multiLineFlags = [...this.multiLineFlags, getLineCount(300, 28, item.caption) > 1]
+          this.multiLineFlags = [...this.multiLineFlags, getLineCount(280, 28, item.caption) > 1]
         })
       }
     }
@@ -177,8 +177,9 @@
   text-align: center;
 }
 .two-line-text {
-  line-height: 50rpx;
+  line-height: 40rpx;
   -webkit-line-clamp:2;
   text-align: left;
+  padding: 10rpx;
 }
 </style>
