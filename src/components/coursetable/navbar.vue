@@ -59,7 +59,7 @@ export default {
 
   onLoad () {
     var that = this
-    // this.activeIndex = this.defaultIndex
+    this.activeIndex = this.current
     wx.getSystemInfo({
       success: function (res) {
         that.windowWidth = res.windowWidth

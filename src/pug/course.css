@@ -31,7 +31,7 @@
 .course-teacher {
   color: #80848f;
   float: left;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .course-name.odd:after{
@@ -42,4 +42,8 @@
 .course-name.even:after{
   content: "(双周)";
   color: #80848f;
+}
+
+.weui-cell .weui-cell {
+  padding: 0;
 }

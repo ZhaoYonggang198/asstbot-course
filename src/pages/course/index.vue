@@ -26,9 +26,12 @@ view(class="page content")
             course-operation(:dayIdx="dayIdx" :intervalIdx="intervalIdx" :courseIdx="courseIdx"
               @configdone="configDone(dayIdx, intervalIdx, courseIdx)"
               @editcourse="editCourse(dayIdx, intervalIdx, courseIdx)")
-        view(class="weui-cell weui-cell_access" v-else @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
-          +course-info
-          view(class="weui-cell__ft weui-cell__ft_in-access")
+        view(class="weui-cell weui-cell_access" v-else @longtap="toggleCourse(dayIdx, intervalIdx, courseIdx)")
+          view(class="weui-cell__bd" @click="editCourse(dayIdx, intervalIdx, courseIdx)")
+            view(class="weui-cell")
+              +course-info
+          view(class="weui-cell__ft")
+            i(class="icon iconfont icon-trash" @click="removecourse(dayIdx, intervalIdx, courseIdx)")
       view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx") 
         view(class="weui-cell__bd") 添加更多
   view(class="weui-flex bottom-button" v-if="!editmode")
@@ -185,6 +188,24 @@ export default {
           }
         })
       }
+    },
+    removecourse (day, interval, course) {
+      wx.showModal({
+        title: '确定删除这节课吗',
+        content: '',
+        showCancel: true,
+        cancelText: '取消',
+        cancelColor: '#000000',
+        confirmText: '确定',
+        confirmColor: '#3CC51F',
+        success: res => {
+          if (res.confirm) {
+            this.$store.commit('deleteCourse', {day,
+              interval,
+              course})
+          }
+        }
+      })
     }
   },
 
@@ -198,8 +219,7 @@ export default {
       this.$store.dispatch('toBindDuerosId', duerosId)
     }
     this.getCourses().then(() => {
-      var date = new Date()
-      var weekday = date.getDay()
+      var weekday = new Date().getDay()
       this.activeDay = (weekday === 0 ? 6 : (weekday - 1))
       this.setDisplayCourseInfo()
     })
@@ -255,6 +275,11 @@ export default {
 
 .current-week {
   font-size: 40rpx;
+}
+
+.icon-trash {
+  font-size: 45rpx;
+  margin-left: 20rpx;
 }
 
 </style>

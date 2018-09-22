@@ -31,7 +31,7 @@ export default {
   methods: {
     valueChange (event) {
       this.isOdd = event.mp.detail.value
-      this.$store.commit('setCurrentWeek', this.event.mp.detail.value)
+      this.$store.commit('setCurrentWeek', event.mp.detail.value)
       this.$store.dispatch('saveCourses', this.courseInfo)
     }
   },
