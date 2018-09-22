@@ -73,7 +73,9 @@ export default {
     }
   },
   onLoad (option) {
-    if (option.scene) {
+    if (this.scene.indexOf('redirectTo') !== -1) {
+
+    } else if (option.scene) {
       this.scene = option.scene
     } else {
       this.scene = 'onLoad'

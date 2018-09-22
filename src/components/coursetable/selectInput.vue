@@ -39,7 +39,8 @@ export default {
     selectlist: {type: Array, default: ''},
     value: {type: String, default: ''},
     inputId: {type: String, default: ''},
-    currentfocus: {type: String, default: ''}
+    currentfocus: {type: String, default: ''},
+    validator: {type: RegExp}
   },
   computed: {
     displaySelectlist () {
