@@ -5,19 +5,23 @@ view(class="page")
     swiper-item
       view(class="swiper-item")
         image(src="/static/image/skill.png" mode="aspectFit")
-        view(class="page__desc") 如果你有小米音箱，在App小爱音箱的技能页面搜索"课表"技能
+        view(class="page__desc") 1. 在App"小爱音箱"技能页面搜索"课表"技能
     swiper-item
       view(class="swiper-item")
         image(src="/static/image/auth1.png" mode="aspectFit")
-        view(class="page__desc") 选择绑定账号
+        view(class="page__desc") 2. 点击"绑定账号"按钮
     swiper-item
       view(class="swiper-item")
         image(src="/static/image/auth2.png" mode="aspectFit")
-        view(class="page__desc") 与哒尔文小程序端（本页面）绑定相同的手机号
+        view(class="page__desc") 3. 输入与本页面相同的手机号
     swiper-item
       view(class="swiper-item")
         image(src="/static/image/auth3.png" mode="aspectFit")
-        view(class="page__desc") 确认授权后，可以在音箱上使用小程序上创建的课程表
+        view(class="page__desc") 4. 点击"确认授权"按钮
+    swiper-item
+      view(class="swiper-item")
+        image(src="/static/image/xiaomi.png" mode="aspectFit")
+        view(class="page__desc") 5. 对小米音箱说"打开课表"，开始使用本课表
 
   i-panel(:title="bindPhone?'已绑定手机：' + bindPhone:''" class="form")
     block(v-if="!bindPhone")
@@ -202,7 +206,8 @@ export default {
 }
 
 .swiper-wrapper {
-  height: 860rpx;
+  padding-top: 20rpx;
+  height: 550rpx;
   width: 100%;
   background: white;
 }
@@ -214,8 +219,8 @@ export default {
 }
 
 .swiper-item image {
-  height: 667rpx;
-  width: 375rpx;
+  height: 416rpx;
+  width: 240rpx;
 }
 
 .bottom-button {
