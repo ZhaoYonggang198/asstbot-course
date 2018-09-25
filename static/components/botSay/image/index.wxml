@@ -2,5 +2,5 @@
     mode="widthFix"
     class="image"
     src="{{content}}"
-    mode="aspectFit"
+    mode="{{imgMode}}"
     bindload="loadDone"/>

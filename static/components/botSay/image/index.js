@@ -6,6 +6,10 @@ Component({
     content: {
       type: String,
       value: ''
+    },
+    imgMode: {
+      type: String,
+      value: 'widthFix'
     }
   },
 
