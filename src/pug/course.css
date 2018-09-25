@@ -28,12 +28,6 @@
   float: left;
 }
 
-.course-teacher {
-  color: #80848f;
-  float: left;
-  font-size: 11px;
-}
-
 .course-name.odd:after{
   content: "(单周)";
   color: #80848f;
