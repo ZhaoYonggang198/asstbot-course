@@ -2,7 +2,7 @@
   <form report-submit="true" @submit="sendMessage" class="footer">
     <view class="weui-flex primary-color light">
       <view class="placeholder">
-        <button class="input-widget form-control primary-color" size="small" @click="changeVoiceMode" v-if="!voiceMode">
+        <button class="input-widget form-control primary-color" size="small" @click="changeToVoiceMode" v-if="!voiceMode">
           <i class="icon iconfont icon-translation"></i>
         </button>
         <button class="input-widget form-control primary-color" size="small" @click="voiceMode=false" v-else>
@@ -36,7 +36,7 @@ import { mapState } from 'vuex'
 import recordButton from './widget/recordButton'
 import devicePadding from './view/devicePadding'
 
-function getRecordAuth () {
+function getRecordAuth (showToast) {
   return new Promise((resolve, reject) => {
     wx.getSetting({
       success (res) {
@@ -47,11 +47,13 @@ function getRecordAuth () {
               resolve()
             },
             fail (err) {
-              wx.hideLoading()
-              wx.showToast({
-                title: '请在设置页面打开“录音功能”',
-                icon: 'none'
-              })
+              if (showToast) {
+                wx.hideLoading()
+                wx.showToast({
+                  title: '请在设置页面打开“录音功能”',
+                  icon: 'none'
+                })
+              }
               reject(err)
             }
           })
@@ -181,8 +183,11 @@ export default {
       this.pullUp = false
       this.$emit('keyBoardUp', '0rpx')
     },
-    changeVoiceMode () {
-      getRecordAuth()
+    changeToVoiceMode () {
+      this.changeVoiceMode(true)
+    },
+    changeVoiceMode (showToast) {
+      getRecordAuth(showToast)
         .then(() => {
           this.voiceMode = true
         })
@@ -190,6 +195,9 @@ export default {
           console.error(err)
         })
     }
+  },
+  created () {
+    this.changeVoiceMode(false)
   }
 }
 </script>
