@@ -173,11 +173,20 @@
 }
 .one-line-text {
   line-height: 100rpx;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
   -webkit-line-clamp:1;
   text-align: center;
 }
 .two-line-text {
+  height: 70rpx;
   line-height: 40rpx;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
   -webkit-line-clamp:2;
   text-align: left;
   padding: 10rpx;

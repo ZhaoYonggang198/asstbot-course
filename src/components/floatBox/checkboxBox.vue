@@ -189,6 +189,7 @@
 
   .haveimage .two-line-text {
     line-height: 40rpx;
+    height: 70rpx;
     -webkit-line-clamp:2;
     padding: 10rpx;
   }
