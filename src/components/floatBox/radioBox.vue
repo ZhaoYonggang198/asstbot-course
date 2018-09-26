@@ -147,6 +147,7 @@
   text-align:center;
   box-shadow:0 0 0;
   font-weight:500;
+  min-width: 60rpx;
 }
 .have .valueBox{
   display: flex;

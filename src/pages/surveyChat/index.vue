@@ -63,6 +63,8 @@ export default {
         })
         .catch((err) => {
           console.log(err)
+          this.survey = {}
+          this.loadDone = true
         })
 
       this.$store.dispatch('updateUserInfo')

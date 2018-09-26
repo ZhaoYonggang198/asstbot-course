@@ -39,8 +39,9 @@ const actions = {
               try {
                 var asr = result.result.result[0]
                 asr = asr.substr(0, asr.length - 1)
-                console.log(asr)
-                dispatch('sendSpeech', {url: hostRoot + result.url, asr, nlu: true})
+                if (asr.length !== 0) {
+                  dispatch('sendSpeech', {url: hostRoot + result.url, asr, nlu: true})
+                }
                 resolve()
               } catch (err) {
                 reject(err)
