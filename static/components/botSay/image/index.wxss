@@ -1,6 +1,8 @@
 .image{
-  width:400rpx;
-  height: 300rpx;
+  width: 400rpx;
   margin-left: 20rpx;
   border-radius: 20rpx;
+  /*display: flex;*/
+  display:inline-block;
+  overflow:hidden;
 }

@@ -18,7 +18,10 @@
             </view>
             <view class="content">
               <bot-say-message msg="{{msg}}" bindloadDone="loadDone" wx:if="{{!lastBotMsg || i < received}}"
-                 bindbuttonListEvent="buttonListEvent" bindpreviewImage="previewImage" id="{{i}}"/>
+                 bindbuttonListEvent="buttonListEvent" bindpreviewImage="previewImage" 
+                 bindexhibitionClick="exhibitionClick"
+                 binditemRender="itemRender"
+                 id="{{i}}"/>
               <view wx:if="{{lastBotMsg && i == received}}">
                 <bot-say-receiving/>
               </view>

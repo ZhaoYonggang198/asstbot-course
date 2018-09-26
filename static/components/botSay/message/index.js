@@ -29,6 +29,12 @@ Component({
     },
     buttonListEvent (event) {
       this.triggerEvent('buttonListEvent', event.detail)
+    },
+    exhibitionClick (event) {
+      this.triggerEvent('exhibitionClick', event.detail)
+    },
+    itemRender () {
+      this.triggerEvent('itemRender')
     }
   }
 })

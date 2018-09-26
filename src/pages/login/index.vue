@@ -77,10 +77,12 @@ export default {
 }
 
 .content image {
+  margin-top: 100rpx;
   width: 320rpx;
   height: 412rpx
 }
 .button-area button {
   margin: 20rpx 100rpx;
+  margin-bottom: 50rpx;
 }
 </style>

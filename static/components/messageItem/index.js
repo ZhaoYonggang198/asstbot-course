@@ -50,6 +50,12 @@ Component({
         })
       }
       this.triggerEvent('buttonListEvent', event.detail)
+    },
+    exhibitionClick (event) {
+      this.triggerEvent('exhibitionClick', event.detail)
+    },
+    itemRender () {
+      this.triggerEvent('itemRender')
     }
   },
 
@@ -62,7 +68,8 @@ Component({
       msg.type === 'audio' ||
       msg.type === 'video' ||
       msg.type === 'divider' ||
-      msg.type === 'button-list'
+      msg.type === 'button-list' ||
+      msg.type === 'exhibition'
     }).map((msg) => {
       msg.show = true
       return msg

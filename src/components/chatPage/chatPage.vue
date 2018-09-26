@@ -13,7 +13,9 @@
                         @itemLoad="scollToBottom"
                         @previewImage="$store.commit('setPreviewFalse')"
                         @buttonListEvent="action"
-                        @videoPlay="playVideo"/>
+                        @videoPlay="playVideo"
+                        @exhibitionClick="exhibitionClick"
+                        @itemRender="itemRender(i)"/>
             </view>
             <view :id="'bottom'+i"></view>
           </block>
@@ -211,6 +213,18 @@ export default {
     playVideo (event) {
       this.videoPlay = true
       this.videoSrc = event.mp.detail
+    },
+    exhibitionClick (event) {
+      console.log(event)
+      this.$store.dispatch('sendGenericRequest', {
+        type: 'event',
+        data: event.mp.detail
+      })
+    },
+    itemRender (i) {
+      console.log('test')
+      this.scrollToView = ''
+      this.scrollToView = 'bottom' + (i - 1)
     }
   },
 

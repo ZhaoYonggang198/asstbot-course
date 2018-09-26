@@ -4,10 +4,12 @@ view
     view(style="text-align: left")
         view(class="weui-cells")
           select-input(inputId='name' label='课程名' placeholder="请输入课程名" 
-            :value="currentCourse.name" :currentfocus="focusItem" :selectlist="allCourses"
+            :value="currentCourse.name" :currentfocus="focusItem"
+            :selectlist="allCourses" :validator="nameValidator"
             @change="nameChange" @focuson="selectInput('name')")
           select-input(inputId='teacher' label='任课老师' placeholder="请输入老师名" 
-            :value="currentCourse.teacher" :currentfocus="focusItem" :selectlist="selectTeacher"
+            :value="currentCourse.teacher" :currentfocus="focusItem"
+            :selectlist="selectTeacher" :validator="teacherValidator"
             @change="teacherChange" @focuson="selectInput('teacher')")        
           view(class="weui-cell")
             view(class="weui-cell__hd")
@@ -19,7 +21,7 @@ view
               view(class="weui-label") 时段
             view(class="weui-cell__bd weui-flex")
               view(class="weui-flex__item time-wrapper")
-                timepicker(mode='time' :start="minStartTime"
+                da-timepicker(mode='time' :start="minStartTime"
                     :end="currentCourse.endTime?currentCourse.endTime:maxStartTime"
                     :value="currentCourse.startTime?currentCourse.startTime:minStartTime"
                     @change="startTimeChange")
@@ -27,14 +29,15 @@ view
                   view(v-else) 未指定
               view(class="weui-flex__item time-wrapper") ~
               view(class="weui-flex__item time-wrapper")
-                timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime"
+                da-timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime"
                     :end="maxEndTime"
                     :value="currentCourse.endTime?currentCourse.endTime:minEndTime"
                     @change="endTimeChange")
                   view(v-if="currentCourse.endTime") {{currentCourse.endTime}}
                   view(v-else) 未指定
           select-input(inputId='location' label='地点' placeholder="请输入上课地点" 
-            :value="currentCourse.location" :currentfocus="focusItem" :selectlist="selectLocation"
+            :value="currentCourse.location" :currentfocus="focusItem"
+            :selectlist="selectLocation"  :validator="locationValidator"
             @change="locationChange" @focuson="selectInput('location')")   
 </template>
 
@@ -48,7 +51,31 @@ export default {
       currentCourse: {},
       focusItem: 'name',
       selectLocation: [],
-      selectTeacher: []
+      selectTeacher: [],
+      nameValidator: {
+        valid: function (value) {
+          const invalidCharacter = [',', '.', '，', '。']
+          for (let i in invalidCharacter) {
+            if (value.indexOf(invalidCharacter[i]) !== -1) {
+              return false
+            }
+          }
+          return true
+        },
+        hint: '课程名包含无效字符'
+      },
+      teacherValidator: {
+        valid: function (value) {
+          return true
+        },
+        hint: '老师名包含无效字符'
+      },
+      locationValidator: {
+        valid: function (value) {
+          return true
+        },
+        hint: '上课地点包含无效字符'
+      }
     }
   },
   components: {

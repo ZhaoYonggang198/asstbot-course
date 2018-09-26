@@ -1,0 +1,5 @@
+<picker mode="multiSelector" range="{{timeRange}}" 
+  value="{{timeValue}}" bindcolumnchange="columnChange"
+  bindchange="valuechange">
+  <slot></slot>
+</picker>

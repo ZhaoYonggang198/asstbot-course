@@ -6,6 +6,7 @@
     "bot-say-image": "/static/components/botSay/image/index",
     "bot-say-audio": "/static/components/botSay/audio/index",
     "bot-say-video": "/static/components/botSay/video/index",
-    "bot-say-timetable": "/static/components/botSay/timetable/index"
+    "bot-say-timetable": "/static/components/botSay/timetable/index",
+    "bot-say-exhibition": "/static/components/botSay/exhibition/index"
   }
 }

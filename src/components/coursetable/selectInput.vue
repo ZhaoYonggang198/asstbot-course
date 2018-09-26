@@ -1,6 +1,6 @@
 <template lang='pug'>
 view(style="padding-bottom:20rpx;")
-  view(class="weui-cell")
+  view(class="weui-cell" :class="error?'weui-cell_warn':''")
     view(class="weui-cell__hd")
       view(class="weui-label") {{label}}
     view(class="weui-cell__bd")
@@ -16,6 +16,12 @@ view(style="padding-bottom:20rpx;")
           @confirm="valueConfirm"
           @focus="onFocus"
           @blur="onBlur")
+    view(class="weui-cell__ft" v-if="error")
+      icon(type="warn" size="23" color="#E64340")
+  view(class="weui-cell weui-cell_warn" v-if="error")
+    view(class="weui-cell__hd")
+      view(class="weui-label")
+    view(class="weui-cell__bd") {{validator.hint}}
   view(class="select-list" :class="selectListShow")
     block(v-for="(item, index) in displaySelectlist" :key="item")
       view(class="weui-cell" @click="select(item)")
@@ -30,7 +36,8 @@ view(style="padding-bottom:20rpx;")
 export default {
   data () {
     return {
-      displayValue: ''
+      displayValue: '',
+      error: false
     }
   },
   props: {
@@ -39,7 +46,8 @@ export default {
     selectlist: {type: Array, default: ''},
     value: {type: String, default: ''},
     inputId: {type: String, default: ''},
-    currentfocus: {type: String, default: ''}
+    currentfocus: {type: String, default: ''},
+    validator: {type: Object}
   },
   computed: {
     displaySelectlist () {
@@ -62,11 +70,14 @@ export default {
   methods: {
     valueConfirm (event) {
       this.displayValue = event.mp.detail.value
-      this.$emit('change', this.displayValue)
+      if (this.validator.valid(this.displayValue)) {
+        this.$emit('change', this.displayValue)
+      }
     },
 
     valueChange (event) {
       this.displayValue = event.mp.detail.value
+      this.error = !this.validator.valid(this.displayValue)
     },
 
     onFocus (event) {
@@ -74,7 +85,9 @@ export default {
     },
 
     onBlur () {
-      this.$emit('change', this.displayValue)
+      if (this.validator.valid(this.displayValue)) {
+        this.$emit('change', this.displayValue)
+      }
     },
 
     select (item) {
