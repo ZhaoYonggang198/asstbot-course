@@ -1,0 +1,5 @@
+<view wx:if="content.body||content.pages">
+    <text>课程提醒:</text>
+    <bot-say-timecell wx:if="{{content.type =='page-list'}}"  wx:for="{{content.pages}}" content="{{item}}"/>    
+    <bot-say-timecell wx:else/>   
+</view>

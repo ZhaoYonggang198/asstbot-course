@@ -1,0 +1,6 @@
+{
+    "component": true,
+    "usingComponents": {
+        "bot-say-timecell": "/static/components/botSay/timeCell/index"
+    }
+}
