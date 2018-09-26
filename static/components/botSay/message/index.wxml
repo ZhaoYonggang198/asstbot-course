@@ -7,6 +7,6 @@
     bindbuttonListEvent="buttonListEvent" style="width: 90%"></bot-say-button-list>
   <bot-say-exhibition message="{{msg}}" wx:elif="{{msg.type=='exhibition'}}"
     bindexhibitionClick="exhibitionClick" bindpreviewImage="previewImage" binditemRender="itemRender"></bot-say-exhibition>
+  <bot-say-timetable content="{{msg}}" wx:elif="{{msg.type=='html' || msg.type=='page-list'}}"/> 
   <bot-say-text content="{{msg.reply}}" wx:else></bot-say-text>
-  <bot-say-timetable content="{{msg}}" wx:else="{{msg.type=='html' || msg.type=='page-list'}}"/> 
 </block>
