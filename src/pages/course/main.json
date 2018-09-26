@@ -5,6 +5,7 @@
     "i-button": "/static/iview/button/index",
     "i-popup": "/static/iview/popup/index",
     "i-input": "/static/iview/input/index",
-    "timepicker": "/static/components/timepicker/index"
+    "timepicker": "/static/components/timepicker/index",
+    "da-timepicker": "/static/components/daTimepicker/index"
   }
 }

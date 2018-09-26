@@ -3,6 +3,9 @@
       bindpreviewImage="previewImage"></bot-say-image>
   <bot-say-audio content="{{msg}}" wx:elif="{{msg.type=='audio'}}"></bot-say-audio>
   <bot-say-video content="{{msg}}" wx:elif="{{msg.type=='video'}}"></bot-say-video>
-  <bot-say-button-list message="{{msg}}" wx:elif="{{msg.type=='button-list'}}" bindbuttonListEvent="buttonListEvent" style="width: 90%"></bot-say-button-list>
-  <bot-say-text content="{{msg.reply}}" wx:else="{{msg.type=='text'}}"></bot-say-text>
+  <bot-say-button-list message="{{msg}}" wx:elif="{{msg.type=='button-list'}}"
+    bindbuttonListEvent="buttonListEvent" style="width: 90%"></bot-say-button-list>
+  <bot-say-exhibition message="{{msg}}" wx:elif="{{msg.type=='exhibition'}}"
+    bindexhibitionClick="exhibitionClick" bindpreviewImage="previewImage" binditemRender="itemRender"></bot-say-exhibition>
+  <bot-say-text content="{{msg.reply}}" wx:else></bot-say-text>
 </block>

@@ -21,7 +21,7 @@ view
               view(class="weui-label") 时段
             view(class="weui-cell__bd weui-flex")
               view(class="weui-flex__item time-wrapper")
-                timepicker(mode='time' :start="minStartTime"
+                da-timepicker(mode='time' :start="minStartTime"
                     :end="currentCourse.endTime?currentCourse.endTime:maxStartTime"
                     :value="currentCourse.startTime?currentCourse.startTime:minStartTime"
                     @change="startTimeChange")
@@ -29,7 +29,7 @@ view
                   view(v-else) 未指定
               view(class="weui-flex__item time-wrapper") ~
               view(class="weui-flex__item time-wrapper")
-                timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime"
+                da-timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime"
                     :end="maxEndTime"
                     :value="currentCourse.endTime?currentCourse.endTime:minEndTime"
                     @change="endTimeChange")
