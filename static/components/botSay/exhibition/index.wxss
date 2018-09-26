@@ -42,7 +42,7 @@ swiper {
 }
 
 .checked .image-value {
-  background-color:#0c5053;
+  background-color:#19a1a8;
   font-weight:normal;
   color: white
 }
@@ -61,6 +61,17 @@ swiper {
 
 .action-container {
   padding: 20rpx 0 0 20rpx;
+  -webkit-transition:height 1s;
+  transition:height 1s;
+  overflow:hidden;
+}
+
+.action-container.show {
+  height: 70rpx;
+}
+
+.action-container.hidden {
+  height: 0rpx;
 }
 
 .action-value {
@@ -76,6 +87,7 @@ swiper {
   font-weight:500;
   font-size: 28rpx;
   margin-left: 25rpx;
+  height: 46rpx;
 }
 
 .action-value:active {

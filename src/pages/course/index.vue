@@ -203,6 +203,7 @@ export default {
             this.$store.commit('deleteCourse', {day,
               interval,
               course})
+            this.$store.dispatch('saveCourses', this.courseInfo)
           }
         }
       })
