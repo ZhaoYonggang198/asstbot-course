@@ -40,7 +40,7 @@ Component({
                         name: text,
                         attrs: {
                             class: '',
-                            style: this.properties.style[text] || 'h1h2h3h4h5h6'.indexOf(text) >= 0 ? 'font-weight:500' : 'list-style:none'
+                            style: 'h1h2h3h4h5h6'.indexOf(text) >= 0 ? 'font-size: 16px;height: 30px;line-height: 30px;white-space: nowrap' : 'list-style: none;line-height: 30px;font-size: 14px;color: #666;height: 30px;white-space: nowrap'
                         }
                     })
                 }

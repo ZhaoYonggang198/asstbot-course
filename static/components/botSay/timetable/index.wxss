@@ -1,0 +1,16 @@
+.text{
+    width: 100%;
+    display: block;
+    /* text-align: center; */
+    padding-left: 20px;
+    margin-top: 10px;
+}
+.time-table-box{
+    display: flex;
+}
+.time-table-item{
+    margin-left: 20px;
+    background: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+}

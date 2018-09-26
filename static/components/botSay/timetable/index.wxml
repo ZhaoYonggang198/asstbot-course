@@ -1,9 +1,17 @@
 <view wx:if="content.body||content.pages">
-    <text>课程提醒:</text>
+<text class='text'>课程提醒</text>
     <block wx:if="{{content.type =='page-list'}}">
-        <bot-say-timecell   wx:for="{{content.pages}}" content="{{item}}"/>
+        <scroll-view scroll-x="true">
+            <view class='time-table-box'>
+                <view class='time-table-item' wx:for="{{content.pages}}">
+                    <bot-say-timecell content="{{item}}"/>
+                </view>
+            </view>
+        </scroll-view>
     </block>
-    <block wx:else>  
-        <bot-say-timecell/>
-    </block>   
+    <block wx:else>
+        <view class='time-table-item'>
+            <bot-say-timecell content="{{content}}"/> 
+        </view>
+    </block>
 </view>
