@@ -69,7 +69,9 @@ Component({
       msg.type === 'video' ||
       msg.type === 'divider' ||
       msg.type === 'button-list' ||
-      msg.type === 'exhibition'
+      msg.type === 'exhibition' ||
+        msg.type === 'html' ||
+        msg.type === 'page-list'
     }).map((msg) => {
       msg.show = true
       return msg

@@ -3,7 +3,7 @@
     <block wx:if="{{content.type =='page-list'}}">
         <scroll-view scroll-x="true">
             <view class='time-table-box'>
-                <view class='time-table-item' wx:for="{{content.pages}}">
+                <view wx:key="{{content.pages}}" class='time-table-item' wx:for="{{content.pages}}">
                     <bot-say-timecell content="{{item}}"/>
                 </view>
             </view>
@@ -11,7 +11,7 @@
     </block>
     <block wx:else>
         <view class='time-table-item'>
-            <bot-say-timecell content="{{content}}"/> 
+            <bot-say-timecell content="{{content}}"/>
         </view>
     </block>
 </view>

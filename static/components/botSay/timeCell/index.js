@@ -17,7 +17,7 @@ Component({
      * 组件的初始数据
      */
     data: {
-        timeTableData: ''
+        timeTableData: []
     },
 
     /**
@@ -45,10 +45,10 @@ Component({
                     })
                 }
                 if ([...arr].pop() == '>') {
-                    text ? htmlArray[htmlArray.length - 1].children = {
+                    text ? htmlArray[htmlArray.length - 1].children = [{
                         type: 'text',
                         text: text
-                    } : ''
+                    }] : []
                 }
                 text ? arr.push(text) : '';
                 arr.push(str.charAt(i));

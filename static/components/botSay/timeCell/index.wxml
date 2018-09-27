@@ -1,1 +1,1 @@
-<rich-text nodes="{{timeTableData}}"></rich-text>
+<rich-text nodes="{{timeTableData}}"/>

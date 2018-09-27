@@ -70,6 +70,7 @@ export default {
       userAuthed: state => state.userProfile.authed
     }),
     displayIncomingMsgs () {
+      console.log(this.messages)
       return this.outgoing || !this.messages || !this.messages.msgs ? [] : this.messages.msgs.filter((msg) => {
         console.log(msg.type)
         return msg.type === 'text' ||
@@ -79,7 +80,9 @@ export default {
           msg.type === 'audio' ||
           msg.type === 'video' ||
           msg.type === 'divider' ||
-          msg.type === 'button-list'
+          msg.type === 'button-list' ||
+          msg.type === 'html' ||
+          msg.type === 'page-list'
       })
     }
   },
