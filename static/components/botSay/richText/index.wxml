@@ -1,4 +1,4 @@
-<view wx:if="content.body||content.pages">
+<view wx:if="content.body||content.pages" class="time-table-container" style="margin-left:{{content.type =='page-list'&&content.pages.length>1 ? '30px':'12px'}}">
 <!-- <text class='text'>课程提醒</text> -->
     <block wx:if="{{content.type =='page-list'}}">
         <scroll-view scroll-x="true" class='time-table-scroll'>
@@ -10,7 +10,7 @@
         </scroll-view>
     </block>
     <block wx:else>
-        <view class='time-table-item' style='margin-right: 0;margin-left:12px;border-radius: 15px 15px 15px 0px'>
+        <view class='time-table-item' style='margin-right: 0;border-radius: 15px 15px 15px 0px'>
             <bot-say-timecell content="{{content}}"/>
         </view>
     </block>

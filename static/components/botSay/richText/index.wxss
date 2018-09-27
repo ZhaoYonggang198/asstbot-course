@@ -1,3 +1,6 @@
+.time-table-container{
+    margin-left: 12px
+}
 .text{
     width: 100%;
     display: block;
@@ -6,7 +9,7 @@
     margin-top: 10px;
 }
 .time-table-scroll{
-    padding-left: 30px;
+    /* padding-left: 30px; */
 }
 .time-table-box{
     display: flex;
