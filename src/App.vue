@@ -284,4 +284,9 @@ page{
   padding: 20rpx 0rpx;
   /*overflow: auto;*/
 }
+::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+  color: transparent;
+}
 </style>
