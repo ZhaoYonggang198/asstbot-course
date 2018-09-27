@@ -63,7 +63,6 @@ swiper {
   padding: 20rpx 0 0 20rpx;
   -webkit-transition:height 1s;
   transition:height 1s;
-  overflow: auto;
 }
 
 .action-container.show {
