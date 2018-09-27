@@ -1,7 +1,7 @@
 <view wx:if="content.body||content.pages">
-<text class='text'>课程提醒</text>
+<!-- <text class='text'>课程提醒</text> -->
     <block wx:if="{{content.type =='page-list'}}">
-        <scroll-view scroll-x="true">
+        <scroll-view scroll-x="true" class='time-table-scroll'>
             <view class='time-table-box'>
                 <view wx:key="{{content.pages}}" class='time-table-item' wx:for="{{content.pages}}">
                     <bot-say-timecell content="{{item}}"/>

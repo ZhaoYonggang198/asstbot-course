@@ -5,12 +5,16 @@
     padding-left: 20px;
     margin-top: 10px;
 }
+.time-table-scroll{
+    padding-left: 30px;
+}
 .time-table-box{
     display: flex;
 }
 .time-table-item{
-    margin-left: 20px;
+    margin-right: 20px;
     background: #fff;
     padding: 10px 15px;
     border-radius: 5px;
+    border: 1px solid #eaeaea;
 }
