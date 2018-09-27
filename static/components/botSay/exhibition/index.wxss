@@ -63,7 +63,7 @@ swiper {
   padding: 20rpx 0 0 20rpx;
   -webkit-transition:height 1s;
   transition:height 1s;
-  overflow:hidden;
+  overflow: auto;
 }
 
 .action-container.show {
@@ -75,22 +75,24 @@ swiper {
 }
 
 .action-value {
+  min-width: 60rpx;
   white-space:nowrap;
-  padding:10rpx 10rpx;
+  margin-left: 10rpx;
   background:#f2f2f2;
-  border:3rpx solid #0c5053;
-  color:#0c5053;
-  border-radius:35rpx;
-  padding:10rpx 20rpx;
-  text-align:center;
+  /*border:2rpx solid #1cb2b9;*/
+  border: 1px solid #dadada;
+  color:#818796;
   box-shadow:0 0 0;
+  text-align:center;
   font-weight:500;
-  font-size: 28rpx;
-  margin-left: 25rpx;
   height: 46rpx;
+  font-size: 26rpx;
+  padding:10rpx 10rpx;
+  border-radius:46rpx;
+  line-height: 46rpx;
 }
 
 .action-value:active {
   background: #0c5053;
-  color: #f2f2f2
+  color: #f2f2f2;
 }
