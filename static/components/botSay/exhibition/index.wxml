@@ -20,11 +20,13 @@
   </block>
 </swiper>
 <block wx:if="{{chooseItem!==-1}}">
-  <view class="weui-flex action-container">
-    <block wx:for="{{message.actions}}" wx:key="{{item}}">
-      <view class="action-value" bindtap="clickAction" data-item="{{item}}">
-        {{item.caption}}
-      </view>
-    </block>
-  </view>
+  <scroll-view scroll-x >
+    <view class="weui-flex action-container">
+      <block wx:for="{{message.actions}}" wx:key="{{item}}">
+        <view class="action-value" bindtap="clickAction" data-item="{{item}}">
+          {{item.caption}}
+        </view>
+      </block>
+    </view>
+  </scroll-view >
 </block>
