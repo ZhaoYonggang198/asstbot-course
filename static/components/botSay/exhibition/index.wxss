@@ -63,6 +63,7 @@ swiper {
   padding: 20rpx 0 0 20rpx;
   -webkit-transition:height 1s;
   transition:height 1s;
+
 }
 
 .action-container.show {
@@ -92,6 +93,6 @@ swiper {
 }
 
 .action-value:active {
-  background: #0c5053;
+  background: #818796;
   color: #f2f2f2;
 }

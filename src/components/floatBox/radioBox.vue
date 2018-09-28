@@ -1,7 +1,7 @@
 <template>
   <scroll-view scroll-x="true">
-    <view class="big-box">
-      <view class="option-container light form-control" @touchstart="touchStart(option)" @touchmove="touchMove" @touchend="touchEnd" @touch="touchOn" @click="selectItem(option)" v-for="option in list.items" :key="option" :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
+    <view class="big-box" :class="'list-' + list.items.length ">
+      <label class="option-container light form-control" @touchstart="touchStart(option)" @touchmove="touchMove" @touchend="touchEnd" @touch="touchOn" @click="selectItem(option)" v-for="option in list.items" :key="option" :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
         <block v-if="!havaImage">
           <view class="image-box imageBox">
             <image class="image" mode="aspectFit" :src="option.imageUrl" v-if="option.imageUrl"></image>
@@ -11,7 +11,7 @@
         <block v-else>
           <view class="value valueBox">{{option.caption}}</view>
         </block>
-      </view>
+      </label>
     </view>
   </scroll-view>
 
@@ -87,6 +87,7 @@
 
 <style lang="less" scoped>
 @import "../../../static/base.less";
+
 .image-box{
   overflow: hidden;
   height:300rpx;
@@ -128,7 +129,8 @@
   width: auto;
   border-radius: 30rpx;
   padding:5rpx;
-  margin-left: 30rpx;
+  margin-left: 15rpx;
+  margin-right: 15rpx;
   background-color: #f2f2f2;
 }
 .no-image>.image-box{
@@ -149,6 +151,12 @@
   font-weight:500;
   min-width: 60rpx;
 }
+
+.no-image>.value:active {
+  background: @select-btn-color;
+  color: #f2f2f2;
+}
+
 .have .valueBox{
   display: flex;
   align-items: center;

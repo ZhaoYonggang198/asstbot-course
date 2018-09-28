@@ -249,6 +249,12 @@ export default {
   onLoad () {
     if (this.scene === 'add') {
       let interval = this.$store.getters.canditateInterval(this.day, this.interval)
+      if (this.day === 5 && this.day === 6) { // weekend handler
+        interval = {
+          startTime: '',
+          endTime: ''
+        }
+      }
       this.currentCourse = {
         name: '',
         location: '',

@@ -274,16 +274,23 @@ page{
 .weui-cell_warn {
   font-size: 24rpx;
 }
-  .move-area{
-    height: 100vh;
-    width: 100%;
-  }
+
+.move-area{
+  height: 100vh;
+  width: 100%;
+}
+
 .big-box{
   display: flex;
   align-items: center;
   padding: 20rpx 0rpx;
   /*overflow: auto;*/
 }
+
+.big-box.list-1, .big-box.list-2 {
+  justify-content: space-around;
+}
+
 ::-webkit-scrollbar{
   width: 0;
   height: 0;

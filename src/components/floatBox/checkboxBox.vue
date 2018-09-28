@@ -1,6 +1,6 @@
 <template>
   <scroll-view scroll-x="true">
-    <view class="big-box">
+    <view class="big-box" :class="'list-'+list.items.length">
       <label class="option-container light form-control" v-for="(option, index) in list.items" :key="option"
              :class="[pureTextList ? 'no-image' : 'haveimage']" :for="'option' + index" @click="checked(index)" @touchstart="touchStart(option)" @touchmove="touchMove()" @touchend="touchEnd(option)">
         <view class="weui-flex">
