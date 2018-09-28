@@ -189,7 +189,7 @@
   display:-webkit-box;
   -webkit-box-orient:vertical;
   -webkit-line-clamp:2;
-  text-align: left;
+  text-align: center;
   padding: 10rpx;
 }
 </style>
