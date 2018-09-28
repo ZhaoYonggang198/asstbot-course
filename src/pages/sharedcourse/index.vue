@@ -63,6 +63,7 @@ export default {
       this.activeDay = index
     },
     gotocourse () {
+      console.log('relaunch after confirm')
       wx.reLaunch({
         url: '/pages/index/main'
       })
@@ -75,6 +76,7 @@ export default {
           success: (res) => {
             if (res.confirm) {
               this.copyCourses()
+              this.gotocourse()
             }
           },
           fail: (err) => {
@@ -83,16 +85,12 @@ export default {
         })
       } else {
         this.copyCourses()
+        this.gotocourse()
       }
     },
     copyCourses () {
       this.$store.commit('copyCourses', {courseInfo: this.courseInfo, meta: this.courseMeta})
       this.saveCourses(this.owncourseInfo)
-        .then(() => {
-          wx.reLaunch({
-            url: '/pages/course/main'
-          })
-        })
     },
     swiperchange (event) {
       this.activeDay = event.mp.detail.current

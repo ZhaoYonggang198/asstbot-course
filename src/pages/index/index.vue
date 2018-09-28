@@ -73,6 +73,7 @@ export default {
     }
   },
   onLoad (option) {
+    console.log('main chat page, onload', option)
     if (this.scene.indexOf('redirectTo') !== -1) {
 
     } else if (option.scene) {
