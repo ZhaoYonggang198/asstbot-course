@@ -4,23 +4,23 @@ view(class="page")
   swiper(indicator-dots="true" autoplay="true" interval="5000" circular="true" class="swiper-wrapper")
     swiper-item
       view(class="swiper-item")
-        image(src="/static/image/skill.png" mode="aspectFit")
+        image(src="http://xiaodamp.cn/asst/resource/skill.png" mode="aspectFit" @click="previewImage('http://xiaodamp.cn/asst/resource/skill.png')")
         view(class="page__desc") 1. 在App"小爱音箱"技能页面搜索"课表"技能
     swiper-item
       view(class="swiper-item")
-        image(src="/static/image/auth1.png" mode="aspectFit")
+        image(src="http://xiaodamp.cn/asst/resource/auth1.png" mode="aspectFit"  @click="previewImage('http://xiaodamp.cn/asst/resource/auth1.png')")
         view(class="page__desc") 2. 点击"绑定账号"按钮
     swiper-item
       view(class="swiper-item")
-        image(src="/static/image/auth2.png" mode="aspectFit")
+        image(src="http://xiaodamp.cn/asst/resource/auth2.png" mode="aspectFit"  @click="previewImage('http://xiaodamp.cn/asst/resource/auth2.png')")
         view(class="page__desc") 3. 输入与本页面相同的手机号
     swiper-item
       view(class="swiper-item")
-        image(src="/static/image/auth3.png" mode="aspectFit")
+        image(src="http://xiaodamp.cn/asst/resource/auth3.png" mode="aspectFit"  @click="previewImage('http://xiaodamp.cn/asst/resource/auth3.png')")
         view(class="page__desc") 4. 点击"确认授权"按钮
     swiper-item
       view(class="swiper-item")
-        image(src="/static/image/xiaomi.png" mode="aspectFit")
+        image(src="http://xiaodamp.cn/asst/resource/xiaomi.png" mode="aspectFit"  @click="previewImage('http://xiaodamp.cn/asst/resource/xiaomi.png')")
         view(class="page__desc") 5. 对小米音箱说"打开课表"，开始使用本课表
 
   i-panel(:title="bindPhone?'已绑定手机：' + bindPhone:''" class="form")
@@ -164,6 +164,13 @@ export default {
           clearInterval(this.intervalId)
         }
       }, 1000)
+    },
+
+    previewImage (imageUrl) {
+      wx.previewImage({
+        current: imageUrl,
+        urls: [imageUrl]
+      })
     }
   },
 
