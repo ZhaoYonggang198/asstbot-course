@@ -20,20 +20,6 @@ var __appendMsg = function (state, msg) {
 }
 
 const getters = {
-  getDisplayIndexs: (state) => (chatType) => {
-    if (chatType === 'main') {
-      let msgIndexs = [...state.creatorBotMsg.keys()]
-      if (state.creatorBotMsg.length > 30) {
-        let startPos = (parseInt(state.creatorBotMsg.length / 10) * 10) - 20
-        console.log('start pos is ', startPos, 'length', state.creatorBotMsg.length)
-        msgIndexs = [...state.creatorBotMsg.keys()].slice(startPos)
-      }
-      console.log('msg indexs', msgIndexs)
-      return msgIndexs
-    } else {
-      return [...state.surveybotMsg.keys()]
-    }
-  },
 
   getCreateMsgLength (state) {
     return state.creatorBotMsg.length
@@ -47,22 +33,6 @@ const getters = {
     }
   },
 
-  needTextReply: state => (chatType) => {
-    let msgList = (chatType === 'main') ? state.creatorBotMsg : state.surveybotMsg
-    if (!msgList) {
-      return false
-    }
-    if (!msgList.length < 5) {
-      return false
-    }
-    let list = msgList.slice(-1).pop()
-    if (list && list.to) {
-      let message = [...list.msgs].slice(-1).pop()
-      return message.type === 'text'
-    } else {
-      return false
-    }
-  },
   activeMsg: state => (chatType) => {
     let msgList = (chatType === 'main') ? state.creatorBotMsg : state.surveybotMsg
     if (!msgList) {
@@ -78,10 +48,18 @@ const getters = {
 
 const mutations = {
   appendMessage (state, message) {
-    if (chatBot === 'surveyBot') {
-      state.surveybotMsg.push({id: state.surveybotMsg.length, ...message})
+    if (message.from) {
+      if (chatBot === 'surveyBot') {
+        state.surveybotMsg.push([{id: state.surveybotMsg.length, ...message}])
+      } else {
+        state.creatorBotMsg.push([{id: state.creatorBotMsg.length, ...message}])
+      }
     } else {
-      state.creatorBotMsg.push({id: state.creatorBotMsg.length, ...message})
+      if (chatBot === 'surveyBot') {
+        state.surveybotMsg[state.surveybotMsg.length - 1].push({id: state.surveybotMsg.length, ...message})
+      } else {
+        state.creatorBotMsg[state.creatorBotMsg.length - 1].push({id: state.creatorBotMsg.length, ...message})
+      }
     }
   },
   talkToBotFather (state) {
@@ -134,22 +112,6 @@ var _impleSendmessage = (commit, id, type, data) => {
     },
     type,
     data
-  }
-  const responseMessage = {
-    to: {
-      id: ''
-    },
-    msgs: [
-      {type: data.type, reply: data.content}
-    ]
-  }
-  if (data.type === 'getUserinfo') {
-    commit('appendMessage', responseMessage)
-    return
-  }
-  if (type === 'allow') {
-    commit('appendMessage', message)
-    return
   }
   commit('appendMessage', message)
   return new Promise((resolve, reject) => {

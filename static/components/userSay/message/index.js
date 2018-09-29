@@ -6,7 +6,20 @@ Component({
   properties: {
     messages: {
       type: Object,
-      value: {}
+      value: {},
+      observer: function (val) {
+        let messages = this.properties.messages
+        let needDisplay = messages.type === 'text' ||
+          messages.type === 'image' ||
+          messages.type === 'speech' ||
+          messages.type === 'checkbox-reply' ||
+          messages.type === 'radio-reply' ||
+          messages.type === 'divider'
+    
+        this.setData({
+          needDisplay
+        })
+      }
     },
     userAuthed: {
       type: Boolean,

@@ -3,26 +3,27 @@
     <view class="content" style="flex-direction: column">
       <videoplayer :src="videoSrc" v-if="videoPlay" @videoEnded="videoPlay=false"></videoplayer>
       <scroll-view scroll-y='true' :scroll-into-view="scrollToView" style="height: 100%">
-        <view class="padding-top-64">
-          <block v-for="(messages, i) in messageList" :key="messages.id">
-            <view :id="i">
-              <message-item :survey="survey" :lastBotMsg="i==(messageList.length-1)&&messages.to!==undefined"
-                        :messages="messages" :userAuthed="userAuthed"
-                        @renderComplete="renderComplete"
-                        @renderUpdate="renderUpdate"
-                        @itemLoad="scollToBottom"
-                        @previewImage="$store.commit('setPreviewFalse')"
-                        @buttonListEvent="action"
-                        @videoPlay="playVideo"
-                        @exhibitionClick="exhibitionClick"
-                        @itemRender="itemRender(i)"/>
+        <view class="message-list">
+          <block v-for="(conversation, i) in messageList" :key="conversation">
+            <view class="conversation" :id="'bottom'+i" :class="{'last-child':i==(messageList.length-1), 'focus-input': keyboardInput}">
+              <block v-for="(messages, j) in conversation" :key="j">
+                <message-item :survey="survey" :lastBotMsg="i==(messageList.length-1)&&messages.to!==undefined"
+                          :messages="messages" :userAuthed="userAuthed"
+                          @renderComplete="renderComplete"
+                          @renderUpdate="renderUpdate"
+                          @itemLoad="scollToBottom"
+                          @previewImage="$store.commit('setPreviewFalse')"
+                          @buttonListEvent="action"
+                          @videoPlay="playVideo"
+                          @exhibitionClick="exhibitionClick"
+                          @itemRender="itemRender(i)"/>
+              </block>
+              <block v-if="localMsgSending && i==(messageList.length-1)">
+                <user-say-sending/>
+              </block>
             </view>
-            <view :id="'bottom'+i"></view>
           </block>
-          <block v-if="localMsgSending">
-            <user-say-sending/>
-          </block>
-          <view id="bottom"></view>
+
         </view>
       </scroll-view>
       <!-- <message-list :messagesList="messageList" :survey="survey" :localmsgsending="localMsgSending"
@@ -32,7 +33,7 @@
       <select-box  v-if="displayFinish" :messageAction="activeBoxMsg"/>
       <command-area  @msgSendStatus="handleMsgSendStatus"
           :inputPromt="activeInputPromtMsg"
-          :displayFinish="displayFinish" @keyBoardUp="keyBoardUp"
+          :displayFinish="displayFinish" @keyboardUp="keyboardUp" @keyboardDown="keyboardDown"
           :needFocus="messageList.length>5"/>
     </view>
   </block>
@@ -63,7 +64,8 @@ export default {
       localMsgSending: false,
       scrollToView: 'bottom',
       videoPlay: false,
-      videoSrc: ''
+      videoSrc: '',
+      keyboardInput: false
     }
   },
   props: {
@@ -79,7 +81,7 @@ export default {
   watch: {
     messageList: function (val) {
       this.msgDisplayBegin()
-      this.scrollToView = `bottom${val.length - 1}`
+      this.scrollToView = `bottom${val.length - 2}`
     }
   },
   computed: {
@@ -98,7 +100,11 @@ export default {
       if (!this.messageList) {
         return undefined
       }
-      let lastmsg = [...this.messageList].slice(-1)[0]
+      const lastConversation = this.messageList[this.messageList.length - 1]
+      if (!lastConversation) {
+        return undefined
+      }
+      let lastmsg = [...lastConversation].slice(-1)[0]
       if (!lastmsg || !lastmsg.to || !lastmsg.msgs || lastmsg.msgs.length === 0) {
         return undefined
       }
@@ -192,7 +198,7 @@ export default {
     },
     handleMsgSendStatus (event) {
       this.localMsgSending = (event === 'start')
-      this.scollToBottom()
+      // this.scollToBottom()
     },
     renderComplete () {
       this.msgDisplayFinish()
@@ -204,10 +210,10 @@ export default {
     scollToBottom () {
       const that = this
       this.scrollToView = ''
-      that.scrollToView = 'bottom'
+      that.scrollToView = `bottom${this.messageList.length - 1}`
       setTimeout(function () {
         that.scrollToView = ''
-        that.scrollToView = 'bottom'
+        that.scrollToView = `bottom${that.messageList.length - 1}`
       }, 200)
     },
     playVideo (event) {
@@ -224,7 +230,14 @@ export default {
     itemRender (i) {
       console.log('test')
       this.scrollToView = ''
-      this.scrollToView = 'bottom' + (i - 1)
+      this.scrollToView = 'bottom' + i
+    },
+    keyboardUp () {
+      console.error('keyboardUp')
+      this.keyboardInput = true
+    },
+    keyboardDown () {
+      this.keyboardInput = false
     }
   },
 
@@ -237,14 +250,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   .footer{
     position: relative;
   }
   .pulldown-box{
     /*transition: height 1s;*/
   }
-  .padding-top-64{
-    padding-top: 70rpx;
+  .message-list,  .conversation.last-child {
+    padding-top: 80rpx;
+    height: 100%;
+  }
+
+  .conversation.last-child.focus-input{
+    height: auto;
   }
 </style>

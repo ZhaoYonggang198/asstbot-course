@@ -163,6 +163,9 @@ export default {
       this.$emit('msgSendStatus', event)
     },
     textFocus (e) {
+      if (e.mp.detail.height > 0) {
+        this.$emit('keyboardUp', e.mp.detail.height)
+      }
       // const that = this
       // wx.getSystemInfo({
       //   success: function (res) {
@@ -181,7 +184,7 @@ export default {
     },
     textBlur (e) {
       this.pullUp = false
-      this.$emit('keyBoardUp', '0rpx')
+      this.$emit('keyboardDown')
     },
     changeToVoiceMode () {
       this.changeVoiceMode(true)
