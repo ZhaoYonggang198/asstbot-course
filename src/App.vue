@@ -287,9 +287,11 @@ page{
   /*overflow: auto;*/
 }
 
-.big-box.list-1, .big-box.list-2 {
-  justify-content: space-around;
+.big-box.list-1, .big-box.list-2{
+  justify-content: center;
+  width: 100vw;
 }
+
 
 ::-webkit-scrollbar{
   width: 0;
