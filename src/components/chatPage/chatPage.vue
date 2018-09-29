@@ -81,7 +81,7 @@ export default {
   watch: {
     messageList: function (val) {
       this.msgDisplayBegin()
-      this.scrollToView = `bottom${val.length - 2}`
+      this.scrollToView = `bottom${val.length - 1}`
     }
   },
   computed: {
