@@ -1,29 +1,25 @@
 
-<swiper indicator-dots="{{false}}"
-  autoplay="{{false}}"
-  interval="{{5000}}"
-  duration="{{500}}"
-  previous-margin="30rpx"
-  next-margin="30rpx"
-  display-multiple-items="2">
-  <block wx:for="{{message.items}}" wx:key="{{item}}">
-    <swiper-item>
-      <view class="option-container {{chooseItem==index?'checked':''}}" bindtap="clickItem" data-id="{{index}}" >
-        <view class="image-box" wx:if="{{item.imageUrl}}">
-          <image mode="aspectFit" src="{{item.imageUrl}}" bindlongpress="previewImage" data-url="{{item.imageUrl}}"/>
-        </view>
-        <view class="image-value {{item.caption&&item.caption.length>10 ? 'two-line-text' : 'one-line-text'}}">
-          {{item.caption}}
+<scroll-view scroll-x="true" class='scroll-container'>
+  <view class="scroll-container__items">
+    <block wx:for="{{message.items}}" wx:key="{{item}}">
+      <view class="scroll-container__item">
+        <view class="option-container {{chooseItem==index?'checked':''}}" bindtap="clickItem" data-id="{{index}}" >
+          <view class="image-box" wx:if="{{item.imageUrl}}">
+            <image mode="aspectFit" src="{{item.imageUrl}}" bindlongpress="previewImage" data-url="{{item.imageUrl}}"/>
+          </view>
+          <view class="image-value {{item.caption&&item.caption.length>10 ? 'two-line-text' : 'one-line-text'}}">
+            {{item.caption}}
+          </view>
         </view>
       </view>
-    </swiper-item>
-  </block>
-</swiper>
+    </block>
+  </view>
+</scroll-view>
 <block wx:if="{{chooseItem!==-1}}">
-  <scroll-view scroll-x >
-    <view class="weui-flex action-container">
+  <scroll-view scroll-x class='scroll-container' >
+    <view class="weui-flex action-container scroll-container__items">
       <block wx:for="{{message.actions}}" wx:key="{{item}}">
-        <view class="action-value" bindtap="clickAction" data-item="{{item}}">
+        <view class="action-value scroll-container__item" bindtap="clickAction" data-item="{{item}}">
           {{item.caption}}
         </view>
       </block>

@@ -38,7 +38,7 @@ view(class="page content")
     view(class="weui-flex__item")
       button(class="button" size="small" @click="toggleEditMode") 编辑课程
     view(class="weui-flex__item" )
-      button(class="button" open-type="share" type="ghost") 分享课表
+      button(class="button" open-type="share" type="ghost") 转发给...
     view(class="weui-flex__item")
       button(class="button" type="primary"  @click="bindphone") 关联小米音箱
   view(class="weui-flex bottom-button" v-else)

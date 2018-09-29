@@ -68,13 +68,30 @@
   width: 40rpx
 }
 
-.bot-message .left-item{
-    max-width: 80%;
-    display: flex;
-    width:100%;
-  }
+.bot-message .left-item {
+  max-width: 80%;
+  display: flex;
+  width:100%;
+}
 
 .bot-message .content{
-    width:100%
-  }
+  width:100%
+}
 
+
+.scroll-container {
+  margin-left: -20px;
+  width: 100vw;
+}
+
+.scroll-container .scroll-container__item:first-child {
+  margin-left: 50px;
+}
+
+.scroll-container__items {
+  display: flex;
+}
+
+.scroll-container__item {
+  margin-right: 15rpx!important;
+}
