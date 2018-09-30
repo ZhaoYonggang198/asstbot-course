@@ -3,7 +3,7 @@
       <user-say-message messages="{{messages}}" userAuthed="{{userAuthed}}" bindpreviewImage="previewImage"></user-say-message>
     </block>
     <block wx:else>
-      <block wx:key="{{msg.id}}" wx:for="{{displayIncomingMsgs}}" wx:for-index="i" wx:for-item="msg">
+      <block wx:key="{{i}}" wx:for="{{displayIncomingMsgs}}" wx:for-index="i" wx:for-item="msg">
         <block wx:if="{{msg.type=='divider'}}">
           <block wx:if="{{!lastBotMsg || i < received}}">
             <divider />
@@ -21,6 +21,7 @@
                  bindbuttonListEvent="buttonListEvent" bindpreviewImage="previewImage" 
                  bindexhibitionClick="exhibitionClick"
                  binditemRender="itemRender"
+                 messageId="{{messages.id}}"
                  id="{{i}}"/>
               <view wx:if="{{lastBotMsg && i == received}}">
                 <bot-say-receiving/>

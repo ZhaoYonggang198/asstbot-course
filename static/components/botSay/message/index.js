@@ -7,6 +7,10 @@ Component({
     msg: {
       type: Object,
       value: {}
+    },
+    messageId: {
+      type: String,
+      value: ''
     }
   },
 

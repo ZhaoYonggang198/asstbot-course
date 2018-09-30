@@ -2,7 +2,7 @@
 include ../../pug/template.pug
   
 view(class="page content")
-  title-bar(title="课表")
+  title-bar(title="我的课表")
   block(v-if="courseMeta.needOddEvenWeek")
     block(v-if="editmode")
       current-week-config
@@ -36,7 +36,7 @@ view(class="page content")
         view(class="weui-cell__bd") 添加更多
   view(class="weui-flex bottom-button" v-if="!editmode")
     view(class="weui-flex__item")
-      button(class="button" size="small" @click="toggleEditMode") 编辑课程
+      button(class="button" size="small" @click="toggleEditMode") 编辑课表
     view(class="weui-flex__item" )
       button(class="button" open-type="share" type="ghost") 转发给...
     view(class="weui-flex__item")
