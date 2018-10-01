@@ -1,7 +1,24 @@
 <template>
   <scroll-view scroll-x="true">
-    <view class="big-box" :class="'list-' + list.items.length ">
-      <label class="option-container light form-control" @touchstart="touchStart(option)" @touchmove="touchMove" @touchend="touchEnd" @touch="touchOn" @click="selectItem(option)" v-for="option in list.items" :key="option" :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
+    <view class="big-box" :class="bigBoxStyle">
+      <label class="option-container light form-control"
+        v-for="action in actions" :key="action" @click="selectAction(index)"
+        :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
+        <block v-if="!havaImage">
+          <view class="value image-value one-line-text">{{action.caption}}</view>
+        </block>
+        <block v-else>
+          <view class="value valueBox">{{action.caption}}</view>
+        </block>        
+      </label>
+      <label class="option-container light form-control"
+          @touchstart="touchStart(option)"
+          @touchmove="touchMove"
+          @touchend="touchEnd"
+          @touch="touchOn"
+          @click="selectItem(option)"
+          v-for="option in list.items" :key="option" v-if="list.type==='radio'"
+          :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
         <block v-if="!havaImage">
           <view class="image-box imageBox">
             <image class="image" mode="aspectFit" :src="option.imageUrl" v-if="option.imageUrl"></image>
@@ -31,14 +48,29 @@
       }
     },
     name: 'radioBox',
-    props: ['list'],
+    props: ['list', 'actions'],
     computed: {
       havaImage: state => {
+        if (!state.list) {
+          return true
+        }
         let a = state.list.items.find(item => !!item.imageUrl === true)
         return a === undefined
+      },
+      bigBoxStyle: state => {
+        var itemLength = state.actions ? state.actions.length : 0
+        if (state.list.type === 'radio') {
+          if (state.list.items) {
+            itemLength = itemLength + state.list.items.length
+          }
+        }
+        return `list-${itemLength}`
       }
     },
     methods: {
+      selectAction (actionIndex) {
+        this.$emit('actionclick', actionIndex)
+      },
       selectItem (obj) {
         if (this.touchEndTime - this.touchStartTime < 800) {
           this.$store.dispatch('sentRadioReply', {...obj, value: obj.value ? obj.value : obj.caption})
@@ -76,7 +108,7 @@
       }
     },
     created () {
-      if (this.list.items) {
+      if (this.list.items && this.list.type === 'radio') {
         this.list.items.map(item => {
           this.multiLineFlags = [...this.multiLineFlags, getLineCount(280, 28, item.caption) > 1]
         })

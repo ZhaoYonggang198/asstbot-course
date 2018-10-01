@@ -15,7 +15,7 @@
     </block>
   </view>
 </scroll-view>
-<block wx:if="{{chooseItem!==-1}}">
+<block wx:if="{{false}}">
   <scroll-view scroll-x class='scroll-container' >
     <view class="weui-flex action-container scroll-container__items">
       <block wx:for="{{message.actions}}" wx:key="{{item}}">

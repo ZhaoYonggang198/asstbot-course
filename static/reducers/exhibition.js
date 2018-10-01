@@ -3,12 +3,12 @@ import { createStore, applyMiddleware } from '../lib/redux.js'
 import thunk from '../lib/redux-thunk.js'
 
 export const { setExhibitionChecked, exhibitionActionExecuted } = createActions({
-  SET_EXHIBITION_CHECKED: (exhibitionId, chooseItemId, chooseItem, action) => (
-    {exhibitionId, chooseItemId, chooseItem, action}),
+  SET_EXHIBITION_CHECKED: (exhibitionId, chooseItemId, chooseItem, actions) => (
+    {exhibitionId, chooseItemId, chooseItem, actions}),
   EXHIBITION_ACTION_EXECUTED: () => ({})
 })
 
-const initState = {exhibitionId: -1, chooseItemId: -1, chooseItem: {}, action: []}
+const initState = {exhibitionId: -1, chooseItemId: -1, chooseItem: {}, actions: []}
 
 const exhibition = handleActions({
   [setExhibitionChecked]: (state, action) => {
