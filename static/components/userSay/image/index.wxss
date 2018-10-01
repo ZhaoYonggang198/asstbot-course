@@ -13,7 +13,7 @@
   flex-direction: row-reverse;
 }
 .right-item{
-  max-width: 70%;
+  max-width: 500rpx;
 }
 .image{
   width: 400rpx;

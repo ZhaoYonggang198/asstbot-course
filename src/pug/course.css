@@ -41,3 +41,7 @@
 .weui-cell .weui-cell {
   padding: 0;
 }
+
+.course-location, .course-teacher {
+  font-size: 13px;
+}

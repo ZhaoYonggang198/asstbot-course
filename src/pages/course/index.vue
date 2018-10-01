@@ -36,14 +36,14 @@ view(class="page content")
         view(class="weui-cell__bd") 添加更多
   view(class="weui-flex bottom-button" v-if="!editmode")
     view(class="weui-flex__item")
-      button(class="button" size="small" @click="toggleEditMode") 编辑课表
+      button(class="button" size="small" @click="toggleEditMode") 修改课表
     view(class="weui-flex__item" )
       button(class="button" open-type="share" type="ghost") 转发给...
     view(class="weui-flex__item")
       button(class="button" type="primary"  @click="bindphone") 关联小米音箱
   view(class="weui-flex bottom-button" v-else)
     view(class="weui-flex__item")
-      button(class="weui-btn" type="primary" @click="toggleEditMode") 完成编辑
+      button(class="weui-btn" type="primary" @click="toggleEditMode") 完成修改
   editcourse(v-if="inediting" @editdone="editdone"
     :scene="scene" :day="editday" :interval="editinterval" :course="editcourse")
 </template>
@@ -258,7 +258,7 @@ export default {
 
 .bottom-button {
   padding-top: 20rpx;
-  margin-bottom: 40rpx;
+  margin-bottom: 50rpx;
 }
 
 .bottom-button .button {

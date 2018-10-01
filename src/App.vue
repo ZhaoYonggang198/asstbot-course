@@ -143,7 +143,7 @@ page{
 }
 
 .bot-message .left-item{
-    max-width: 80%;
+    max-width: 650rpx;
     display: flex;
     width:100%;
   }
