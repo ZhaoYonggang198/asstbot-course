@@ -43,6 +43,7 @@
     },
     methods: {
       actionshow (event) {
+        console.log(event)
         this.chooseItem = event.mp.detail.chooseItem
         this.actions = event.mp.detail.actions
       },

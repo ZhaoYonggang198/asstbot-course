@@ -51,9 +51,10 @@
     props: ['list', 'actions'],
     computed: {
       havaImage: state => {
-        if (!state.list) {
+        if (!state.list || !state.list.items) {
           return true
         }
+
         let a = state.list.items.find(item => !!item.imageUrl === true)
         return a === undefined
       },

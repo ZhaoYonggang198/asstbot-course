@@ -287,7 +287,7 @@ page{
   /*overflow: auto;*/
 }
 
-.big-box.list-1, .big-box.list-2{
+.big-box.list-1, .big-box.list-2, .big-box.list-3{
   justify-content: center;
   width: 100vw;
 }

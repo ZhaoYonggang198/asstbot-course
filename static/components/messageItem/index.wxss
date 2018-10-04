@@ -8,12 +8,14 @@
 .bot-message {
   padding-bottom: 10px;
   display: flex;
+  z-index: 1;
 
 }
 
 .bot-message .avatar-wrapper {
   padding: 3px 10px;
-  width: 40rpx
+  width: 40rpx;
+  z-index: 1
 }
 
 .bot-message .left-item{

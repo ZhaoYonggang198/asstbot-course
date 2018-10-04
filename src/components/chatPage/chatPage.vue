@@ -21,16 +21,18 @@
               <block v-if="localMsgSending && i==(messageList.length-1)">
                 <user-say-sending/>
               </block>
+              <view class="record-area" v-if="i==(messageList.length-1)">
+                <record-widget @msgSendStatus="handleMsgSendStatus"/>
+              </view>
             </view>
           </block>
-
         </view>
       </scroll-view>
       <!-- <message-list :messagesList="messageList" :survey="survey" :localmsgsending="localMsgSending"
           @renderFinish="msgDisplayFinish" @renderBegin="msgDisplayBegin"/> -->
     </view>
     <view class="footer">
-      <select-box  v-if="displayFinish" :messageAction="activeBoxMsg"/>
+      <select-box  v-if="displayFinish" :messageAction="activeBoxMsg" />
       <command-area  @msgSendStatus="handleMsgSendStatus"
           :inputPromt="activeInputPromtMsg"
           :displayFinish="displayFinish" @keyboardUp="keyboardUp" @keyboardDown="keyboardDown"
@@ -44,6 +46,7 @@ import commandArea from '@/components/commandArea'
 import selectBox from '@/components/selectBox'
 import userSaySending from '@/components/userSay/sending'
 import videoplayer from '@/components/widget/videoplayer'
+import recordWidget from '@/components/chatPage/recordWidget'
 import { mapState } from 'vuex'
 
 const urlMaping = {
@@ -245,7 +248,8 @@ export default {
     commandArea,
     selectBox,
     userSaySending,
-    videoplayer
+    videoplayer,
+    recordWidget
   }
 }
 </script>
@@ -260,6 +264,20 @@ export default {
   .message-list,  .conversation.last-child {
     padding-top: 80rpx;
     height: 100%;
+  }
+
+  .conversation.last-child {
+    z-index: 1;
+    position: relative;
+  }
+
+  .message-list .record-area {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    height: 100%;
+    width: 100%;
+    z-index:0;
   }
 
   .conversation.last-child.focus-input{
