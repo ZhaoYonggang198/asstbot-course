@@ -82,7 +82,10 @@ export default {
     },
 
     touchend (event) {
-      if (this.recordStatus !== 'idle') {
+      if (this.recordStatus === 'readyToCancel') {
+        this.recordStatus = 'idle'
+        recorderManager.stop()
+      } else if (this.recordStatus === 'inRecording') {
         recorderManager.stop()
       } else {
         clearTimeout(this.timer)

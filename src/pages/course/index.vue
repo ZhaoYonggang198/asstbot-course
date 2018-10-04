@@ -263,9 +263,25 @@ export default {
 
 .bottom-button .button {
   font-size: 28rpx;
-  line-height: 2;
   margin-left: 10rpx;
   margin-right: 10rpx;
+  line-height: 1.6;
+  white-space:nowrap;
+  padding:10rpx 10rpx;
+  background:#f2f2f2;
+  border:3rpx solid #19a1a8;
+  color:#19a1a8;
+  border-radius:35rpx;
+  padding:10rpx 10rpx;
+  text-align:center;
+  box-shadow:0 0 0;
+  font-weight:500;
+  min-width:60rpx;
+}
+
+.bottom-button .button:active {
+  background: #19a1a8;
+  color: white;
 }
 
 .bottom-button .weui-btn {

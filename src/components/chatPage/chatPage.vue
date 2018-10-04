@@ -200,6 +200,7 @@ export default {
       }, 500)
     },
     handleMsgSendStatus (event) {
+      console.log('handleMsgSendStatus')
       this.localMsgSending = (event === 'start')
       // this.scollToBottom()
     },
@@ -262,11 +263,11 @@ export default {
     /*transition: height 1s;*/
   }
   .message-list,  .conversation.last-child {
-    padding-top: 80rpx;
     height: 100%;
   }
 
   .conversation.last-child {
+    padding-top: 80rpx;
     z-index: 1;
     position: relative;
   }
@@ -275,7 +276,7 @@ export default {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    height: 100%;
+    height: 80%;
     width: 100%;
     z-index:0;
   }

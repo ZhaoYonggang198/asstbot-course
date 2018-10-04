@@ -1,5 +1,5 @@
   <block wx:if="{{needDisplay}}">
-    <view class="weui-flex">
+    <view class="weui-flex user-say">
       <view class="weui-flex__item">
         <user-say-text content="{{messages.data.query}}" wx:if="{{messages.type=='text'}}"/>
         <user-say-image url="{{messages.data.url}}" bindpreviewImage="previewImage" wx:elif="{{messages.type=='image'}}"/>

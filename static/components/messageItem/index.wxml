@@ -1,7 +1,7 @@
 <block>
-    <block wx:if="{{outgoing}}">
+    <view wx:if="{{outgoing}}">
       <user-say-message messages="{{messages}}" userAuthed="{{userAuthed}}" bindpreviewImage="previewImage"></user-say-message>
-    </block>
+    </view>
     <block wx:else>
       <block wx:key="{{i}}" wx:for="{{displayIncomingMsgs}}" wx:for-index="i" wx:for-item="msg">
         <block wx:if="{{msg.type=='divider'}}">
