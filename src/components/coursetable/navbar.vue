@@ -70,6 +70,14 @@ export default {
 </script>
 
 <style scoped>
+
+.weui-navbar__item {
+  color: #999999;
+}
+
+.weui-navbar__item.weui-bar__item_on {
+  color: #0c5053;
+}
 .weui-navbar__slider {
   width: 3em;
   /* background: #2b85e4!important */

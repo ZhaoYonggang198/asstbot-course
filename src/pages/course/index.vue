@@ -34,16 +34,12 @@ view(class="page content")
             i(class="icon iconfont icon-trash" @click="removecourse(dayIdx, intervalIdx, courseIdx)")
       view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx") 
         view(class="weui-cell__bd") 添加更多
-  view(class="weui-flex bottom-button" v-if="!editmode")
-    view(class="weui-flex__item")
-      button(class="button" size="small" @click="toggleEditMode") 修改课表
-    view(class="weui-flex__item" )
-      button(class="button" open-type="share" type="ghost") 转发给...
-    view(class="weui-flex__item")
-      button(class="button" type="primary"  @click="bindphone") 关联小米音箱
-  view(class="weui-flex bottom-button" v-else)
-    view(class="weui-flex__item")
-      button(class="button" type="primary" @click="toggleEditMode") 完成修改
+  view(class="bottom-button" v-if="!editmode")
+    button(class="button" size="small" @click="toggleEditMode") 修改课表
+    button(class="button" open-type="share" type="ghost") 转发给...
+    button(class="button" type="primary"  @click="bindphone") 关联小米音箱
+  view(class="bottom-button" v-else)
+    button(class="button" type="primary" @click="toggleEditMode") 完成修改
   editcourse(v-if="inediting" @editdone="editdone"
     :scene="scene" :day="editday" :interval="editinterval" :course="editingcourse")
 </template>
@@ -260,20 +256,21 @@ export default {
 .bottom-button {
   padding-top: 20rpx;
   margin-bottom: 50rpx;
+  display: flex;
+  justify-content: center;
 }
 
 .bottom-button .button {
   font-size: 28rpx;
-  margin-left: 10rpx;
-  margin-right: 10rpx;
+  margin-left: 15rpx;
+  margin-right: 15rpx;
   line-height: 1.6;
   white-space:nowrap;
-  padding:10rpx 10rpx;
   background:#f2f2f2;
   border:3rpx solid #19a1a8;
   color:#19a1a8;
   border-radius:35rpx;
-  padding:10rpx 10rpx;
+  padding:10rpx 20rpx;
   text-align:center;
   box-shadow:0 0 0;
   font-weight:500;

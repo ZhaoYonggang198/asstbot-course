@@ -27,7 +27,9 @@
   margin-right: 15rpx;
   float: left;
 }
-
+.course-name {
+  color: #0c5053;
+}
 .course-name.odd:after{
   content: "(单周)";
   color: #80848f;
