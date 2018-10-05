@@ -43,9 +43,9 @@ view(class="page content")
       button(class="button" type="primary"  @click="bindphone") 关联小米音箱
   view(class="weui-flex bottom-button" v-else)
     view(class="weui-flex__item")
-      button(class="weui-btn" type="primary" @click="toggleEditMode") 完成修改
+      button(class="button" type="primary" @click="toggleEditMode") 完成修改
   editcourse(v-if="inediting" @editdone="editdone"
-    :scene="scene" :day="editday" :interval="editinterval" :course="editcourse")
+    :scene="scene" :day="editday" :interval="editinterval" :course="editingcourse")
 </template>
 
 <script>
@@ -66,7 +66,7 @@ export default {
       scene: 'add',
       editday: 0,
       editinterval: 0,
-      editcourse: 0,
+      editingcourse: 0,
       editmode: false,
       weekmode: 'both',
       displayCourseInfo: []
@@ -131,7 +131,7 @@ export default {
       this.scene = 'config'
       this.editday = day
       this.editinterval = interval
-      this.editcourse = course
+      this.editingcourse = course
     },
     editdone () {
       this.inediting = false
@@ -143,6 +143,7 @@ export default {
       this.scene = 'add'
       this.editday = day
       this.editinterval = interval
+      this.editingcourse = this.courseInfo[day].interval[interval].course.length
     },
     toggleEditMode () {
       if (this.editmode) {

@@ -6,7 +6,8 @@
         <view class="message-list">
           <block v-for="(conversation, i) in messageList" :key="conversation">
             <view class="conversation" :id="'bottom'+i" :class="{'last-child':i==(messageList.length-1), 'focus-input': keyboardInput}">
-              <block v-for="(messages, j) in conversation" :key="j">
+              <view style="height: 80rpx;" v-if="i==(messageList.length-1)" />
+              <view style="z-index: 1" v-for="(messages, j) in conversation" :key="j">
                 <message-item :survey="survey" :lastBotMsg="i==(messageList.length-1)&&messages.to!==undefined"
                           :messages="messages" :userAuthed="userAuthed"
                           @renderComplete="renderComplete"
@@ -15,9 +16,8 @@
                           @previewImage="$store.commit('setPreviewFalse')"
                           @buttonListEvent="action"
                           @videoPlay="playVideo"
-                          @exhibitionClick="exhibitionClick"
-                          @itemRender="itemRender(i)"/>
-              </block>
+                          @exhibitionClick="exhibitionClick"/>
+              </view>
               <block v-if="localMsgSending && i==(messageList.length-1)">
                 <user-say-sending/>
               </block>
@@ -231,17 +231,16 @@ export default {
         data: event.mp.detail
       })
     },
-    itemRender (i) {
-      console.log('test')
-      this.scrollToView = ''
-      this.scrollToView = 'bottom' + i
-    },
     keyboardUp () {
       console.error('keyboardUp')
       this.keyboardInput = true
     },
     keyboardDown () {
       this.keyboardInput = false
+      setTimeout(() => {
+        this.scrollToView = ''
+        this.scrollToView = `bottom${this.messageList.length - 1}`
+      }, 200)
     }
   },
 
@@ -266,8 +265,11 @@ export default {
     height: 100%;
   }
 
+   .conversation.last-child  {
+     height: 100%;
+   }
+
   .conversation.last-child {
-    padding-top: 80rpx;
     z-index: 1;
     position: relative;
   }
@@ -276,12 +278,17 @@ export default {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    height: 80%;
+    height: 100%;
     width: 100%;
-    z-index:0;
+    z-index: -1;
   }
 
   .conversation.last-child.focus-input{
     height: auto;
+  }
+
+  .conversation.last-child.focus-input .record-area {
+    height: 0;
+    overflow: hidden;
   }
 </style>
