@@ -40,6 +40,10 @@ export default {
   color: @text-on-p-color;
 }
 
+.icon-return {
+  font-size: 50rpx;
+}
+
 .return-button:active {
   background-color: @p-color;
 }

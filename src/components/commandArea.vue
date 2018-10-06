@@ -193,6 +193,7 @@ export default {
         duration: 3000,
         mask: false
       })
+      this.voiceMode = true
     },
     changeVoiceMode (showToast) {
       getRecordAuth(showToast)

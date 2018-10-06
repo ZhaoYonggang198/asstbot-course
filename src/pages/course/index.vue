@@ -16,7 +16,7 @@ view(class="page content")
             +course-info
       block(v-else)
         view(class="weui-cell" @click="setEditmode")
-          view(class="weui-cell__bd") 休息
+          view(class="weui-cell__bd course-name") 休息
     block(v-else)
       block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
         view(class="active-course" v-if="activeDay==dayIdx && activeInterval==intervalIdx && activeCourse==courseIdx")
@@ -35,7 +35,7 @@ view(class="page content")
       view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx") 
         view(class="weui-cell__bd") 添加更多
   view(class="bottom-button" v-if="!editmode")
-    button(class="button" size="small" @click="toggleEditMode") 修改课表
+    //- button(class="button" size="small" @click="toggleEditMode") 修改课表
     button(class="button" open-type="share" type="ghost") 转发给...
     button(class="button" type="primary"  @click="bindphone") 关联小米音箱
   view(class="bottom-button" v-else)
@@ -192,9 +192,9 @@ export default {
         content: '',
         showCancel: true,
         cancelText: '取消',
-        cancelColor: '#000000',
+        cancelColor: '#0c5053',
         confirmText: '确定',
-        confirmColor: '#3CC51F',
+        confirmColor: '#19a1a8',
         success: res => {
           if (res.confirm) {
             this.$store.commit('deleteCourse', {day,
