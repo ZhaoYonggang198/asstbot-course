@@ -1,7 +1,6 @@
 <template>
 <block>
-  <record-status :recordStatus="recordStatus"></record-status>
-  <view class="input-widget form-control secondary-color" :class="recordStatus=='readyToRecord'?'':'dark'"
+  <view class="input-widget form-control secondary-color" :class="recordStatus=='idle'?'':'dark'"
           style="border-radius:0!important; border:none"
             @touchstart="startRecord"
             @touchcancel="cancelRecord"
@@ -14,20 +13,25 @@ const recorderManager = wx.getRecorderManager()
 export default {
   data () {
     return {
-      recordStatus: 'readyToRecord',
+      recordStatus: 'idle',
       startRecordPageY: 0,
       endRecordPageY: 0
     }
   },
   computed: {
     recordOperationText () {
-      if (this.recordStatus === 'readyToRecord') {
+      if (this.recordStatus === 'idle') {
         return '按住 说话'
       } else if (this.recordStatus === 'readyToCancel') {
         return '松开手指，取消发送'
       } else {
         return '松开 结束'
       }
+    }
+  },
+  watch: {
+    recordStatus: function (val) {
+      this.$store.commit('updateRecordStatus', {status: val, cancelText: '手指上滑，取消发送'})
     }
   },
   methods: {
@@ -52,7 +56,7 @@ export default {
       }
     },
     clearRecordStatus () {
-      this.recordStatus = 'readyToRecord'
+      this.recordStatus = 'idle'
       this.startRecordPageY = 0
       this.endRecordPageY = 0
     },

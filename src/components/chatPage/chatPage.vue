@@ -32,6 +32,7 @@
           @renderFinish="msgDisplayFinish" @renderBegin="msgDisplayBegin"/> -->
     </view>
     <view class="footer">
+      <record-status/>
       <select-box  v-if="displayFinish" :messageAction="activeBoxMsg" />
       <command-area  @msgSendStatus="handleMsgSendStatus"
           :inputPromt="activeInputPromtMsg"

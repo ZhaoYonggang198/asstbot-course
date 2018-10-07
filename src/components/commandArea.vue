@@ -198,7 +198,7 @@ export default {
     changeVoiceMode (showToast) {
       getRecordAuth(showToast)
         .then(() => {
-          this.voiceMode = false
+          this.voiceMode = true
         })
         .catch((err) => {
           console.error(err)
