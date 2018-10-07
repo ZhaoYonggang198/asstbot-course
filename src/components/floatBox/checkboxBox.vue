@@ -1,6 +1,6 @@
 <template>
   <scroll-view scroll-x="true">
-    <view class="big-box">
+    <view class="big-box" :class="'list-'+list.items.length">
       <label class="option-container light form-control" v-for="(option, index) in list.items" :key="option"
              :class="[pureTextList ? 'no-image' : 'haveimage']" :for="'option' + index" @click="checked(index)" @touchstart="touchStart(option)" @touchmove="touchMove()" @touchend="touchEnd(option)">
         <view class="weui-flex">
@@ -10,7 +10,7 @@
                 <image class="image" mode="aspectFit" :src="option.imageUrl"  v-if="option.imageUrl"></image>
               </view>
             </block>
-              <view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color', multiLineFlags[index] ? 'two-line-text':'one-line-text']">{{option.caption}}</view>
+              <view class="value" :class="[multiLineFlags[index] ? 'two-line-text':'one-line-text', checkArr[index] ? 'checked-color':'un-checked-color']">{{option.caption}}</view>
               <!--<view class="value" :class="[checkArr[index] ? 'checked-color':'un-checked-color', pureTextList ? 'valueBox' : 'image-value']">{{option.caption}}</view>-->
           </view>
         </view>
@@ -170,7 +170,6 @@
   }
   .no-image .value{
     white-space: nowrap;
-    padding:6rpx 20rpx;
     border-radius:35rpx;
     padding:10rpx 10rpx;
     box-shadow:0 0 0;
@@ -188,13 +187,17 @@
   }
 
   .haveimage .two-line-text {
+    width:300rpx;
+    box-sizing:border-box;
     line-height: 40rpx;
-    height: 70rpx;
+    height: 100rpx;
     -webkit-line-clamp:2;
-    padding: 10rpx;
+    padding: 15rpx 10rpx;
+    text-align: center;
   }
 
   .haveimage .one-line-text {
+    width:300rpx;
     line-height: 100rpx;
     -webkit-line-clamp:1;
   }
@@ -222,15 +225,15 @@
   .select-box{
     display: none;
   }
-  /*.haveimage .valueBox{*/
-    /*display: flex;*/
-    /*align-items: center;*/
-    /*justify-items: center;*/
-    /*justify-content: center;*/
-    /*align-content: center;*/
-    /*width: 300rpx;*/
-    /*height: 400rpx;*/
-  /*}*/
+  .haveimage .valueBox{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    width: 300rpx;
+    height: 400rpx;
+  }
 
   .haveimage .checked {
     position: absolute;
@@ -238,19 +241,5 @@
     right: 10rpx;
   }
 
-  /*.image-value{*/
-    /*text-align:center;*/
-    /*font-size:28rpx;*/
-    /*font-weight:500;*/
-    /*line-height: 50rpx;*/
-    /*height: 100rpx;*/
-    /*overflow:hidden;*/
-    /*text-overflow:ellipsis;*/
-    /*display:-webkit-box;*/
-    /*-webkit-box-orient:vertical;*/
-    /*-webkit-line-clamp:2;*/
-    /*border-bottom-left-radius: 20rpx;*/
-    /*border-bottom-right-radius: 20rpx;*/
-  /*}*/
 
 </style>

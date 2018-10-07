@@ -1,5 +1,6 @@
 import wechat from './wechat'
 import config from './config.js'
+import Time from '../../../utils/time'
 require('xiaoda-date')
 
 const url = config.service.courseUrl
@@ -140,6 +141,63 @@ function __allCourses (state) {
   return courses
 }
 
+const possibleInterval = (state) => {
+  let courseInterval = {}
+  let courseInfo = state.courseInfo
+
+  courseInfo.forEach(day => {
+    day.interval.forEach(interval => {
+      interval.course.forEach(course => {
+        if (course.startTime && course.endTime) {
+          let interval = Time.interval(course.startTime, course.endTime)
+          courseInterval[interval] = courseInterval[interval] ? (courseInterval[interval] + 1) : 1
+        }
+      })
+    })
+  })
+
+  let pCourseInterval = 45
+  let occurTimes = 0
+
+  for (let j in courseInterval) {
+    if (occurTimes < courseInterval[j]) {
+      pCourseInterval = j
+      occurTimes = courseInterval[j]
+    }
+  }
+
+  return pCourseInterval
+}
+
+const possibleIntervalBetweenCourse = state => {
+  let courseInterval = {}
+  let courseInfo = state.courseInfo
+
+  courseInfo.forEach(day => {
+    day.interval.forEach(interval => {
+      interval.course.forEach((course, index) => {
+        let lastCourse = interval.course[index - 1]
+        if (index > 0 && course.startTime && lastCourse.endTime) {
+          let interval = Time.interval(lastCourse.endTime, course.startTime)
+          courseInterval[interval] = courseInterval[interval] ? (courseInterval[interval] + 1) : 1
+        }
+      })
+    })
+  })
+
+  let pCourseInterval = 10
+  let occurTimes = 0
+
+  for (let j in courseInterval) {
+    if (occurTimes < courseInterval[j]) {
+      pCourseInterval = j
+      occurTimes = courseInterval[j]
+    }
+  }
+
+  return pCourseInterval
+}
+
 const getters = {
   allCourses: state => {
     return __allCourses(state)
@@ -191,6 +249,39 @@ const getters = {
       }
     }
     return {startTime: '', endTime: ''}
+  },
+  candidateStartTime: (state) => (day, interval, courseidx) => {
+    const courseInfo = state.courseInfo
+    for (let i in courseInfo) {
+      let course = courseInfo[i].interval[interval].course[courseidx]
+      if (course && course.startTime && course.endTime) {
+        return course.startTime
+      }
+    }
+
+    if (courseidx > 0) {
+      let course = courseInfo[day].interval[interval].course[courseidx - 1]
+      if (course && course.startTime && course.endTime) {
+        let possibleInterval = possibleIntervalBetweenCourse(state)
+        return Time.endTime(course.endTime, possibleInterval) // 上一节课的结束时间 + 10
+      }
+    }
+
+    if (interval === 0) { // 上午的推荐时间
+      return '08:00'
+    } else if (interval === 1) { // 下午的推荐时间
+      return '13:00'
+    } else {
+      return '19:00'
+    }
+  },
+
+  candidateEndTime: (state) => (startTime) => {
+    if (startTime === '') {
+      return ''
+    }
+    let courseinterval = possibleInterval(state)
+    return Time.endTime(startTime, courseinterval)
   },
   allTeacherOfCourse: (state) => (courseName) => {
     let teacher = []
@@ -294,23 +385,6 @@ const mutations = {
     state.courseInfo = courseInfo
     state.courseMeta.sameOddWeek = meta.sameOddWeek
   },
-
-  // mergeCourses (state, courseInfo) {
-  //   var allCourses = __allCourses(state)
-  //   if (allCourses.length === 0) {
-  //     state.courseInfo = courseInfo
-  //   } else {
-  //     for (let dayidx in state.courseInfo) {
-  //       let day = courseInfo[dayidx]
-  //       for (let intervalidx in state.courseInfo[dayidx].interval) {
-  //         if (state.courseInfo[dayidx].interval[intervalidx].course.length === 0) {
-  //           state.courseInfo[dayidx].interval[intervalidx].course =
-  //             day.interval[intervalidx].course
-  //         }
-  //       }
-  //     }
-  //   }
-  // },
 
   setOpenId (state, openid) {
     state.openid = openid

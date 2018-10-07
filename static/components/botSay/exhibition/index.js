@@ -1,4 +1,5 @@
-// static/components/botSay/exhibition/index.js
+import { store, setExhibitionChecked } from '../../../reducers/exhibition'
+
 Component({
   /**
    * 组件的属性列表
@@ -6,7 +7,11 @@ Component({
   properties: {
     message: {
       type: Object,
-      default: {}
+      value: {}
+    },
+    exhibitionId: {
+      type: String,
+      value: ''
     }
   },
 
@@ -34,15 +39,11 @@ Component({
     },
 
     clickItem (event) {
-      let id = event.currentTarget.dataset.id
-      if (id === this.data.chooseItem) {
-        this.setData({chooseItem: -1})
-      } else {
-        this.setData({chooseItem: id})
-      }
-      if (this.data.chooseItem !== -1) {
-        this.triggerEvent('itemRender')
-      }
+      store.exhibition.dispatch(
+        setExhibitionChecked(this.properties.exhibitionId,
+          event.currentTarget.dataset.id,
+          this.properties.message.items[event.currentTarget.dataset.id],
+          this.properties.message.actions))
     },
 
     previewImage (event) {
@@ -53,5 +54,20 @@ Component({
         urls: [url]
       })
     }
+  },
+
+  attached () {
+    this.unsubscribe = store.exhibition.subscribe(() => {
+      const state = store.exhibition.getState()
+      if (this.properties.exhibitionId === state.exhibitionId) {
+        this.setData({chooseItem: state.chooseItemId})
+      } else {
+        this.setData({chooseItem: -1})
+      }
+    })
+  },
+
+  detached () {
+    this.unsubscribe()
   }
 })

@@ -2,7 +2,7 @@
 include ../../pug/template.pug
   
 view(class="page content")
-  title-bar(title="课表")
+  title-bar(title="我的课表")
   block(v-if="courseMeta.needOddEvenWeek")
     block(v-if="editmode")
       current-week-config
@@ -34,18 +34,14 @@ view(class="page content")
             i(class="icon iconfont icon-trash" @click="removecourse(dayIdx, intervalIdx, courseIdx)")
       view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx") 
         view(class="weui-cell__bd") 添加更多
-  view(class="weui-flex bottom-button" v-if="!editmode")
-    view(class="weui-flex__item")
-      button(class="button" size="small" @click="toggleEditMode") 编辑课程
-    view(class="weui-flex__item" )
-      button(class="button" open-type="share" type="ghost") 分享课表
-    view(class="weui-flex__item")
-      button(class="button" type="primary"  @click="bindphone") 关联小米音箱
-  view(class="weui-flex bottom-button" v-else)
-    view(class="weui-flex__item")
-      button(class="weui-btn" type="primary" @click="toggleEditMode") 完成编辑
+  view(class="bottom-button" v-if="!editmode")
+    button(class="button" size="small" @click="toggleEditMode") 修改课表
+    button(class="button" open-type="share" type="ghost") 转发给...
+    button(class="button" type="primary"  @click="bindphone") 关联小米音箱
+  view(class="bottom-button" v-else)
+    button(class="button" type="primary" @click="toggleEditMode") 完成修改
   editcourse(v-if="inediting" @editdone="editdone"
-    :scene="scene" :day="editday" :interval="editinterval" :course="editcourse")
+    :scene="scene" :day="editday" :interval="editinterval" :course="editingcourse")
 </template>
 
 <script>
@@ -66,7 +62,7 @@ export default {
       scene: 'add',
       editday: 0,
       editinterval: 0,
-      editcourse: 0,
+      editingcourse: 0,
       editmode: false,
       weekmode: 'both',
       displayCourseInfo: []
@@ -131,7 +127,7 @@ export default {
       this.scene = 'config'
       this.editday = day
       this.editinterval = interval
-      this.editcourse = course
+      this.editingcourse = course
     },
     editdone () {
       this.inediting = false
@@ -143,6 +139,7 @@ export default {
       this.scene = 'add'
       this.editday = day
       this.editinterval = interval
+      this.editingcourse = this.courseInfo[day].interval[interval].course.length
     },
     toggleEditMode () {
       if (this.editmode) {
@@ -258,14 +255,31 @@ export default {
 
 .bottom-button {
   padding-top: 20rpx;
-  margin-bottom: 40rpx;
+  margin-bottom: 50rpx;
+  display: flex;
+  justify-content: center;
 }
 
 .bottom-button .button {
   font-size: 28rpx;
-  line-height: 2;
-  margin-left: 10rpx;
-  margin-right: 10rpx;
+  margin-left: 15rpx;
+  margin-right: 15rpx;
+  line-height: 1.6;
+  white-space:nowrap;
+  background:#f2f2f2;
+  border:3rpx solid #19a1a8;
+  color:#19a1a8;
+  border-radius:35rpx;
+  padding:10rpx 20rpx;
+  text-align:center;
+  box-shadow:0 0 0;
+  font-weight:500;
+  min-width:60rpx;
+}
+
+.bottom-button .button:active {
+  background: #19a1a8;
+  color: white;
 }
 
 .bottom-button .weui-btn {

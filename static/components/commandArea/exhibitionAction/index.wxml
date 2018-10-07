@@ -1,0 +1,11 @@
+  <scroll-view scroll-x v-if="{{actions.length!==0}}">
+    <view class="weui-flex action-container">
+      <block wx:for="{{actions}}" wx:key="{{item}}">
+        <label class="action-value-wrapper">
+          <view class="action-value" bindtap="clickAction" data-item="{{item}}">
+            {{item.caption}}
+          </view>
+        </label>
+      </block>
+    </view>
+  </scroll-view >

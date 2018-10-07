@@ -143,7 +143,7 @@ page{
 }
 
 .bot-message .left-item{
-    max-width: 80%;
+    max-width: 650rpx;
     display: flex;
     width:100%;
   }
@@ -274,16 +274,25 @@ page{
 .weui-cell_warn {
   font-size: 24rpx;
 }
-  .move-area{
-    height: 100vh;
-    width: 100%;
-  }
+
+.move-area{
+  height: 100vh;
+  width: 100%;
+}
+
 .big-box{
   display: flex;
   align-items: center;
   padding: 20rpx 0rpx;
   /*overflow: auto;*/
 }
+
+.big-box.list-1, .big-box.list-2, .big-box.list-3{
+  justify-content: center;
+  width: 100vw;
+}
+
+
 ::-webkit-scrollbar{
   width: 0;
   height: 0;

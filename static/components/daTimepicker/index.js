@@ -102,10 +102,20 @@ Component({
     },
     value: {
       type: String,
+      value: '',
+      observer: function (val) {
+        let time = timeStrToVal(val === '' ? this.properties.recommend : val)
+        this.setRangeData(this.data.startTime, this.data.endTime, time)
+      }
+    },
+    recommend: {
+      type: String,
       value: '00:00',
       observer: function (val) {
-        let time = timeStrToVal(val)
-        this.setRangeData(this.data.startTime, this.data.endTime, time)
+        if (this.properties.value === '') {
+          let time = timeStrToVal(val)
+          this.setRangeData(this.data.startTime, this.data.endTime, time)
+        }
       }
     }
   },

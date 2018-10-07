@@ -9,3 +9,7 @@
   overflow:hidden;  
   display: block;
 }
+
+.user-say {
+  z-index: 1;
+}

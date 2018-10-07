@@ -1,8 +1,9 @@
 <template>
     <view class="select-box" :class="{'top_110': !showImage, 'top_444': showImage}">
-      <global-component v-if="globalShow"></global-component>
-      <block v-else>
-        <radio-box v-if="messageAction.type === 'radio'" :list="messageAction"></radio-box>
+      <exhibition-action @actionshow="actionshow" :actionclick="actionclicked"></exhibition-action>
+      <block v-if="!exhibitionActionShow">
+        <radio-box v-if="messageAction.type === 'radio' || (actions && actions.length > 0)" 
+          :list="messageAction" :actions="actions" @actionclick="actionclick"></radio-box>
         <checkbox-box v-if="messageAction.type === 'checkbox'" :list="messageAction"></checkbox-box>
         <avatar-box v-if="messageAction.type === 'imageUploader'" :list="messageAction"></avatar-box>
       </block>
@@ -14,7 +15,7 @@
   import checkboxBox from '@/components/floatBox/checkboxBox'
   import avatarBox from '@/components/floatBox/avatarBox'
   import globalComponent from '@/components/floatBox/globalComponent'
-  import { mapState } from 'vuex'
+
   export default {
     name: 'selectBox',
     props: {
@@ -33,12 +34,34 @@
       avatarBox,
       globalComponent
     },
-    computed: {
-      ...mapState({
-        globalShow: state => {
-          return state.inputValue.globalShow
-        }
-      })
+    data () {
+      return {
+        chooseItem: {},
+        actions: [],
+        actionclicked: false
+      }
+    },
+    methods: {
+      actionshow (event) {
+        console.log(event)
+        this.chooseItem = event.mp.detail.chooseItem
+        this.actions = event.mp.detail.actions
+      },
+      actionclick (event) {
+        this.actionclicked = true
+        console.log(event)
+        let action = this.actions[event]
+        console.log(this.actions)
+        this.$store.dispatch('sendGenericRequest', {
+          type: 'event',
+          data: {
+            caption: action.caption,
+            name: action.event,
+            indicator: this.chooseItem.indicator,
+            ...action.data
+          }
+        })
+      }
     }
   }
 </script>

@@ -1,3 +1,6 @@
+@import '/static/style/weui.wxss';
+@import '/static/style/main.wxss';
+
 .time-table-container{
     margin-left: 12px
 }
@@ -14,6 +17,7 @@
 .time-table-box{
     display: flex;
 }
+
 .time-table-item{
     margin-right: 10px;
     background: #fff;

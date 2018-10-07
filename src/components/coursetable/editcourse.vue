@@ -23,7 +23,8 @@ view
               view(class="weui-flex__item time-wrapper")
                 da-timepicker(mode='time' :start="minStartTime"
                     :end="currentCourse.endTime?currentCourse.endTime:maxStartTime"
-                    :value="currentCourse.startTime?currentCourse.startTime:minStartTime"
+                    :value="currentCourse.startTime"
+                    :recommend="recommendStartTime"
                     @change="startTimeChange")
                   view(v-if="currentCourse.startTime") {{currentCourse.startTime}}
                   view(v-else) 未指定
@@ -31,7 +32,8 @@ view
               view(class="weui-flex__item time-wrapper")
                 da-timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime"
                     :end="maxEndTime"
-                    :value="currentCourse.endTime?currentCourse.endTime:minEndTime"
+                    :value="currentCourse.endTime"
+                    :recommend="recommendEndTime"
                     @change="endTimeChange")
                   view(v-if="currentCourse.endTime") {{currentCourse.endTime}}
                   view(v-else) 未指定
@@ -155,6 +157,12 @@ export default {
       } else {
         return '23:59'
       }
+    },
+    recommendStartTime () {
+      return this.$store.getters.candidateStartTime(this.day, this.interval, this.course)
+    },
+    recommendEndTime () {
+      return this.$store.getters.candidateEndTime(this.currentCourse.startTime)
     }
   },
   watch: {
@@ -249,6 +257,12 @@ export default {
   onLoad () {
     if (this.scene === 'add') {
       let interval = this.$store.getters.canditateInterval(this.day, this.interval)
+      if (this.day === 5 && this.day === 6) { // weekend handler
+        interval = {
+          startTime: '',
+          endTime: ''
+        }
+      }
       this.currentCourse = {
         name: '',
         location: '',
