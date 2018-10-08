@@ -19,4 +19,7 @@ export default {
 .current-week {
   font-weight: bold;
 }
+view {
+  color: #0c5053;
+}
 </style>

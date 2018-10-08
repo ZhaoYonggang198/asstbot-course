@@ -3,8 +3,8 @@
     view(class="weui-cell__bd")
       current-week
     view(class="weui-cell__ft")
-      switch(checked @change='valueChange' v-if="initOddStatus")
-      switch(@change='valueChange' v-else)
+      switch(checked @change='valueChange' v-if="initOddStatus" color='#19a1a8')
+      switch(@change='valueChange' v-else color='#19a1a8')
 </template>
 
 <script>
