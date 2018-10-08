@@ -86,6 +86,9 @@ export default {
                 icon: 'none'
               })
             })
+            .finally(() => {
+              that.$emit('msgSendStatus', 'end')
+            })
         }
         that.clearRecordStatus()
       })

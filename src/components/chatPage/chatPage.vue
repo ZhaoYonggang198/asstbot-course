@@ -21,7 +21,7 @@
               <block v-if="localMsgSending && i==(messageList.length-1)">
                 <user-say-sending/>
               </block>
-              <view class="record-area" v-if="i==(messageList.length-1)">
+              <view class="record-area" v-if="i==(messageList.length-1) && recordAuthed">
                 <record-widget @msgSendStatus="handleMsgSendStatus"/>
               </view>
             </view>
@@ -90,7 +90,8 @@ export default {
   },
   computed: {
     ...mapState({
-      userAuthed: state => state.userProfile.authed
+      userAuthed: state => state.userProfile.authed,
+      recordAuthed: state => state.recordStatus.authed
     }),
 
     messageList () {

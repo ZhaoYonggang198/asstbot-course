@@ -55,6 +55,9 @@ const actions = {
         },
         fail: function (error) {
           reject(error)
+        },
+        complete: function (response) {
+          console.log(response)
         }
       })
     })

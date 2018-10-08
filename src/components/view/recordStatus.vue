@@ -62,7 +62,7 @@ export default {
 }
 
 .icon-translation_fill{
-  animation: recording infinite 1s;
+  animation: recording infinite 1.8s;
 }
 
 @keyframes recording

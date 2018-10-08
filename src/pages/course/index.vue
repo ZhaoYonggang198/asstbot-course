@@ -65,7 +65,8 @@ export default {
       editingcourse: 0,
       editmode: false,
       weekmode: 'both',
-      displayCourseInfo: []
+      displayCourseInfo: [],
+      currentDay: 0
     }
   },
 
@@ -85,6 +86,19 @@ export default {
     },
     editbutton () {
       return this.editmode ? '确认编辑' : '编辑课程'
+    },
+    activeCourse () {
+      // return this.displayCourseInfo.map((day, dayIndex) => {
+      //   let intervalData = day.interval.map((interval, intervalIndex) => {
+      //     let courseData = interval.course.map((course) => {
+      //       if (dayIndex === this.currentDay) {
+      //         let date = new Date()
+      //         let hour = data.get
+      //       }
+      //       return false
+      //     })
+      //   })
+      // })
     }
   },
 
@@ -219,6 +233,7 @@ export default {
     this.getCourses().then(() => {
       var weekday = new Date().getDay()
       this.activeDay = (weekday === 0 ? 6 : (weekday - 1))
+      this.currentDay = this.activeDay
       this.setDisplayCourseInfo()
     })
     this.inediting = false
