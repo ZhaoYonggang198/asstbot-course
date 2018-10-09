@@ -8,7 +8,6 @@
                 </view>
             </view>
         </scroll-view>
-
     </block>
     <block wx:else>
         <bot-say-timecell content="{{content}}"/>
