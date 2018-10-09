@@ -3,7 +3,7 @@ mixin course-info
     view(class="course-name" :class="course.week") {{course.name}}
     view(class="addition-info")
       text(class="course-time" v-if="course.startTime") {{course.startTime}}~{{course.endTime}}
-  view(class="weui-cell__ft") 
+  view(class="weui-cell__ft")
     view(class="course-location" v-if="course.location") {{course.location}}
     view(class="course-teacher"  v-if="course.teacher") {{course.teacher}}
 

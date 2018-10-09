@@ -1,6 +1,6 @@
 <template lang="pug">
 include ../../pug/template.pug
-  
+
 view(class="page content")
   title-bar(title="我的课表")
   block(v-if="courseMeta.needOddEvenWeek")
@@ -32,7 +32,7 @@ view(class="page content")
               +course-info
           view(class="weui-cell__ft")
             i(class="icon iconfont icon-trash" @click="removecourse(dayIdx, intervalIdx, courseIdx)")
-      view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx") 
+      view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx")
         view(class="weui-cell__bd") 添加更多
   view(class="bottom-button" v-if="!editmode")
     button(class="button" size="small" @click="toggleEditMode") 修改课表

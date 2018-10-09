@@ -1,0 +1,8 @@
+
+<scroll-view scroll-x="true" class='time-table-scroll scroll-container'>
+            <view class='time-table-box'>
+                <view wx:key="{{content.pages}}" class='time-table-item scroll-container__item' wx:for="{{content.pages}}">
+                    <bot-say-timecell content="{{item}}"/>
+                </view>
+            </view>
+        </scroll-view>
