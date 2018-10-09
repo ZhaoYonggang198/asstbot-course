@@ -1,0 +1,28 @@
+/* static/components/botSay/scrollList/index.wxss */
+@import '/static/style/weui.wxss';
+@import '/static/style/main.wxss';
+
+.time-table-container{
+    margin-left: 12px
+}
+.text{
+    width: 100%;
+    display: block;
+    /* text-align: center; */
+    padding-left: 20px;
+    margin-top: 10px;
+}
+.time-table-scroll{
+    /* padding-left: 30px; */
+}
+.time-table-box{
+    display: flex;
+}
+
+.time-table-item{
+    margin-right: 10px;
+    background: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #eaeaea;
+}
