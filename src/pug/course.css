@@ -47,3 +47,16 @@
 .course-location, .course-teacher {
   font-size: 13px;
 }
+
+.current-course {
+  background-color:#19a1a8 !important;
+
+}
+
+.current-course .course-name,
+.current-course .course-name:after,
+.current-course  .course-location,
+.current-course .course-teacher,
+.current-course .course-time{
+  color:#ffffff !important;
+}

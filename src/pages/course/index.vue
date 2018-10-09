@@ -12,11 +12,11 @@ view(class="page content")
     block(v-if="!editmode")
       block(v-if="interval.course.length>0")
         block(v-for="(course, k) in interval.course" :key="k")
-          view(class="weui-cell" @click="setEditmode")
+          view(class="weui-cell" :class="currentCourses[dayIdx][intervalIdx][k]?'current-course':''" @click="setEditmode")
             +course-info
       block(v-else)
         view(class="weui-cell" @click="setEditmode")
-          view(class="weui-cell__bd") 休息
+          view(class="weui-cell__bd course-name") 休息
     block(v-else)
       block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
         view(class="active-course" v-if="activeDay==dayIdx && activeInterval==intervalIdx && activeCourse==courseIdx")
@@ -30,7 +30,8 @@ view(class="page content")
           view(class="weui-cell__bd" @click="editCourse(dayIdx, intervalIdx, courseIdx)")
             view(class="weui-cell")
               +course-info
-          view(class="weui-cell__ft")
+          view(class="weui-cell__ft course-config")
+            i( class="icon iconfont icon-editor" @click="editCourse(dayIdx, intervalIdx, courseIdx)")
             i(class="icon iconfont icon-trash" @click="removecourse(dayIdx, intervalIdx, courseIdx)")
       view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx")
         view(class="weui-cell__bd") 添加更多
@@ -51,6 +52,7 @@ import editcourse from '@/components/coursetable/editcourse'
 import currentWeekConfig from '@/components/coursetable/currentWeekConfig'
 import weekDisplayMode from '@/components/coursetable/weekDisplayMode'
 import { mapState, mapActions } from 'vuex'
+import Time from '@/utils/time'
 
 export default {
   data () {
@@ -65,7 +67,8 @@ export default {
       editingcourse: 0,
       editmode: false,
       weekmode: 'both',
-      displayCourseInfo: []
+      displayCourseInfo: [],
+      currentDay: 0
     }
   },
 
@@ -85,6 +88,38 @@ export default {
     },
     editbutton () {
       return this.editmode ? '确认编辑' : '编辑课程'
+    },
+    currentCourses () {
+      return this.displayCourseInfo.map((day, dayIndex) => {
+        return day.interval.map((interval, intervalIndex) => {
+          return interval.course.map((course, index) => {
+            if (dayIndex === this.currentDay) {
+              let date = new Date()
+              let current = `${date.getHours()}:${date.getMinutes()}`
+              if (course.startTime && course.endTime) {
+                if (Time.isGreater(current, course.startTime) &&
+                  Time.isGreater(course.endTime, current)) {
+                  return true
+                }
+                if (index > 0 &&
+                  interval.course[index - 1].startTime &&
+                  interval.course[index - 1].endTime) {
+                  if (Time.isGreater(current, interval.course[index - 1].endTime) &&
+                    Time.isGreater(course.startTime, current)) {
+                    return true
+                  }
+                }
+                if (index === 0 &&
+                  Time.interval(current, course.startTime) < 30 &&
+                  Time.interval(current, course.startTime) >= 0) {
+                  return true
+                }
+              }
+            }
+            return false
+          })
+        })
+      })
     }
   },
 
@@ -192,9 +227,9 @@ export default {
         content: '',
         showCancel: true,
         cancelText: '取消',
-        cancelColor: '#000000',
+        cancelColor: '#0c5053',
         confirmText: '确定',
-        confirmColor: '#3CC51F',
+        confirmColor: '#19a1a8',
         success: res => {
           if (res.confirm) {
             this.$store.commit('deleteCourse', {day,
@@ -219,6 +254,7 @@ export default {
     this.getCourses().then(() => {
       var weekday = new Date().getDay()
       this.activeDay = (weekday === 0 ? 6 : (weekday - 1))
+      this.currentDay = this.activeDay
       this.setDisplayCourseInfo()
     })
     this.inediting = false
@@ -292,7 +328,12 @@ export default {
   font-size: 40rpx;
 }
 
-.icon-trash {
+.course-config {
+  display: flex;
+  flex-direction: row;
+}
+
+.icon.iconfont {
   font-size: 45rpx;
   margin-left: 20rpx;
 }

@@ -1,17 +1,14 @@
 <template>
-<view class="record-status" v-if="recordStatus && recordStatus!='readyToRecord'">
+<view class="record-status" v-if="recordStatus && recordStatus!='idle'">
   <block v-if="recordStatus=='inRecording'">
     <view class="weui-flex" style="width: 300rpx">
       <view class="weui-flex__item">
-        <i class="icon iconfont icon-translation_fill" style="color: white; float:right;"></i>
-      </view>
-      <view class="weui-flex__item">
-        <spinner></spinner>
+        <i class="icon iconfont icon-translation_fill" style="color: white;"></i>
       </view>
     </view>
-    <view style="width: 300rpx;text-align: center">
+    <view>
       <text>
-        手指上滑，取消发送
+        {{cancelText}}
       </text>
     </view>
   </block>
@@ -27,8 +24,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  props: ['recordStatus']
+  computed: {
+    ...mapState({
+      recordStatus: state => state.recordStatus.status,
+      cancelText: state => state.recordStatus.cancelText
+    })
+  }
 }
 </script>
 
@@ -42,8 +45,12 @@ export default {
   height: 375rpx;
   background-color: rgba(0 , 0, 0, 0.5);
   text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-content: center;
   color: white;
-  z-index: 1;
+  z-index: 100;
 }
 
 .record-status .iconfont {
@@ -53,4 +60,23 @@ export default {
 .record-status text {
   font-size: @font-size-small;
 }
+
+.icon-translation_fill{
+  animation: recording infinite 1.8s;
+}
+
+@keyframes recording
+{
+  0%   {opacity: 1;}
+  50%  {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@-webkit-keyframes  recording
+{
+  0%   {opacity: 1;}
+  50%  {opacity: 0;}
+  100% {opacity: 1;}
+}
+
 </style>

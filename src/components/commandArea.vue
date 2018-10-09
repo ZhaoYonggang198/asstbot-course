@@ -187,24 +187,28 @@ export default {
       this.$emit('keyboardDown')
     },
     changeToVoiceMode () {
-      wx.showToast({
-        title: '在聊天窗口空白处\n长按可以使用语音功能',
-        icon: 'none',
-        duration: 3000,
-        mask: false
+      getRecordAuth(true).then(() => {
+        wx.showToast({
+          title: '在聊天窗口空白处\n长按可以使用语音功能',
+          icon: 'none',
+          duration: 3000,
+          mask: false
+        })
+        this.voiceMode = true
       })
     },
     changeVoiceMode (showToast) {
       getRecordAuth(showToast)
         .then(() => {
-          this.voiceMode = false
+          this.voiceMode = true
+          this.$store.commit('initAuthStatus', true)
         })
         .catch((err) => {
           console.error(err)
         })
     }
   },
-  created () {
+  onLoad () {
     this.changeVoiceMode(false)
   }
 }

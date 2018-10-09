@@ -1,20 +1,23 @@
 <template>
-  <view class="container" @touchstart="touchstart"
-            @touchcancel="touchcancel"
-            @touchmove="touchmove"
-            @touchend="touchend">
-    <block>
-      <view :style="buttonStyle" class="record-button secondary-color" v-if="recordStatus == 'inRecording'">
-        <i class="icon iconfont icon-translation"></i>
-      </view>
-      <view :style="buttonStyle" class="record-button warn-color light" v-else-if="recordStatus == 'readyToCancel'">
-        <i class="icon iconfont icon-close"></i>
-      </view>
-    </block>
-  </view>
+  <block>
+    <view class="container" @touchstart="touchstart"
+              @touchcancel="touchcancel"
+              @touchmove="touchmove"
+              @touchend="touchend">
+      <block>
+        <view :style="buttonStyle" class="record-button secondary-color" v-if="recordStatus == 'inRecording'">
+          <i class="icon iconfont icon-translation recording"></i>
+        </view>
+        <view :style="buttonStyle" class="record-button warn-color light" v-else-if="recordStatus == 'readyToCancel'">
+          <i class="icon iconfont icon-close"></i>
+        </view>
+      </block>
+    </view>
+  </block>
 </template>
 
 <script>
+import recordStatus from '@/components/view/recordStatus'
 const recorderManager = wx.getRecorderManager()
 
 export default {
@@ -28,9 +31,17 @@ export default {
       timestamp: 0
     }
   },
+  components: {
+    recordStatus
+  },
   computed: {
     buttonPosition () {
-      return `top: ${this.pageY - 62}px; left: ${this.pageX - 62}px;`
+      return `top: ${this.pageY - 50}px; left: ${this.pageX - 50}px;`
+    }
+  },
+  watch: {
+    recordStatus: function (val) {
+      this.$store.commit('updateRecordStatus', {status: val, cancelText: '左右滑动，取消发送'})
     }
   },
   methods: {
@@ -51,8 +62,8 @@ export default {
         let opacity = (distance) / 100
         this.buttonStyle = `${this.buttonPosition} opacity: ${opacity};`
       } else {
-        this.recordStatus = 'idle'
-        recorderManager.stop()
+        this.recordStatus = 'readyToCancel'
+        this.buttonStyle = `${this.buttonPosition} opacity: 1;`
       }
     },
     touchstart (event) {
@@ -157,8 +168,8 @@ export default {
 }
 
 .record-button{
-  width: 250rpx;
-  height: 250rpx;
+  width: 200rpx;
+  height: 200rpx;
   border-radius: 50%;
   position: fixed;
   display:flex;
@@ -169,5 +180,9 @@ export default {
 
 .iconfont {
   font-size: 80rpx;
+}
+
+.recording {
+  animation: name duration timing-function delay iteration-count direction fill-mode;
 }
 </style>

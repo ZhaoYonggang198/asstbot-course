@@ -1,7 +1,7 @@
 <template>
   <view class="primary-color dark title-bar">
     <device-top-padding></device-top-padding>
-    <view class="weui-flex">
+    <view class="weui-flex title-wrapper">
       <view style="width: 174rpx;" >
         <view class="return-button">
           <return-button/>
@@ -37,7 +37,11 @@ export default {
 <style lang="less" scoped>
 @import "~@/../static/base.less";
 .title-bar {
-  padding-bottom: 20rpx;
+  padding-bottom: 25rpx;
+}
+
+.title-wrapper {
+  align-items: center;
 }
 
 .title-bar .iconfont {
@@ -47,13 +51,12 @@ export default {
 }
 
 .title {
-  min-height: 76rpx;
   flex: 1;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: @font-size-middle + 4;
+  font-size: @font-size-middle + 8;
 }
 
 .weui-flex {
