@@ -33,8 +33,8 @@
     </view>
     <view class="footer">
       <record-status/>
-      <select-box  v-if="displayFinish" :messageAction="activeBoxMsg" />
-      <command-area  @msgSendStatus="handleMsgSendStatus"
+      <select-box v-if="displayFinish" :messageAction="activeBoxMsg" />
+      <command-area @msgSendStatus="handleMsgSendStatus"
           :inputPromt="activeInputPromtMsg"
           :displayFinish="displayFinish" @keyboardUp="keyboardUp" @keyboardDown="keyboardDown"
           :needFocus="messageList.length>5"/>
@@ -48,6 +48,7 @@ import selectBox from '@/components/selectBox'
 import userSaySending from '@/components/userSay/sending'
 import videoplayer from '@/components/widget/videoplayer'
 import recordWidget from '@/components/chatPage/recordWidget'
+import audioReply from '@/utils/audioReply'
 import { mapState } from 'vuex'
 
 const urlMaping = {
@@ -86,12 +87,25 @@ export default {
     messageList: function (val) {
       this.msgDisplayBegin()
       this.scrollToView = `bottom${val.length - 1}`
+    },
+    activeTtsMsg: function (val) {
+      if (val.length === 0) {
+        audioReply.stop()
+      } else {
+        audioReply.play(val)
+      }
+    },
+    recordStatus: function (val) {
+      if (val !== 'idle') {
+        audioReply.stop()
+      }
     }
   },
   computed: {
     ...mapState({
       userAuthed: state => state.userProfile.authed,
-      recordAuthed: state => state.recordStatus.authed
+      recordAuthed: state => state.recordStatus.authed,
+      recordStatus: state => state.recordStatus.status
     }),
 
     messageList () {
@@ -124,6 +138,16 @@ export default {
     },
     activeInputPromtMsg () {
       return this.activeSomeKindOfMsg(['input-prompt'])
+    },
+    activeTtsMsg () {
+      if (!this.activeMsg) {
+        return []
+      }
+      return this.activeMsg.msgs.filter((msg) => {
+        return msg.tts !== undefined
+      }).map((msg) => {
+        return msg.tts
+      })
     }
   },
   methods: {
