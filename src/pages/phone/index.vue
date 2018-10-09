@@ -31,9 +31,8 @@ view(class="page")
           i-input(:value="inputCode" @change="codechange" type="number" maxlength="6" title="验证码" placeholder="请输入验证码")
         i-button(size="small" :disabled="vcodeDisable" @iclick="requestCode" v-if="sumbitDisable") {{vcodeOperation}}
         i-button(type="primary" @iclick="formSubmit" size="small" v-else) 绑定
-  view(class="weui-flex bottom-button" v-if="bindPhone")
-    view(class="weui-flex__item")
-      button(@click="formReset" size="small" :disabled='bindPhone.length === 0') 解绑
+  view(class="bottom-button" v-if="bindPhone")
+    view(class="button" @click="formReset" size="small" ) 解绑
 </template>
 
 <script>
@@ -197,6 +196,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background: #f2f2f2;
 }
 
 .page .form {
@@ -240,5 +240,42 @@ button {
   line-height: 2;
   margin-left: 20rpx;
   margin-right: 20rpx;
+}
+
+
+.button {
+  font-size: 28rpx;
+  margin-left: 15rpx;
+  margin-right: 15rpx;
+  line-height: 1.6;
+  white-space:nowrap;
+  background:#f2f2f2;
+  border:3rpx solid #19a1a8;
+  color:#19a1a8;
+  border-radius:35rpx;
+  padding:10rpx 20rpx;
+  text-align:center;
+  box-shadow:0 0 0;
+  font-weight:500;
+  min-width: 60rpx;
+
+}
+.bottom-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bottom-button .button {
+  width: 240rpx;
+}
+
+.button:active {
+  background: #19a1a8;
+  color: white;
+}
+
+.page__desc {
+  color: #0c5053;
 }
 </style>
