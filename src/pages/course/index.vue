@@ -30,7 +30,8 @@ view(class="page content")
           view(class="weui-cell__bd" @click="editCourse(dayIdx, intervalIdx, courseIdx)")
             view(class="weui-cell")
               +course-info
-          view(class="weui-cell__ft")
+          view(class="weui-cell__ft course-config")
+            i( class="icon iconfont icon-editor" @click="editCourse(dayIdx, intervalIdx, courseIdx)")
             i(class="icon iconfont icon-trash" @click="removecourse(dayIdx, intervalIdx, courseIdx)")
       view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx") 
         view(class="weui-cell__bd") 添加更多
@@ -327,7 +328,12 @@ export default {
   font-size: 40rpx;
 }
 
-.icon-trash {
+.course-config {
+  display: flex;
+  flex-direction: row;
+}
+
+.icon.iconfont {
   font-size: 45rpx;
   margin-left: 20rpx;
 }

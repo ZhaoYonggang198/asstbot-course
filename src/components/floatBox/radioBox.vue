@@ -3,32 +3,53 @@
     <view class="big-box" :class="bigBoxStyle">
       <label class="option-container light form-control"
         v-for="action in actions" :key="action" @click="selectAction(index)"
-        :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
-        <block v-if="!havaImage">
+        :class="{'have background-fff': havaImage, 'no-image user-msg-box-color': !havaImage}">
+        <block v-if="havaImage">
           <view class="value image-value one-line-text">{{action.caption}}</view>
         </block>
         <block v-else>
           <view class="value valueBox">{{action.caption}}</view>
         </block>        
       </label>
-      <label class="option-container light form-control"
-          @touchstart="touchStart(option)"
-          @touchmove="touchMove"
-          @touchend="touchEnd"
-          @touch="touchOn"
-          @click="selectItem(option)"
-          v-for="option in list.items" :key="option" v-if="list.type==='radio'"
-          :class="{'have background-fff': !havaImage, 'no-image user-msg-box-color': havaImage}">
-        <block v-if="!havaImage">
-          <view class="image-box imageBox">
-            <image class="image" mode="aspectFit" :src="option.imageUrl" v-if="option.imageUrl"></image>
-          </view>
-          <view class="value image-value" :class="[multiLineFlags[index] ? 'two-line-text':'one-line-text']" v-if="option.caption">{{option.caption}}</view>
-        </block>
-        <block v-else>
-          <view class="value valueBox">{{option.caption}}</view>
-        </block>
-      </label>
+      <block v-for="option in list.items" :key="option" v-if="list.type==='radio'">
+        <label v-if="!option.type || option.type !== 'share'"
+            class="option-container light form-control"
+            @touchstart="touchStart(option)"
+            @touchmove="touchMove"
+            @touchend="touchEnd"
+            @touch="touchOn"
+            @click="selectItem(option)"
+            :class="{'have background-fff': havaImage, 'no-image user-msg-box-color': !havaImage}">
+          <block v-if="havaImage">
+            <view class="image-box imageBox">
+              <image class="image" mode="aspectFit" :src="option.imageUrl" v-if="option.imageUrl"></image>
+            </view>
+            <view class="value image-value" :class="[multiLineFlags[index] ? 'two-line-text':'one-line-text']" v-if="option.caption">{{option.caption}}</view>
+          </block>
+          <block v-else>
+            <view class="value valueBox">{{option.caption}}</view>
+          </block>
+        </label>
+        <label v-else
+            class="option-container light form-control"
+            @touchstart="touchStart(option)"
+            @touchmove="touchMove"
+            @touchend="touchEnd"
+            @touch="touchOn"
+            :for="index"
+            :class="{'have background-fff': havaImage, 'no-image user-msg-box-color': !havaImage}">
+          <block v-if="havaImage">
+            <view class="image-box imageBox">
+              <image class="image" mode="aspectFit" :src="option.imageUrl" v-if="option.imageUrl"></image>
+            </view>
+            <view class="value image-value" :class="[multiLineFlags[index] ? 'two-line-text':'one-line-text']" v-if="option.caption">{{option.caption}}</view>
+          </block>
+          <block v-else>
+            <view class="value valueBox">{{option.caption}}</view>
+          </block>
+          <button :id="index" open-type="share" style="display:none"/>
+        </label>
+      </block>
     </view>
   </scroll-view>
 
@@ -56,7 +77,7 @@
         }
 
         let a = state.list.items.find(item => !!item.imageUrl === true)
-        return a === undefined
+        return a !== undefined
       },
       bigBoxStyle: state => {
         var itemLength = state.actions ? state.actions.length : 0
