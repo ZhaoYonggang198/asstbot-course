@@ -18,12 +18,27 @@
                           @videoPlay="playVideo"
                           @exhibitionClick="exhibitionClick"/>
               </view>
-              <block v-if="localMsgSending && i==(messageList.length-1)">
-                <user-say-sending/>
+              <block v-if="i==(messageList.length-1)">
+                <block v-if="localMsgSending">
+                  <user-say-sending/>
+                </block>
+                <view class="record-area" v-if="recordAuthed">
+                  <record-widget @msgSendStatus="handleMsgSendStatus"/>
+                </view>
+                <block v-if="conversation.length == 1">
+                  <view class="weui-flex bot-message">
+                    <view class="left-item">
+                      <view class="avatar-wrapper">
+                        <!--<image :src="bodAvatar" class="small-avatar" v-if="i==0"/>-->
+                        <bot-avatar size="30"/>
+                      </view>
+                      <view class="content">
+                        <bot-say-receiving/>
+                      </view>
+                    </view>
+                  </view>
+                </block>
               </block>
-              <view class="record-area" v-if="i==(messageList.length-1) && recordAuthed">
-                <record-widget @msgSendStatus="handleMsgSendStatus"/>
-              </view>
             </view>
           </block>
         </view>
