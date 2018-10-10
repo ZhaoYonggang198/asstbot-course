@@ -10,6 +10,6 @@
         </scroll-view>
     </block>
     <block wx:else>
-        <bot-say-timecell content="{{content}}"/>
+        <bot-say-timecelllist  content="{{content}}"/>
     </block>
 </view>

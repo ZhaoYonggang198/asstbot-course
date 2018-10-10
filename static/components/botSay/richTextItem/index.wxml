@@ -1,1 +1,1 @@
-<rich-text nodes="{{htmlStr}}"/>
+<rich-text nodes="{{timeTableData}}"/>

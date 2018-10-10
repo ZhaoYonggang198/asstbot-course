@@ -1,6 +1,7 @@
 {
     "component": true,
     "usingComponents": {
-        "bot-say-timecell": "/static/components/botSay/richTextItem/index"
+        "bot-say-timecell": "/static/components/botSay/richTextItem/index",
+        "bot-say-timecelllist": "/static/components/botSay/richTextList/index"
     }
 }
