@@ -71,7 +71,8 @@ export default {
       this.pageX = event.mp.touches[0].pageX
       this.pageY = event.mp.touches[0].pageY
       this.buttonStyle = this.buttonPosition
-      this.timestamp =
+      this.recordStatus = 'idle'
+      recorderManager.stop()
       this.timer = setTimeout(() => {
         this.startRecord()
         this.recordStatus = 'inRecording'

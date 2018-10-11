@@ -15,7 +15,9 @@
     "pages/surveyTitleAndIntro/main",
     "pages/course/main",
     "pages/sharedcourse/main",
-    "pages/phone/main"
+    "pages/phone/main",
+    "pages/smartSpeaker/main",
+    "pages/xiaoduhelp/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

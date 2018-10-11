@@ -38,7 +38,7 @@ view(class="page content")
   view(class="bottom-button" v-if="!editmode")
     button(class="button" size="small" @click="toggleEditMode") 修改课表
     button(class="button" open-type="share" type="ghost") 转发给...
-    button(class="button" type="primary"  @click="bindphone") 关联小米音箱
+    button(class="button" type="primary" @click="bindphone") 关联智能音箱
   view(class="bottom-button" v-else)
     button(class="button" type="primary" @click="toggleEditMode") 完成修改
   editcourse(v-if="inediting" @editdone="editdone"
@@ -154,7 +154,7 @@ export default {
     },
     bindphone () {
       wx.navigateTo({
-        url: '/pages/phone/main'
+        url: '/pages/smartSpeaker/main'
       })
     },
     editCourse (day, interval, course) {

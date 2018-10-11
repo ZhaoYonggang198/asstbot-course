@@ -105,7 +105,10 @@ Component({
       value: '',
       observer: function (val) {
         let time = timeStrToVal(val === '' ? this.properties.recommend : val)
-        this.setRangeData(this.data.startTime, this.data.endTime, time)
+        this.setData({time})
+        if (this.data.startTime && this.data.endTime) {
+          this.setRangeData(this.data.startTime, this.data.endTime, time)
+        }
       }
     },
     recommend: {
@@ -114,7 +117,10 @@ Component({
       observer: function (val) {
         if (this.properties.value === '') {
           let time = timeStrToVal(val)
-          this.setRangeData(this.data.startTime, this.data.endTime, time)
+          this.setData({time})
+          if (this.data.startTime && this.data.endTime) {
+            this.setRangeData(this.data.startTime, this.data.endTime, time)
+          }
         }
       }
     }
