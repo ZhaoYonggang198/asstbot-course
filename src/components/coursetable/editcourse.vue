@@ -28,6 +28,7 @@ view
                     @change="startTimeChange")
                   view(v-if="currentCourse.startTime") {{currentCourse.startTime}}
                   view(v-else) 未指定
+                icon(type="cancel" size="16" color='#999' @click="currentCourse.startTime=''" v-if="currentCourse.startTime")
               view(class="weui-flex__item time-wrapper") ~
               view(class="weui-flex__item time-wrapper")
                 da-timepicker(mode='time' :start="currentCourse.startTime?currentCourse.startTime:minEndTime"
@@ -37,6 +38,7 @@ view
                     @change="endTimeChange")
                   view(v-if="currentCourse.endTime") {{currentCourse.endTime}}
                   view(v-else) 未指定
+                icon(type="cancel" size="16" color='#999' @click="currentCourse.endTime=''" v-if="currentCourse.endTime")
           select-input(inputId='location' label='地点' placeholder="请输入上课地点" 
             :value="currentCourse.location" :currentfocus="focusItem"
             :selectlist="selectLocation"  :validator="locationValidator"
@@ -286,16 +288,13 @@ export default {
 }
 
 .time-wrapper {
-  text-align: center;
   font-size: 28rpx;
+  text-align: center
 }
 
-.time-wrapper:first-child {
-  text-align: left;
-}
-
-.time-wrapper:last-child {
-  text-align: right;
+.time-wrapper:first-child, .time-wrapper:last-child  {
+  display:flex;
+  justify-content: center;
 }
 
 .weui-cells:before {
@@ -310,6 +309,8 @@ export default {
   display: none;
 }
 
-
+icon {
+  margin-left: 10rpx;
+}
 
 </style>

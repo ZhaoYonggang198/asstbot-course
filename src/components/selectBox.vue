@@ -1,6 +1,6 @@
 <template>
     <view class="select-box" :class="{'top_110': !showImage, 'top_444': showImage}">
-      <exhibition-action @actionshow="actionshow" :actionclick="actionclicked"></exhibition-action>
+      <exhibition-action style="display: none" @actionshow="actionshow" :actionclick="actionclicked"></exhibition-action>
       <block v-if="!exhibitionActionShow">
         <radio-box v-if="messageAction.type === 'radio' || (actions && actions.length > 0)" 
           :list="messageAction" :actions="actions" @actionclick="actionclick"></radio-box>

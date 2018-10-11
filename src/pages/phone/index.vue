@@ -2,27 +2,10 @@
 view(class="page")
   title-bar(title="关联小米音箱")
   swiper(indicator-dots="true" autoplay="true" interval="5000" circular="true" class="swiper-wrapper")
-    swiper-item
+    swiper-item(v-for="(item, index) in helpDesc" :key="index")
       view(class="swiper-item")
-        image(src="http://xiaodamp.cn/asst/resource/skill.png" mode="aspectFit" @click="previewImage('http://xiaodamp.cn/asst/resource/skill.png')")
-        view(class="page__desc") 1. 在App"小爱音箱"技能页面搜索"课表"技能
-    swiper-item
-      view(class="swiper-item")
-        image(src="http://xiaodamp.cn/asst/resource/auth1.png" mode="aspectFit"  @click="previewImage('http://xiaodamp.cn/asst/resource/auth1.png')")
-        view(class="page__desc") 2. 点击"绑定账号"按钮
-    swiper-item
-      view(class="swiper-item")
-        image(src="http://xiaodamp.cn/asst/resource/auth2.png" mode="aspectFit"  @click="previewImage('http://xiaodamp.cn/asst/resource/auth2.png')")
-        view(class="page__desc") 3. 输入与本页面相同的手机号
-    swiper-item
-      view(class="swiper-item")
-        image(src="http://xiaodamp.cn/asst/resource/auth3.png" mode="aspectFit"  @click="previewImage('http://xiaodamp.cn/asst/resource/auth3.png')")
-        view(class="page__desc") 4. 点击"确认授权"按钮
-    swiper-item
-      view(class="swiper-item")
-        image(src="http://xiaodamp.cn/asst/resource/xiaomi.png" mode="aspectFit"  @click="previewImage('http://xiaodamp.cn/asst/resource/xiaomi.png')")
-        view(class="page__desc") 5. 对小米音箱说"打开课表"，开始使用本课表
-
+        image(:src="item.image" mode="aspectFit" @click="previewImage(item.image)")
+        view(class="page__desc") {{index + 1}}. {{item.desc}}
   i-panel(:title="bindPhone?'已绑定手机：' + bindPhone:''" class="form")
     block(v-if="!bindPhone")
       i-input(:value="inputPhone" @change="phonechange" type="number" maxlength="11" title="手机号" placeholder="请输入手机号")
@@ -44,7 +27,29 @@ export default {
     return {
       inputPhone: '',
       inputCode: '',
-      requestInterval: 0
+      requestInterval: 0,
+      helpDesc: [
+        {
+          image: 'http://xiaodamp.cn/asst/resource/skill.png',
+          desc: '在App"小爱音箱"技能页面搜索"课表"技能'
+        },
+        {
+          image: 'http://xiaodamp.cn/asst/resource/auth1.png',
+          desc: '点击"绑定账号"按钮'
+        },
+        {
+          image: 'http://xiaodamp.cn/asst/resource/auth2.png',
+          desc: '输入与本页面相同的手机号'
+        },
+        {
+          image: 'http://xiaodamp.cn/asst/resource/auth3.png',
+          desc: '点击"确认授权"按钮'
+        },
+        {
+          image: 'http://xiaodamp.cn/asst/resource/xiaomi.png',
+          desc: '对小米音箱说"打开课表"，开始使用本课表'
+        }
+      ]
     }
   },
 
@@ -135,7 +140,7 @@ export default {
             this.inputCode = ''
             wx.showModal({
               title: '绑定成功',
-              content: '在小爱音箱app搜索"课表"技能并绑定同一手机号，可以在小爱音箱上使用课程表功能',
+              content: '在小爱音箱app搜索"课表"技能并绑定同一手机号，可以在小爱音箱上使用该课程表',
               showCancel: false,
               confirmText: '确定',
               confirmColor: '#3CC51F',
@@ -168,7 +173,7 @@ export default {
     previewImage (imageUrl) {
       wx.previewImage({
         current: imageUrl,
-        urls: [imageUrl]
+        urls: this.helpDesc.map((item) => { return item.image })
       })
     }
   },

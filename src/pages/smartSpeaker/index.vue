@@ -2,10 +2,10 @@
 view(class="page content")
   title-bar(title="关联智能音箱")
   navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/phone/main")
-    view(class="weui-cell__bd") 关联小爱音箱
+    view(class="weui-cell__bd") 关联小爱音箱（小米）
     view(class="weui-cell__ft weui-cell__ft_in-access")
   navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/xiaoduhelp/main")
-    view(class="weui-cell__bd") 关联小度音箱
+    view(class="weui-cell__bd") 关联小度在家（百度）
     view(class="weui-cell__ft weui-cell__ft_in-access")
 </template>
 
