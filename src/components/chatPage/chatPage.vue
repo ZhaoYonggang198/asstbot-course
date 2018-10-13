@@ -6,7 +6,7 @@
         <view class="message-list">
           <block v-for="(conversation, i) in messageList" :key="conversation">
             <view class="conversation" :id="'bottom'+i" :class="{'last-child':i==(messageList.length-1), 'focus-input': keyboardInput}">
-              <view style="height: 80rpx;" v-if="i==(messageList.length-1)" />
+              <view style="height: 80rpx;" v-if="i==(messageList.length-1) || i == 0" />
               <view style="z-index: 1" v-for="(messages, j) in conversation" :key="j">
                 <message-item :survey="survey" :lastBotMsg="i==(messageList.length-1)&&messages.to!==undefined"
                           :messages="messages" :userAuthed="userAuthed"
@@ -85,7 +85,8 @@ export default {
       scrollToView: 'bottom',
       videoPlay: false,
       videoSrc: '',
-      keyboardInput: false
+      keyboardInput: false,
+      ttsPlaying: false
     }
   },
   props: {
@@ -105,9 +106,15 @@ export default {
     },
     activeTtsMsg: function (val) {
       if (val.length === 0) {
+        this.ttsPlaying = false
         audioReply.stop()
       } else {
-        audioReply.play(val)
+        this.ttsPlaying = true
+        let that = this
+        audioReply.play(val, () => {
+          that.ttsPlaying = false
+          that.toDoRedirect()
+        })
       }
     },
     recordStatus: function (val) {
@@ -159,7 +166,7 @@ export default {
         return []
       }
       return this.activeMsg.msgs.filter((msg) => {
-        return msg.tts !== undefined
+        return msg.tts !== undefined && msg.tts !== ''
       }).map((msg) => {
         return msg.tts
       })
@@ -200,9 +207,14 @@ export default {
     },
     msgDisplayFinish () {
       this.displayFinish = true
-      let lastMsg = this.activeRedirectMsg
-      if (lastMsg) {
-        this.doRedirect(lastMsg)
+      this.toDoRedirect()
+    },
+    toDoRedirect () {
+      if (this.displayFinish && !this.ttsPlaying) {
+        let lastMsg = this.activeRedirectMsg
+        if (lastMsg) {
+          this.doRedirect(lastMsg)
+        }
       }
     },
     doRedirect (lastmsg) {

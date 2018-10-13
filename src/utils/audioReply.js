@@ -10,8 +10,9 @@ const state = {
 
 const innerAudioContext = wx.createInnerAudioContext()
 innerAudioContext.autoplay = true
+innerAudioContext.onError((error) => { console.log(error) })
 
-const play = function (sounds) {
+const play = function (sounds, callback) {
   state.sounds = sounds
   state.currentIndex = 0
   innerAudioContext.src = `${hostRoot}/${sounds[0]}`
@@ -21,6 +22,8 @@ const play = function (sounds) {
     if (state.currentIndex < state.sounds.length) {
       innerAudioContext.src = `${hostRoot}/${state.sounds[state.currentIndex]}`
       innerAudioContext.onEnded(onEnd)
+    } else {
+      callback()
     }
   }
   innerAudioContext.onEnded(onEnd)
@@ -30,6 +33,7 @@ const stop = function () {
   innerAudioContext.stop()
   state.sounds = []
   state.currentIndex = 0
+  innerAudioContext.offEnded()
 }
 
 export default {

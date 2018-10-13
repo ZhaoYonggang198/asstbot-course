@@ -24,8 +24,7 @@
   line-height: 1.2;
   font-size: 13px;
   color: #80848f;
-  margin-right: 15rpx;
-  float: left;
+  font-family:'Helvetica Neue'
 }
 .course-name {
   color: #0c5053;
@@ -44,8 +43,9 @@
   padding: 0;
 }
 
-.course-location, .course-teacher {
+.course-location, .course-teacher, .course-time{
   font-size: 13px;
+  color: #80848f;
 }
 
 .current-course {
@@ -59,4 +59,20 @@
 .current-course .course-teacher,
 .current-course .course-time{
   color:#ffffff !important;
+}
+
+.course-append {
+  display: flex;
+  flex-direction: column;
+}
+
+.course-append .course-teacher {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 170rpx;
+}
+
+.course-info {
+  align-items: flex-start
 }

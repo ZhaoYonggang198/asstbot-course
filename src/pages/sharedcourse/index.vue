@@ -6,18 +6,15 @@ view(class="page content")
   +navbar-swiper("(day, dayIdx) in courseInfo")
     block(v-if="interval.course.length>0")
       block(v-for="(course, k) in interval.course" :key="k")
-        view(class="weui-cell")
+        view(class="weui-cell course-info")
           +course-info
     block(v-else)
       view(class="weui-cell")
         view(class="weui-cell__bd") 休息
   view(class="weui-flex bottom-button")
-    view(class="weui-flex__item")
-      button(size="small" @click="gotocourse") 回到主页
-    view(class="weui-flex__item")
-      button(size="small" open-type="share") 直接转发
-    view(class="weui-flex__item")
-      button(size="small" type="primary" @click="mergecourse") 存入我的课表
+    button(class="button" size="small" @click="gotocourse") 回到主页
+    button(class="button" size="small" open-type="share") 直接转发
+    button(class="button" size="small" @click="mergecourse") 存入我的课表
 </template>
 
 <script>
@@ -139,17 +136,32 @@ export default {
   display: flex;
 }
 .bottom-button {
-  margin-bottom: 40rpx;
+  padding-top: 20rpx;
+  margin-bottom: 50rpx;
+  display: flex;
+  justify-content: center;
 }
 
-.bottom-button button {
+.bottom-button .button {
   font-size: 28rpx;
-  line-height: 2;
-  margin-left: 20rpx;
-  margin-right: 20rpx;
-  padding-left: 10rpx;
-  padding-right: 10rpx;
+  margin-left: 15rpx;
+  margin-right: 15rpx;
+  line-height: 1.6;
+  white-space:nowrap;
+  background:#f2f2f2;
+  border:3rpx solid #19a1a8;
+  color:#19a1a8;
+  border-radius:35rpx;
+  padding:10rpx 20rpx;
+  text-align:center;
+  box-shadow:0 0 0;
+  font-weight:500;
+  min-width:60rpx;
 }
 
+.bottom-button .button:active {
+  background: #19a1a8;
+  color: white;
+}
 @import '../../pug/course.css';
 </style>
