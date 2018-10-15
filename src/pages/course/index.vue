@@ -262,6 +262,8 @@ export default {
           course: option.course,
           config: 'add'
         }
+      } else {
+        this.loadOption = {}
       }
     }
     this.getCourses().then(() => {

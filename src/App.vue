@@ -283,8 +283,7 @@ page{
 .big-box{
   display: flex;
   align-items: center;
-  padding: 20rpx 0rpx;
-  /*overflow: auto;*/
+  padding: 5rpx 0rpx 13rpx 0rpx;
 }
 
 .big-box.list-1, .big-box.list-2{

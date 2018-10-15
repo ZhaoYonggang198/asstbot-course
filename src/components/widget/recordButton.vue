@@ -45,6 +45,7 @@ export default {
       recorderManager.stop()
     },
     cancelRecord (e) {
+      this.recordStatus = 'idle'
       recorderManager.stop()
     },
     recordOperation (e) {
@@ -118,7 +119,9 @@ export default {
         format: 'mp3'
       }
 
-      recorderManager.start(options)
+      if (this.recordStatus === 'inRecording') {
+        recorderManager.start(options)
+      }
     }
   }
 }

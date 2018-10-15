@@ -18,10 +18,10 @@
                           @videoPlay="playVideo"
                           @exhibitionClick="exhibitionClick"/>
               </view>
-              <block v-if="i==(messageList.length-1)">
-                <block v-if="localMsgSending">
+              <block v-if="i==(messageList.length-1)" >
+                <view v-if="localMsgSending" id="localMsgSending">
                   <user-say-sending/>
-                </block>
+                </view>
                 <view class="record-area" v-if="recordAuthed">
                   <record-widget @msgSendStatus="handleMsgSendStatus"/>
                 </view>
@@ -116,6 +116,12 @@ export default {
         audioReply.stop()
         this.ttsPlaying = false
         this.toDoRedirect()
+      }
+    },
+    localMsgSending: function (val) {
+      if (val) {
+        this.scrollToView = ''
+        this.scrollToView = 'localMsgSending'
       }
     }
   },
