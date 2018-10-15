@@ -42,7 +42,8 @@ view(class="page content")
   view(class="bottom-button" v-else)
     button(class="button" type="primary" @click="toggleEditMode") 完成修改
   editcourse(v-if="inediting" @editdone="editdone"
-    :scene="scene" :day="editday" :interval="editinterval" :course="editingcourse")
+    :scene="scene" :day="editday" :interval="editinterval" :course="editingcourse"
+    :recommendCourseName="recommendCourseName")
 </template>
 
 <script>
@@ -68,7 +69,9 @@ export default {
       editmode: false,
       weekmode: 'both',
       displayCourseInfo: [],
-      currentDay: 0
+      currentDay: 0,
+      recommendCourseName: '',
+      loadOption: {}
     }
   },
 
@@ -166,6 +169,7 @@ export default {
     },
     editdone () {
       this.inediting = false
+      this.recommendCourseName = ''
       this.activeInterval = -1
       this.activeCourse = -1
     },
@@ -250,12 +254,32 @@ export default {
     if (duerosId && duerosId.indexOf('dueros') !== -1) {
       console.log('qrcode scan from dueros, duerosId = ' + duerosId)
       this.$store.dispatch('toBindDuerosId', duerosId)
+    } else {
+      if (option.weekday && option.time) {
+        this.loadOption = {
+          weekday: option.weekday,
+          time: option.time,
+          course: option.course,
+          config: 'add'
+        }
+      }
     }
     this.getCourses().then(() => {
       var weekday = new Date().getDay()
       this.activeDay = (weekday === 0 ? 6 : (weekday - 1))
       this.currentDay = this.activeDay
       this.setDisplayCourseInfo()
+      if (this.loadOption.config === 'add') {
+        this.editmode = true
+        if (this.loadOption.weekday !== undefined && this.loadOption.time !== undefined) {
+          this.inediting = true
+          this.activeDay = this.loadOption.weekday
+          this.editday = this.loadOption.weekday
+          this.editinterval = this.loadOption.time
+          this.scene = 'add'
+          this.recommendCourseName = this.loadOption.course
+        }
+      }
     })
     this.inediting = false
     this.clearEditmode()

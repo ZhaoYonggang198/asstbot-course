@@ -106,20 +106,16 @@ export default {
     },
     activeTtsMsg: function (val) {
       if (val.length === 0) {
-        this.ttsPlaying = false
         audioReply.stop()
       } else {
-        this.ttsPlaying = true
-        let that = this
-        audioReply.play(val, () => {
-          that.ttsPlaying = false
-          that.toDoRedirect()
-        })
+        audioReply.play(val, () => {})
       }
     },
     recordStatus: function (val) {
       if (val !== 'idle') {
         audioReply.stop()
+        this.ttsPlaying = false
+        this.toDoRedirect()
       }
     }
   },

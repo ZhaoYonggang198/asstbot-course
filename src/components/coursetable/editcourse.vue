@@ -102,6 +102,10 @@ export default {
     course: {
       type: Number,
       default: 0
+    },
+    recommendCourseName: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -266,7 +270,7 @@ export default {
         }
       }
       this.currentCourse = {
-        name: '',
+        name: this.recommendCourseName,
         location: '',
         week: 'both',
         tearch: '',
