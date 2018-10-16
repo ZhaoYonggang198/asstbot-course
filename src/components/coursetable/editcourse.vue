@@ -273,7 +273,7 @@ export default {
         name: this.recommendCourseName,
         location: '',
         week: 'both',
-        tearch: '',
+        teacher: '',
         ...interval
       }
       this.showSelectCourse = true

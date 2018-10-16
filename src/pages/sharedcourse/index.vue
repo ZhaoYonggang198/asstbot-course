@@ -105,7 +105,17 @@ export default {
     if (option.user) {
       this.getOtherCourses(option.user)
         .then((courses) => {
-          this.courseInfo = courses.courseInfo
+          this.courseInfo = courses.courseInfo.map(day => {
+            let tmpDay = day
+            tmpDay.interval = day.interval.map(interval => {
+              let tmpInterval = interval
+              tmpInterval.course = interval.course.filter((course) => {
+                return course.share
+              })
+              return tmpInterval
+            })
+            return tmpDay
+          })
           this.courseMeta = courses.meta
         })
     }
