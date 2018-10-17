@@ -19,6 +19,7 @@ Component({
     data: {
         timeTableData: [],
         htmlStr: ""
+
     },
 
     /**
@@ -36,42 +37,5 @@ Component({
         this.setData({
             htmlStr: htmlStr
         })
-        // const htmlStyle = {
-        //   h4: 'font-size: 16px;height: 30px;line-height: 30px;white-space: nowrap;',
-        //   li: 'list-style: none;line-height: 30px;font-size: 14px;color: #666;height: 30px;white-space: nowrap',
-        //     h3:'font-size: 16px;font-weight:500'
-        // }
-
-        // let str = this.properties.content.body;
-        // let style = this.properties.content.style ? this.properties.content.style : {};
-        // let text = '', arr = [], htmlArray = [];
-        // for (let i in str) {
-        //   if ('<>'.indexOf(str.charAt(i)) >= 0) {
-        //     if ([...arr].pop() == '<' && text.indexOf('/') < 0) {
-        //       htmlArray.push({
-        //         name: text,
-        //         attrs: {
-        //           class: '',
-        //           style: style[text] ? style[text] : htmlStyle[text]
-        //         }
-        //       })
-        //     }
-        //     if ([...arr].pop() == '>') {
-        //       text.replace(/^\s*/, '') ? htmlArray[htmlArray.length - 1].children = [{
-        //         type: 'text',
-        //         text: text
-        //       }] : []
-        //     }
-        //     text ? arr.push(text) : '';
-        //     arr.push(str.charAt(i));
-        //     text = '';
-        //   } else {
-        //     text += str.charAt(i);
-        //   }
-        // }
-        // console.log(htmlArray)
-        // this.setData({
-        //   timeTableData: htmlArray
-        // })
     }
 })
