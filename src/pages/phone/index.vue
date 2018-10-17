@@ -1,6 +1,7 @@
 <template lang="pug">
 view(class="page")
   title-bar(title="关联小米音箱")
+  view(style="text-align:center;font-size:13px;color:#0c5053") 点击图片可预览
   swiper(indicator-dots="true" autoplay="true" interval="5000" circular="true" class="swiper-wrapper")
     swiper-item(v-for="(item, index) in helpDesc" :key="index")
       view(class="swiper-item")
