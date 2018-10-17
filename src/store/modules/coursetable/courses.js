@@ -70,14 +70,13 @@ var getFrontEndCoursePerInterval = function (backendCourse, dayBackend, interval
         startTime: '',
         endTime: '',
         week: 'both',
-        teacher: ''
+        teacher: '',
+        share: true
       }
     })
   } else {
     return backendAddition.map((course) => {
-      course.week = course.week || 'both'
-      course.teacher = course.teacher || ''
-      return course
+      return { week: 'both', teacher: '', share: true, ...course }
     })
   }
 }
@@ -393,6 +392,12 @@ const mutations = {
   setCurrentWeek (state, odd) {
     let xiaoDaOdd = new Date().isOddWeek()
     state.courseMeta.sameOddWeek = (xiaoDaOdd === odd)
+  },
+
+  toggleCourseShare (state, {day, interval, course}) {
+    let courseInfo = state.courseInfo[day].interval[interval].course[course]
+    state.courseInfo[day].interval[interval].course.splice(course, 1,
+      {...courseInfo, share: !courseInfo.share})
   }
 }
 

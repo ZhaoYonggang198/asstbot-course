@@ -18,7 +18,7 @@ import recordStatus from './modules/recordStatus'
 
 Vue.use(Vuex)
 
-const debug = process.env.NODE_ENV !== 'production'
+// const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
   modules: {
@@ -38,5 +38,5 @@ export default new Vuex.Store({
     dueros,
     recordStatus
   },
-  strict: debug
+  strict: false
 })

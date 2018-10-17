@@ -3,24 +3,27 @@ include ../../pug/template.pug
 
 view(class="page content")
   title-bar(title="我的课表")
-  block(v-if="courseMeta.needOddEvenWeek")
+  block(v-if="courseMeta.needOddEvenWeek && !sharemode")
     block(v-if="editmode")
       current-week-config
     block(v-else)
       week-display-mode(@weekModeChange="chooseWeekMode")
+  view(v-else-if="sharemode")
+    share-course-hint
+    
   +navbar-swiper("(day, dayIdx) in displayCourseInfo")
-    block(v-if="!editmode")
+    block(v-if="!editmode && !sharemode")
       block(v-if="interval.course.length>0")
         block(v-for="(course, k) in interval.course" :key="k")
-          view(class="weui-cell" :class="currentCourses[dayIdx][intervalIdx][k]?'current-course':''" @click="setEditmode")
+          view(class="weui-cell course-info" :class="currentCourses[dayIdx][intervalIdx][k]?'current-course':''" @click="setEditmode")
             +course-info
       block(v-else)
         view(class="weui-cell" @click="setEditmode")
           view(class="weui-cell__bd course-name") 休息
-    block(v-else)
+    block(v-else-if="editmode")
       block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
         view(class="active-course" v-if="activeDay==dayIdx && activeInterval==intervalIdx && activeCourse==courseIdx")
-          view(class="weui-cell" @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
+          view(class="weui-cell course-info" @click="toggleCourse(dayIdx, intervalIdx, courseIdx)")
             +course-info
           view(class="weui-celll")
             course-operation(:dayIdx="dayIdx" :intervalIdx="intervalIdx" :courseIdx="courseIdx"
@@ -28,21 +31,39 @@ view(class="page content")
               @editcourse="editCourse(dayIdx, intervalIdx, courseIdx)")
         view(class="weui-cell weui-cell_access" v-else @longtap="toggleCourse(dayIdx, intervalIdx, courseIdx)")
           view(class="weui-cell__bd" @click="editCourse(dayIdx, intervalIdx, courseIdx)")
-            view(class="weui-cell")
+            view(class="weui-cell course-info")
               +course-info
           view(class="weui-cell__ft course-config")
             i( class="icon iconfont icon-editor" @click="editCourse(dayIdx, intervalIdx, courseIdx)")
             i(class="icon iconfont icon-trash" @click="removecourse(dayIdx, intervalIdx, courseIdx)")
       view(class="weui-cell add-more" @click="addcourse(dayIdx, intervalIdx)" v-if="activeInterval != intervalIdx")
         view(class="weui-cell__bd") 添加更多
-  view(class="bottom-button" v-if="!editmode")
+    block(v-else)
+      block(v-if="interval.course.length>0")
+        block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
+          view(class="weui-cell weui-cell_access" @click='toggleShare(dayIdx, intervalIdx, courseIdx)')
+            view(class="weui-cell__bd")
+              view(class="weui-cell course-info")
+                +course-info
+            view(class="weui-cell__ft")
+              view(class="check-wrapper")
+                view
+                  icon(type='success_no_circle' size='15' color='#19a1a8' v-if="course.share") 
+      block(v-else)
+        view(class="weui-cell")
+          view(class="weui-cell__bd course-name") 休息
+  view(class="bottom-button" v-if="!editmode && !sharemode")
     button(class="button" size="small" @click="toggleEditMode") 修改课表
-    button(class="button" open-type="share" type="ghost") 转发给...
+    button(class="button" @click="toggleShareMode") 转发给...
     button(class="button" type="primary" @click="bindphone") 关联智能音箱
-  view(class="bottom-button" v-else)
+  view(class="bottom-button" v-else-if="editmode")
     button(class="button" type="primary" @click="toggleEditMode") 完成修改
+  view(class="bottom-button" v-else)
+    button(class="button" open-type="share" type="ghost") 确认转发
+    button(class="button" type="primary" @click="toggleShareMode") 取消转发
   editcourse(v-if="inediting" @editdone="editdone"
-    :scene="scene" :day="editday" :interval="editinterval" :course="editingcourse")
+    :scene="scene" :day="editday" :interval="editinterval" :course="editingcourse"
+    :recommendCourseName="recommendCourseName")
 </template>
 
 <script>
@@ -51,6 +72,7 @@ import courseOperation from '@/components/coursetable/courseOperation'
 import editcourse from '@/components/coursetable/editcourse'
 import currentWeekConfig from '@/components/coursetable/currentWeekConfig'
 import weekDisplayMode from '@/components/coursetable/weekDisplayMode'
+import shareCourseHint from '@/components/coursetable/shareCourseHint'
 import { mapState, mapActions } from 'vuex'
 import Time from '@/utils/time'
 
@@ -66,9 +88,12 @@ export default {
       editinterval: 0,
       editingcourse: 0,
       editmode: false,
+      sharemode: false,
       weekmode: 'both',
       displayCourseInfo: [],
-      currentDay: 0
+      currentDay: 0,
+      recommendCourseName: '',
+      loadOption: {}
     }
   },
 
@@ -128,7 +153,8 @@ export default {
     courseOperation,
     editcourse,
     currentWeekConfig,
-    weekDisplayMode
+    weekDisplayMode,
+    shareCourseHint
   },
 
   methods: {
@@ -166,6 +192,7 @@ export default {
     },
     editdone () {
       this.inediting = false
+      this.recommendCourseName = ''
       this.activeInterval = -1
       this.activeCourse = -1
     },
@@ -209,7 +236,7 @@ export default {
       this.setDisplayCourseInfo()
     },
     setDisplayCourseInfo () {
-      if (this.editmode) {
+      if (this.editmode || this.sharemode) {
         this.displayCourseInfo = this.courseInfo
       } else {
         this.displayCourseInfo = this.$store.getters.getDisplayCourse((course) => {
@@ -239,6 +266,16 @@ export default {
           }
         }
       })
+    },
+    toggleShare (day, interval, course) {
+      this.$store.commit('toggleCourseShare', {day,
+        interval,
+        course})
+      this.$store.dispatch('saveCourses', this.courseInfo)
+    },
+    toggleShareMode () {
+      this.sharemode = !this.sharemode
+      this.setDisplayCourseInfo()
     }
   },
 
@@ -247,15 +284,54 @@ export default {
 
   onLoad (option) {
     var duerosId = option.scene
+    this.loadOption = {}
+    this.sharemode = false
+    this.editmode = false
     if (duerosId && duerosId.indexOf('dueros') !== -1) {
       console.log('qrcode scan from dueros, duerosId = ' + duerosId)
       this.$store.dispatch('toBindDuerosId', duerosId)
+    } else {
+      if (option.operation) {
+        if (option.operation === 'modify') {
+          if (option.weekday) {
+            this.loadOption = {
+              weekday: option.weekday,
+              config: 'modify'
+            }
+          }
+        } else if (option.operation === 'add') {
+          if (option.weekday && option.time) {
+            this.loadOption = {
+              weekday: option.weekday,
+              time: option.time,
+              course: option.course,
+              config: 'add'
+            }
+          }
+        }
+      }
     }
     this.getCourses().then(() => {
       var weekday = new Date().getDay()
       this.activeDay = (weekday === 0 ? 6 : (weekday - 1))
       this.currentDay = this.activeDay
       this.setDisplayCourseInfo()
+      if (this.loadOption.config === 'add') {
+        this.editmode = true
+        if (this.loadOption.weekday !== undefined && this.loadOption.time !== undefined) {
+          this.inediting = true
+          this.activeDay = this.loadOption.weekday
+          this.editday = this.loadOption.weekday
+          this.editinterval = this.loadOption.time
+          this.scene = 'add'
+          this.recommendCourseName = this.loadOption.course
+        }
+      } else if (this.loadOption.config === 'modify') {
+        this.editmode = true
+        if (this.loadOption.weekday) {
+          this.activeDay = this.loadOption.weekday
+        }
+      }
     })
     this.inediting = false
     this.clearEditmode()
@@ -335,6 +411,17 @@ export default {
 
 .icon.iconfont {
   font-size: 45rpx;
+  margin-left: 20rpx;
+}
+
+.check-wrapper {
+  display: flex;
+  justify-content:center;
+  justify-items: center;
+  flex-direction: row;
+  width: 40rpx;
+  height: 40rpx;
+  border: solid #999999 1rpx;
   margin-left: 20rpx;
 }
 

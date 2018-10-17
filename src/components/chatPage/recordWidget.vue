@@ -82,6 +82,7 @@ export default {
     touchcancel (event) {
       this.recordStatus = 'idle'
       recorderManager.stop()
+      clearTimeout(this.timer)
     },
 
     touchmove (event) {

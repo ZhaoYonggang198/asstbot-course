@@ -102,6 +102,10 @@ export default {
     course: {
       type: Number,
       default: 0
+    },
+    recommendCourseName: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -153,7 +157,7 @@ export default {
     },
     maxEndTime () {
       if (this.courseInfo[this.day].interval[this.interval].name === '上午') {
-        return '13:00'
+        return '15:00'
       } else if (this.courseInfo[this.day].interval[this.interval].name === '下午') {
         return '20:00'
       } else {
@@ -266,10 +270,10 @@ export default {
         }
       }
       this.currentCourse = {
-        name: '',
+        name: this.recommendCourseName,
         location: '',
         week: 'both',
-        tearch: '',
+        teacher: '',
         ...interval
       }
       this.showSelectCourse = true

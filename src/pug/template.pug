@@ -2,9 +2,9 @@ mixin course-info
   view(class="weui-cell__bd")
     view(class="course-name" :class="course.week") {{course.name}}
     view(class="addition-info")
-      text(class="course-time" v-if="course.startTime") {{course.startTime}}~{{course.endTime}}
-  view(class="weui-cell__ft")
-    view(class="course-location" v-if="course.location") {{course.location}}
+      view(class="course-location" v-if="course.location") {{course.location}}
+  view(class="weui-cell__ft course-append")
+    text(class="course-time" v-if="course.startTime") {{course.startTime}}~{{course.endTime}}
     view(class="course-teacher"  v-if="course.teacher") {{course.teacher}}
 
 mixin navbar-swiper(vForParameter)
