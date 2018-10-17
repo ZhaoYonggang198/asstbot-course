@@ -116,7 +116,7 @@ export default {
             })
             return tmpDay
           })
-          this.courseMeta = courses.meta
+          this.courseMeta = {...courses.meta, from: option.user}
         })
     }
     this.getCourses()

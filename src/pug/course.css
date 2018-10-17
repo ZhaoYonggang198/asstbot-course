@@ -64,6 +64,7 @@
 .course-append {
   display: flex;
   flex-direction: column;
+  padding-top: 6px;
 }
 
 .course-append .course-teacher {

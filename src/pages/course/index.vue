@@ -2,14 +2,12 @@
 include ../../pug/template.pug
 
 view(class="page content")
-  title-bar(title="我的课表")
+  title-bar(:title="!sharemode?'我的课表':'选择分享的课程'")
   block(v-if="courseMeta.needOddEvenWeek && !sharemode")
     block(v-if="editmode")
       current-week-config
     block(v-else)
       week-display-mode(@weekModeChange="chooseWeekMode")
-  view(v-else-if="sharemode")
-    share-course-hint
     
   +navbar-swiper("(day, dayIdx) in displayCourseInfo")
     block(v-if="!editmode && !sharemode")
@@ -41,17 +39,15 @@ view(class="page content")
     block(v-else)
       block(v-if="interval.course.length>0")
         block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
-          view(class="weui-cell weui-cell_access" @click='toggleShare(dayIdx, intervalIdx, courseIdx)')
+          view(class="weui-cell weui-cell_access share-course-item" :class="{'shared-course': course.share}" @click='toggleShare(dayIdx, intervalIdx, courseIdx)')
+            view(class="weui-cell__hd weui-check__hd_in-checkbox")
+              icon(class="weui-icon-checkbox_circle" type="circle" size="23" v-if="!course.share")
+              icon(class="weui-icon-checkbox_success" type="success" size="23" v-else)
             view(class="weui-cell__bd")
               view(class="weui-cell course-info")
                 +course-info
-            view(class="weui-cell__ft")
-              view(class="check-wrapper")
-                view
-                  icon(type='success_no_circle' size='15' color='#19a1a8' v-if="course.share") 
       block(v-else)
         view(class="weui-cell")
-          view(class="weui-cell__bd course-name") 休息
   view(class="bottom-button" v-if="!editmode && !sharemode")
     button(class="button" size="small" @click="toggleEditMode") 修改课表
     button(class="button" @click="toggleShareMode") 转发给...
@@ -422,7 +418,11 @@ export default {
   width: 40rpx;
   height: 40rpx;
   border: solid #999999 1rpx;
-  margin-left: 20rpx;
+  margin-right: 20rpx;
+}
+
+.share-course-item.shared-course {
+  background-color: #fbfbfb;
 }
 
 </style>

@@ -130,7 +130,7 @@ var _impleSendmessage = (commit, id, type, data) => {
       },
       complete: (response) => {
         if (!response.statusCode || response.statusCode !== 200) {
-          commit('appendMessage', {to: {id: 'xxx'}, msgs: [{type: 'text', reply: '小哒累了, 休息一会儿'}]})
+          commit('appendMessage', {to: {id: 'xxx'}, msgs: [{type: 'text', reply: '小哒累了, 休息一会儿💤，等会儿再来找我行吗'}]})
           console.error(response)
           reject(response)
         }

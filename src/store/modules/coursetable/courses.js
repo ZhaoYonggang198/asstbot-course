@@ -96,7 +96,9 @@ var getFrontEndCourse = function (backendCourse) {
     }
     frontend.push(daycourse)
   }
+
   let meta = backendCourse.meta ? backendCourse.meta : {sameOddWeek: true}
+  console.log('meta', meta)
   return {meta, courseInfo: frontend}
 }
 
@@ -121,7 +123,8 @@ const state = {
   openid: '',
   courseMeta: {
     needOddEvenWeek: false,
-    sameOddWeek: true
+    sameOddWeek: true,
+    from: ''
   }
 }
 
@@ -339,8 +342,9 @@ function __setCourses (state, courseInfo) {
 }
 
 const mutations = {
-  setBackendCourses (state, {courseInfo, meta}) {
-    state.courseMeta.sameOddWeek = meta && meta.sameOddWeek ? meta.sameOddWeek : true
+  setBackendCourses (state, {meta, courseInfo}) {
+    state.courseMeta.sameOddWeek = meta && meta.sameOddWeek !== undefined ? meta.sameOddWeek : true
+    state.courseMeta.from = meta && meta.from !== undefined ? meta.from : ''
     __setCourses(state, courseInfo)
   },
 
@@ -383,6 +387,7 @@ const mutations = {
   copyCourses (state, {courseInfo, meta}) {
     state.courseInfo = courseInfo
     state.courseMeta.sameOddWeek = meta.sameOddWeek
+    state.courseMeta.from = meta.from
   },
 
   setOpenId (state, openid) {
