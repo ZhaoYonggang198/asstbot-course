@@ -17,7 +17,8 @@
     "pages/sharedcourse/main",
     "pages/phone/main",
     "pages/smartSpeaker/main",
-    "pages/xiaoduhelp/main"
+    "pages/xiaoduhelp/main",
+    "pages/bindXiaodu/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

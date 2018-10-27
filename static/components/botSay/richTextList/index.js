@@ -5,7 +5,13 @@ Component({
     properties: {
         content: {
             type: Object,
-            value: {}
+            value: {},
+            observer: function (val) {
+                let htmlStr = val.body.replace(/<\s*/g, '<').replace(/\s*>/g, '>').replace(/<\/\s*/g, '</').replace(/style\=\s*/g, 'style=')
+                this.setData({
+                    htmlStr: htmlStr
+                })
+            }
         },
         style: {
             type: Object,
@@ -33,9 +39,6 @@ Component({
      * 组件实例进入页面节点树时执行
      */
     attached: function () {
-        let htmlStr = this.data.content.body.replace(/<\s*/g, '<').replace(/\s*>/g, '>').replace(/<\/\s*/g, '</').replace(/style\=\s*/g, 'style=')
-        this.setData({
-            htmlStr: htmlStr
-        })
+
     }
 })

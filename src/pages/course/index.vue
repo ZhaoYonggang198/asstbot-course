@@ -68,7 +68,6 @@ import courseOperation from '@/components/coursetable/courseOperation'
 import editcourse from '@/components/coursetable/editcourse'
 import currentWeekConfig from '@/components/coursetable/currentWeekConfig'
 import weekDisplayMode from '@/components/coursetable/weekDisplayMode'
-import shareCourseHint from '@/components/coursetable/shareCourseHint'
 import { mapState, mapActions } from 'vuex'
 import Time from '@/utils/time'
 
@@ -149,8 +148,7 @@ export default {
     courseOperation,
     editcourse,
     currentWeekConfig,
-    weekDisplayMode,
-    shareCourseHint
+    weekDisplayMode
   },
 
   methods: {
@@ -285,7 +283,17 @@ export default {
     this.editmode = false
     if (duerosId && duerosId.indexOf('dueros') !== -1) {
       console.log('qrcode scan from dueros, duerosId = ' + duerosId)
-      this.$store.dispatch('toBindDuerosId', duerosId)
+      this.$store.dispatch('toBindDuerosId', duerosId).then(() => {
+        wx.showModal({
+          title: '绑定小度音箱成功',
+          content: '快来录入课程吧',
+          showCancel: false,
+          confirmText: '确定',
+          confirmColor: '#19a1a8',
+          success: res => {
+          }
+        })
+      })
     } else {
       if (option.operation) {
         if (option.operation === 'modify') {
@@ -408,17 +416,6 @@ export default {
 .icon.iconfont {
   font-size: 45rpx;
   margin-left: 20rpx;
-}
-
-.check-wrapper {
-  display: flex;
-  justify-content:center;
-  justify-items: center;
-  flex-direction: row;
-  width: 40rpx;
-  height: 40rpx;
-  border: solid #999999 1rpx;
-  margin-right: 20rpx;
 }
 
 .share-course-item.shared-course {

@@ -1,6 +1,6 @@
 <template lang='pug'>
   view(class="weui-cell")
-    view(class="weui-cell__bd") 选择分享的课程
+    view(class="weui-cell__bd") 选择要存入的课程
     
 </template>
 

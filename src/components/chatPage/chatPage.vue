@@ -76,7 +76,7 @@ const urlMaping = {
   'course-skill': '/pages/course/main',
   'do-survey': '/pages/surveyChat/main',
   'xiaoai-speaker': '/pages/phone/main',
-  'xiaodu-speaker': '/pages/xiaoduhelp/main'
+  'xiaodu-speaker': '/pages/bindXiaodu/main'
 }
 
 export default {

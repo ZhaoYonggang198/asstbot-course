@@ -23,11 +23,11 @@ view(class="page content")
           text(class="bold-style") 小度小度，打开课程表
           text ”，就可以使用课程表技能了
         view(class="weui-article__p")
-          text 课程表技能支持录入课表，查询课表，修改课表。
+          text 课程表技能支持查询课表。
         view(class="weui-article__p")
-          text 用户首次打开技能，如果发现还没有录入课程，会提醒用户逐天录入课表。
-        view(class="weui-article__p") 
-          text 目前有屏音箱支持使用微信扫码，使用微信扫描小度音箱屏幕上的小程序码，可以在小度音箱上使用本小程序的课表
+          text 用户在小度在家上打开技能,如果发现还没有录入课程,或者对音箱说"怎么录入课程",会提醒扫描小程序码在哒尔文小程序上输入课程。
+        view(class="weui-article__p")
+          text 使用微信扫描小度音箱屏幕上的小程序码，即完成在小程序和小度在家的关联。在小程序上输入课程，可以在小度音箱上使用本小程序的课表
 </template>
 
 <script>

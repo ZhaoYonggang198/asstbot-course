@@ -3,10 +3,13 @@ import config from '@/config.js'
 
 const url = config.service.userInfoUrl
 
+const bindingUrl = `${config.service.hostRoot}/binding`
+
 const state = {
   userInfo: {},
   authed: undefined,
-  loginStatus: undefined
+  loginStatus: undefined,
+  smartSpeakes: []
 }
 
 const getters = {
@@ -24,6 +27,9 @@ const mutations = {
   },
   setLogin (state) {
     state.loginStatus = true
+  },
+  setSmartSpeaker (state, speakers) {
+    state.smartSpeakes = speakers
   }
 }
 
@@ -93,6 +99,49 @@ const actions = {
           commit('setAuth', auth)
           resolve(auth)
         }
+      })
+    })
+  },
+  getSmartSpeakers ({commit}) {
+    return new Promise((resolve, reject) => {
+      wechat.getOpenId().then((openid) => {
+        wx.request({
+          url: `${bindingUrl}?openId=${openid}`,
+          method: 'GET',
+          success: (response) => {
+            if (response.data.bindingTypes !== undefined) {
+              commit('setSmartSpeaker', response.data.bindingTypes)
+            }
+            resolve()
+          },
+          fail: (err) => {
+            reject(err)
+          }
+        })
+      })
+    })
+  },
+  bindSpeaker ({dispatch}, {bindingCode}) {
+    return new Promise((resolve, reject) => {
+      wechat.getOpenId().then((openId) => {
+        wx.request({
+          url: `${bindingUrl}`,
+          method: 'POST',
+          data: {
+            openId, bindingCode
+          },
+          success: (response) => {
+            dispatch('getSmartSpeakers')
+            if (response.data.result === 'success' && response.data.state) {
+              resolve()
+            } else {
+              reject(response.data)
+            }
+          },
+          fail: (err) => {
+            reject(err)
+          }
+        })
       })
     })
   }
