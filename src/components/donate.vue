@@ -2,7 +2,7 @@
 view(class="modal")
   view(class="donate-modal")
     view(class="modal-title")
-      view(class="title") 喜欢哒尔文
+      view(class="title") 小哒辛苦了
       view(class="modal-close" @click="close")
         i(class="icon iconfont icon-close")
 
@@ -18,9 +18,9 @@ view(class="modal")
       view(class="button-area")
         view(class="button" @click="confirm") 打赏
     block(v-else)
-      view 谢谢打赏，我会努力变得更好的
+      view(class="thanks") 谢谢老板
       view(class="button-area")
-        view(class="button" @click="close") 再逛逛
+        view(class="button" @click="end") 再逛逛
 </template>
 
 <script>
@@ -45,7 +45,13 @@ export default {
       this.totalFee = event.mp.detail.value
     },
     close () {
-      this.totalFee = 0
+      // this.donated = false
+      this.totalFee = ''
+      this.$emit('closeDonate')
+    },
+    end () {
+      this.donated = false
+      this.totalFee = ''
       this.$emit('closeDonate')
     },
     confirm () {
@@ -65,7 +71,6 @@ export default {
                 success: res => {
                   console.log(res)
                   this.donated = true
-                  this.close()
                 },
                 fail: () => {
 
@@ -98,6 +103,7 @@ export default {
   align-items: center;
   align-content: center;
   justify-content: center;
+  z-index: 1000;
 }
 
 .donate-modal {
@@ -116,6 +122,7 @@ export default {
 
 .modal-title .title {
   flex: 1;
+  color: #0c5053;
 }
 
 .donate-option {
@@ -155,10 +162,13 @@ export default {
 .other-fee {
   display: flex;
   justify-content: space-between;
+  font-size: 26rpx;
+  color: #0c5053;
 }
 
 .other-fee input {
   border-bottom: 1rpx solid gray;
+  padding: 0 15rpx;
 }
 
 .button-area {
@@ -178,6 +188,14 @@ export default {
   box-shadow:0 0 0;
   font-weight:500;
   min-width:60rpx;
+}
+
+.thanks {
+  width: 100%;
+  font-size: 26rpx;
+  color: #0c5053;
+  text-align: center;
+  margin: 20rpx 0;
 }
 
 </style>

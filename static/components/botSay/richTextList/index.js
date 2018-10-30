@@ -7,10 +7,12 @@ Component({
             type: Object,
             value: {},
             observer: function (val) {
-                let htmlStr = val.body.replace(/<\s*/g, '<').replace(/\s*>/g, '>').replace(/<\/\s*/g, '</').replace(/style\=\s*/g, 'style=')
-                this.setData({
-                    htmlStr: htmlStr
-                })
+                if(val.body) {
+                    let htmlStr = val.body.replace(/<\s*/g, '<').replace(/\s*>/g, '>').replace(/<\/\s*/g, '</').replace(/style\=\s*/g, 'style=')
+                    this.setData({
+                        htmlStr: htmlStr
+                    })
+                }
             }
         },
         style: {

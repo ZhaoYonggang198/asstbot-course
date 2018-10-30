@@ -140,10 +140,12 @@ export default {
           this.$store.commit('clearState')
         })
         this.currentMessage = ''
-      } else {
+      } else if (this.items.length !== 0){
         this.$store.dispatch('sentCheckBoxReply', {items: this.items, event: this.event}).then(res => {
           this.$store.commit('clearState')
         })
+      } else {
+        this.$store.commit('clearState')
       }
     },
     confirm (e) {
