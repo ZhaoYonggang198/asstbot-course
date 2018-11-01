@@ -1,0 +1,4 @@
+<block>
+    <view class='pinyin'>{{pinyin}}</view>
+    <view class='hanzi'>{{hanzi}}</view>
+</block>

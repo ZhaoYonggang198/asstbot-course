@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+      "dic-pin": "../dicPin/index"
+  }
+}

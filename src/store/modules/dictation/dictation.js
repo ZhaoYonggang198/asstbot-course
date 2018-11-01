@@ -2,6 +2,18 @@ import config from '@/config.js'
 import wechat from '../wechat'
 let hostUrl = config.service.hostRoot
 
+function getPin (word) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: hostUrl + '/pinyin?sentence=' + word,
+      method: 'get',
+      success: function (res) {
+        resolve(res.data.data)
+      }
+    })
+  })
+}
+
 let state = {
   dictation: []
 }
@@ -78,6 +90,13 @@ const actions = {
         }
       })
     })
+  },
+  getPinyin ({dispatch, commit}, words) {
+    let arr = []
+    words.map(item => {
+      arr.push(getPin(item))
+    })
+    return Promise.all(arr)
   }
 }
 

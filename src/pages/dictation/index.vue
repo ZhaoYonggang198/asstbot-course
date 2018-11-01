@@ -13,14 +13,13 @@
             <view class="dic-foot-select-title">{{select.title}}</view>
             <scroll-view scroll-y style="max-height: 150px">
               <view class="dic-foot-select-text-container">
-                <text class="dic-foot-select-text" :key="index" v-for="(word, index) in select.words">{{word}}</text>
+                <text class="dic-foot-select-text" :key="index" v-for="(word, index) in select.words">{{word.term}}</text>
               </view>
             </scroll-view>
           </view>
         </view>
         <view class="dic-footer">
           <view class="dic-foot-btn" @click="ShowNewModal">新增</view>
-          <view class="dic-foot-btn">设置</view>
           <button class="dic-foot-btn" open-type="share">分享给...</button>
           <view class="dic-foot-btn" @click="bindPhone">关联智能音箱</view>
         </view>

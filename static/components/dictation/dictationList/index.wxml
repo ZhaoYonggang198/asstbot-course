@@ -33,7 +33,7 @@
         <view class='dic-title'>{{dicItem.title}}</view>
         <scroll-view scroll-x>
             <view class='dic-text-container'>
-                <text class='dic-text' wx:key="index" wx:for="{{dicItem.words}}">{{item}}</text>
+                <text class='dic-text' wx:key="index" wx:for="{{dicItem.words}}">{{item.term}}</text>
             </view>
         </scroll-view>
         <icon class='del-btn' type='cancel' size='20' color='#333' catchtap='showDelModal' data-dic="{{dicItem}}"></icon>

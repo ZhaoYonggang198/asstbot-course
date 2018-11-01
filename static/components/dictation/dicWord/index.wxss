@@ -1,0 +1,9 @@
+.word-box{
+    display: flex;
+}
+.word-inner{
+    color: #fff;
+}
+.icon-cancel{
+    float: right;
+}

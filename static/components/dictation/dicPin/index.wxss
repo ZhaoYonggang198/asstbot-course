@@ -1,0 +1,7 @@
+.pinyin{
+    text-align:center;
+    padding:0px 8px 5px;
+}
+.hanzi{
+    text-align: center
+}
