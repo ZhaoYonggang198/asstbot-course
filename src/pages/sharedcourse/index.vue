@@ -3,11 +3,17 @@ include ../../pug/template.pug
 
 view(class="page content")
   title-bar(title="你朋友的课表")
+  share-course-hint
   +navbar-swiper("(day, dayIdx) in courseInfo")
     block(v-if="interval.course.length>0")
-      block(v-for="(course, k) in interval.course" :key="k")
-        view(class="weui-cell course-info")
-          +course-info
+      block(v-for="(course, courseIdx) in interval.course" :key="courseIdx")
+        view(class="weui-cell weui-cell_access share-course-item" :class="{'shared-course': course.share}" @click='toggleShare(dayIdx, intervalIdx, courseIdx)')
+          view(class="weui-cell__hd weui-check__hd_in-checkbox")
+            icon(class="weui-icon-checkbox_circle" type="circle" size="23" v-if="!course.share")
+            icon(class="weui-icon-checkbox_success" type="success" size="23" v-else)
+          view(class="weui-cell__bd")
+            view(class="weui-cell course-info")
+              +course-info
     block(v-else)
       view(class="weui-cell")
         view(class="weui-cell__bd") 休息
@@ -19,7 +25,22 @@ view(class="page content")
 
 <script>
 import navBar from '@/components/coursetable/navbar'
+import shareCourseHint from '@/components/coursetable/shareCourseHint'
 import { mapState, mapActions } from 'vuex'
+
+function filterByShare (courseInfo) {
+  return courseInfo.map(day => {
+    let tmpDay = day
+    tmpDay.interval = day.interval.map(interval => {
+      let tmpInterval = interval
+      tmpInterval.course = interval.course.filter((course) => {
+        return course.share
+      })
+      return tmpInterval
+    })
+    return tmpDay
+  })
+}
 
 export default {
   data () {
@@ -47,7 +68,8 @@ export default {
   },
 
   components: {
-    navBar
+    navBar,
+    shareCourseHint
   },
 
   methods: {
@@ -86,7 +108,9 @@ export default {
       }
     },
     copyCourses () {
-      this.$store.commit('copyCourses', {courseInfo: this.courseInfo, meta: this.courseMeta})
+      let courseInfo = filterByShare(this.courseInfo)
+
+      this.$store.commit('copyCourses', {courseInfo, meta: this.courseMeta})
       this.saveCourses(this.owncourseInfo)
     },
     swiperchange (event) {
@@ -94,6 +118,10 @@ export default {
     },
     sharecourse () {
       console.log(this.$root.$mp.query)
+    },
+    toggleShare (dayIdx, intervalIdx, courseIdx) {
+      this.courseInfo[dayIdx].interval[intervalIdx].course[courseIdx].share =
+        !this.courseInfo[dayIdx].interval[intervalIdx].course[courseIdx].share
     }
   },
 
@@ -105,17 +133,7 @@ export default {
     if (option.user) {
       this.getOtherCourses(option.user)
         .then((courses) => {
-          this.courseInfo = courses.courseInfo.map(day => {
-            let tmpDay = day
-            tmpDay.interval = day.interval.map(interval => {
-              let tmpInterval = interval
-              tmpInterval.course = interval.course.filter((course) => {
-                return course.share
-              })
-              return tmpInterval
-            })
-            return tmpDay
-          })
+          this.courseInfo = filterByShare(courses.courseInfo)
           this.courseMeta = {...courses.meta, from: option.user}
         })
     }
@@ -173,5 +191,10 @@ export default {
   background: #19a1a8;
   color: white;
 }
+
+.share-course-item.shared-course {
+  background-color: #fbfbfb;
+}
+
 @import '../../pug/course.css';
 </style>

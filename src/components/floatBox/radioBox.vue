@@ -95,7 +95,12 @@
       },
       selectItem (obj) {
         if (this.touchEndTime - this.touchStartTime < 800) {
-          this.$store.dispatch('sentRadioReply', {...obj, value: obj.value ? obj.value : obj.caption})
+          console.log(obj)
+          if (obj.type && obj.type === 'donate') {
+            this.$emit('donateclick')
+          } else {
+            this.$store.dispatch('sentRadioReply', {...obj, value: obj.value ? obj.value : obj.caption})
+          }
         }
       },
       touchStart (option) {

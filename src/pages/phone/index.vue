@@ -1,12 +1,13 @@
 <template lang="pug">
 view(class="page")
   title-bar(title="关联小米音箱")
-  view(style="text-align:center;font-size:13px;color:#0c5053") 点击图片可预览
-  swiper(indicator-dots="true" autoplay="true" interval="5000" circular="true" class="swiper-wrapper")
-    swiper-item(v-for="(item, index) in helpDesc" :key="index")
-      view(class="swiper-item")
-        image(:src="item.image" mode="aspectFit" @click="previewImage(item.image)")
-        view(class="page__desc") {{index + 1}}. {{item.desc}}
+  block(v-if="!xiaoaiBinded")
+    view(style="text-align:center;font-size:18px;color:#0c5053") 点击图片可放大查看
+    swiper(indicator-dots="true" autoplay="true" interval="5000" circular="true" class="swiper-wrapper")
+      swiper-item(v-for="(item, index) in helpDesc" :key="index")
+        view(class="swiper-item")
+          image(:src="item.image" mode="aspectFit" @click="previewImage(item.image)")
+          view(class="page__desc") {{index + 1}}. {{item.desc}}
   i-panel(:title="bindPhone?'已绑定手机：' + bindPhone:''" class="form")
     block(v-if="!bindPhone")
       i-input(:value="inputPhone" @change="phonechange" type="number" maxlength="11" title="手机号" placeholder="请输入手机号")
@@ -58,7 +59,8 @@ export default {
     ...mapState({
       bindPhone: state => {
         return state.phone.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
-      }
+      },
+      xiaoaiBinded: state => (state.userProfile.smartSpeakes.indexOf('小米') !== -1)
     }),
 
     vcodeDisable () {
@@ -120,8 +122,9 @@ export default {
     formReset (ev) {
       var formId = 1
       this.toUnbindPhone(formId).then(() => {
+        this.$store.dispatch('getSmartSpeakers')
         wx.showToast({
-          title: '绑定成功',
+          title: '解绑成功',
           icon: 'success',
           mask: true
         })
@@ -186,6 +189,7 @@ export default {
   onLoad () {
     this.inputPhone = ''
     this.inputCode = ''
+    this.$store.dispatch('getSmartSpeakers')
   },
   onShareAppMessage: function () {
     return {

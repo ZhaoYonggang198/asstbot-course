@@ -3,7 +3,7 @@
       <exhibition-action style="display: none" @actionshow="actionshow" :actionclick="actionclicked"></exhibition-action>
       <block v-if="!exhibitionActionShow">
         <radio-box v-if="messageAction.type === 'radio' || (actions && actions.length > 0)" 
-          :list="messageAction" :actions="actions" @actionclick="actionclick"></radio-box>
+          :list="messageAction" :actions="actions" @actionclick="actionclick" @donateclick="donateclick"></radio-box>
         <checkbox-box v-if="messageAction.type === 'checkbox'" :list="messageAction"></checkbox-box>
         <avatar-box v-if="messageAction.type === 'imageUploader'" :list="messageAction"></avatar-box>
       </block>
@@ -61,6 +61,9 @@
             ...action.data
           }
         })
+      },
+      donateclick () {
+        this.$emit('donateclick')
       }
     }
   }

@@ -48,12 +48,13 @@
     </view>
     <view class="footer">
       <record-status/>
-      <select-box v-if="displayFinish" :messageAction="activeBoxMsg" />
+      <select-box v-if="displayFinish" :messageAction="activeBoxMsg" @donateclick="donateclick"/>
       <command-area @msgSendStatus="handleMsgSendStatus"
           :inputPromt="activeInputPromtMsg"
           :displayFinish="displayFinish" @keyboardUp="keyboardUp" @keyboardDown="keyboardDown"
           :needFocus="messageList.length>5"/>
     </view>
+    <donate v-if="inDonating" @closeDonate="closeDonate"/>
   </block>
 </template>
 
@@ -63,6 +64,7 @@ import selectBox from '@/components/selectBox'
 import userSaySending from '@/components/userSay/sending'
 import videoplayer from '@/components/widget/videoplayer'
 import recordWidget from '@/components/chatPage/recordWidget'
+import donate from '@/components/donate'
 import audioReply from '@/utils/audioReply'
 import { mapState } from 'vuex'
 
@@ -77,7 +79,7 @@ const urlMaping = {
   'dictation': '/pages/dictation/main',
   'do-survey': '/pages/surveyChat/main',
   'xiaoai-speaker': '/pages/phone/main',
-  'xiaodu-speaker': '/pages/xiaoduhelp/main'
+  'xiaodu-speaker': '/pages/bindXiaodu/main'
 }
 
 export default {
@@ -89,7 +91,8 @@ export default {
       videoPlay: false,
       videoSrc: '',
       keyboardInput: false,
-      ttsPlaying: false
+      ttsPlaying: false,
+      inDonating: false
     }
   },
   props: {
@@ -299,15 +302,26 @@ export default {
         this.scrollToView = ''
         this.scrollToView = `bottom${this.messageList.length - 1}`
       }, 200)
+    },
+    donateclick () {
+      console.log('donateClick')
+      this.inDonating = true
+    },
+    closeDonate () {
+      this.inDonating = false
     }
   },
 
+  onLoad () {
+    this.inDonating = false
+  },
   components: {
     commandArea,
     selectBox,
     userSaySending,
     videoplayer,
-    recordWidget
+    recordWidget,
+    donate
   }
 }
 </script>
