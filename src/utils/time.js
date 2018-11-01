@@ -33,8 +33,28 @@ function endTime (start, interval) {
   return _valToTimeStr(_timeStrToVal(start) + parseInt(interval))
 }
 
+/*
+* 获取 yyyy-MM-dd HH:mm:ss格式的时间
+* */
+function getFormatTime () {
+  let now = new Date()
+  let year = now.getFullYear()
+  let month = now.getMonth() + 1
+  month = month < 10 ? '0' + month : month
+  let day = now.getDate()
+  day = day < 10 ? '0' + day : day
+  let hour = now.getHours()
+  hour = hour < 10 ? '0' + hour : hour
+  let minute = now.getMinutes()
+  minute = minute < 10 ? '0' + minute : minute
+  let second = now.getSeconds()
+  second = second < 10 ? '0' + second : second
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
+}
+
 export default {
   interval,
   isGreater,
-  endTime
+  endTime,
+  getFormatTime
 }

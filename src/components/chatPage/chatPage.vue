@@ -74,6 +74,7 @@ const urlMaping = {
   'publish-survey': '/pages/publish/main',
   'show-survey-result': '/pages/detail/main',
   'course-skill': '/pages/course/main',
+  'dictation': '/pages/dictation/main',
   'do-survey': '/pages/surveyChat/main',
   'xiaoai-speaker': '/pages/phone/main',
   'xiaodu-speaker': '/pages/xiaoduhelp/main'

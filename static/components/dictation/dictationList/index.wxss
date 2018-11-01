@@ -1,0 +1,104 @@
+/* static/components/dictation/index.wxss */
+@import '/static/style/weui.wxss';
+@import '/static/style/main.wxss';
+@import '/static/font/iconfont.wxss';
+
+.dictation-scroll{
+    height: 100%;
+  }
+.dictation-item-scroll{
+    display: flex;
+}
+.dictate-item{ 
+    border-bottom: 1px solid #d8d8d8;
+    box-sizing: border-box;
+    /* padding: 10px 15px; */
+    padding-left: 35px;
+    background: #fff;
+    position: relative;
+    width: 100vw;
+    transition: 0.3s;
+}
+.dic-num-box{
+    position:absolute;
+    top:0;
+    background:#fff;
+    width:35px;
+    height:100%;
+    display:flex;
+    color:#fff;
+    left:0;
+    padding-left: 5px;
+    padding-top:8px;
+    box-sizing:border-box;
+    justify-content: center;
+}
+
+.dic-words-num{
+    display:inline-block;
+    background:#999;
+    color:#fff;
+    min-width:20px;
+    height:20px;
+    line-height:20px;
+    text-align:center;
+    border-radius:10px;
+    padding:0 5px;
+    box-sizing:border-box;
+    font-size:14px;
+}
+.dic-title{
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 500;
+}
+
+.dic-text-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.dic-text{
+    margin-right:10px;
+padding:8px 10px;
+border-radius:15px;
+background:#19a1a8;
+white-space:nowrap;
+line-height:14px;
+font-size:14px;
+margin-top:12px;
+color:#fff;
+
+}
+.dic-delete{
+    background: red;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    line-height: 80px;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 0;
+    right: -80px;
+}
+.del-btn{
+    position:absolute;
+    top:0;
+    right:0;
+    width:35px;
+    height:30px;
+    padding-top:10px;
+    box-sizing:border-box;
+}
+.delBox{
+    position:absolute;
+    top:0;
+    background:red;
+    width:80px;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    right:-80px;
+}

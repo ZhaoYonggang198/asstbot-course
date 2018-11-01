@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+      "dictation-edit-modal": "../dictationEditModal/index",
+      "dictation-del-modal": "../dictationItemDelModal/index"
+  }
+}

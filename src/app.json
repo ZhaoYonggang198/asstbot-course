@@ -17,7 +17,10 @@
     "pages/sharedcourse/main",
     "pages/phone/main",
     "pages/smartSpeaker/main",
-    "pages/xiaoduhelp/main"
+    "pages/xiaoduhelp/main",
+    "pages/dictation/main",
+    "pages/dictationEdit/main",
+    "pages/dictationPlay/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

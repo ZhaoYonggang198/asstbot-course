@@ -26,6 +26,5 @@ Component({
      * 组件实例进入页面节点树时执行
      */
     attached: function () {
-        console.log(this.data.content)
     }
 })
