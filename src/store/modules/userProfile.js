@@ -4,6 +4,7 @@ import config from '@/config.js'
 const url = config.service.userInfoUrl
 
 const bindingUrl = `${config.service.hostRoot}/binding`
+const unbindingUrl = `${config.service.hostRoot}/unbinding`
 
 const state = {
   userInfo: {},
@@ -121,14 +122,38 @@ const actions = {
       })
     })
   },
-  bindSpeaker ({dispatch}, {bindingCode}) {
+  bindSpeaker ({dispatch}, data) {
     return new Promise((resolve, reject) => {
       wechat.getOpenId().then((openId) => {
         wx.request({
           url: `${bindingUrl}`,
           method: 'POST',
           data: {
-            openId, bindingCode
+            openId, ...data
+          },
+          success: (response) => {
+            dispatch('getSmartSpeakers')
+            if (response.data.result === 'success' && response.data.state) {
+              resolve()
+            } else {
+              reject(response.data)
+            }
+          },
+          fail: (err) => {
+            reject(err)
+          }
+        })
+      })
+    })
+  },
+  unbindSpeaker ({dispatch}, data) {
+    return new Promise((resolve, reject) => {
+      wechat.getOpenId().then((openId) => {
+        wx.request({
+          url: `${unbindingUrl}`,
+          method: 'POST',
+          data: {
+            openId, ...data
           },
           success: (response) => {
             dispatch('getSmartSpeakers')

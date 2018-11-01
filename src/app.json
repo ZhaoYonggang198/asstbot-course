@@ -22,7 +22,8 @@
     "pages/dictationEdit/main",
     "pages/dictationPlay/main",
     "pages/bindXiaodu/main",
-    "pages/donate/main"
+    "pages/donate/main",
+    "pages/bindXiaomi/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

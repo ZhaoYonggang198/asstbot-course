@@ -31,8 +31,8 @@ export default {
 
   computed: {
     ...mapState({
-      xiaoaiBinded: state => (state.userProfile.smartSpeakes.indexOf('小米') !== -1),
-      baiduBinded: state => (state.userProfile.smartSpeakes.indexOf('百度') !== -1)
+      xiaoaiBinded: state => (state.userProfile.smartSpeakes.indexOf('xiaoai') !== -1),
+      baiduBinded: state => (state.userProfile.smartSpeakes.indexOf('dueros') !== -1)
     })
   },
 
