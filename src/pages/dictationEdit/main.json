@@ -1,0 +1,8 @@
+{
+  "enablePullDownRefresh": false,
+  "disableScroll": true,
+  "usingComponents": {
+      "dictation-item": "/static/components/dictation/dictationList/index",
+      "dictation-add-modal": "/static/components/dictation/dictationAddModal/index"
+  }
+}

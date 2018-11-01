@@ -18,6 +18,9 @@
     "pages/phone/main",
     "pages/smartSpeaker/main",
     "pages/xiaoduhelp/main",
+    "pages/dictation/main",
+    "pages/dictationEdit/main",
+    "pages/dictationPlay/main",
     "pages/bindXiaodu/main",
     "pages/donate/main",
     "pages/bindXiaomi/main"

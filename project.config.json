@@ -37,15 +37,8 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": -1,
 			"list": [
-				{
-					"id": 0,
-					"name": "毛孩子",
-					"pathName": "pages/surveyChat/main",
-					"query": "id=a81f22f08ccc11e8b1e74d9f5b42667a",
-					"scene": "1008"
-				},
 				{
 					"id": 1,
 					"name": "主课程表",
@@ -82,13 +75,6 @@
 					"scene": "1008"
 				},
 				{
-					"id": 6,
-					"name": "输入框的多选框测试",
-					"pathName": "pages/surveyChat/main",
-					"query": "id=f605ec40923711e88429f5fb0ddc2255",
-					"scene": "1008"
-				},
-				{
 					"id": 7,
 					"name": "调查问卷",
 					"pathName": "pages/surveySubjects/main",
@@ -100,6 +86,20 @@
 					"name": "详情页面",
 					"pathName": "pages/detail/main",
 					"query": "resultId=123a65f0923111e88429f5fb0ddc2255&score=3&type=reply",
+					"scene": "1008"
+				},
+				{
+					"id": -1,
+					"name": "课表",
+					"pathName": "pages/dictation/index",
+					"query": "openid=oNijH5YvxrIh42xyrXqCDhJBuic0",
+					"scene": "1008"
+				},
+				{
+					"id": -1,
+					"name": "听写词汇",
+					"pathName": "pages/dictation/main",
+					"query": "",
 					"scene": "1008"
 				}
 			]

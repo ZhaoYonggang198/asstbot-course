@@ -1,0 +1,15 @@
+<!--static/components/dictation/dictationAddModal/index.wxml-->
+<view class='modal-container'>
+    <view class='modal-inner'>
+        <view class='modal-header'>新增词条</view>
+        <view class='dic-add-title'><input class='dic-add-input' bindblur='addTitle' bindconfirm='addTitle' placeholder='请输入标签' placeholder-style='color: #999'></input></view>
+        <view class='modal-content'>
+            <input class='modal-input' placeholder='请速入词语' placeholder-style='color: #999' bindblur='addNew' bindconfirm='addNew'></input>
+            <text class='modal-text'>如果输入多个词语，用逗号(,)隔开</text>
+        </view>
+        <view class='modal-footer'>
+            <view class='modal-btn btn-success' bindtap='success'>完成</view>
+            <view class='modal-btn btn-fail' bindtap='fail'>取消</view>
+        </view>
+    </view>
+</view>

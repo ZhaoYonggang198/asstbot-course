@@ -1,0 +1,33 @@
+<scroll-view class='dictation-scroll' scroll-y scroll-into-view="{{dicBottom}}">
+    <radio-group class="radio-group" bindchange="radioChange">
+        <view wx:key="dicIndex" wx:for="{{content}}" wx:for-item="dicItem" wx:for-index="dicIndex" class="dictate-item" style="background:{{activeDictation.id==dicItem.id ? '#ddd' : '#fff'}}" id="dicBottom{{dicIndex}}" >
+            <!-- <view class='dic-radio-container'>
+                <radio></radio>
+            </view> -->
+            <view class='dic-fun-container'>
+                <view class='dic-fun-item' bindtap='dictateEdit' data-dic="{{dicItem}}">
+                    <view class="icon iconfont icon-editor"></view>
+                </view>
+                <view class='dic-fun-item' bindtap='dictateDel'  data-dic="{{dicItem}}">
+                    <view class="icon iconfont icon-trash"></view>
+                </view>
+            </view>
+            <view class='dic-content'  bindtap='selectDic' data-dic="{{dicItem}}" data-bottom="dicBottom{{dicIndex}}">
+                <view class='dic-title'>{{dicItem.title}}</view>
+                <scroll-view scroll-x>
+                    <view class='dic-text-container'>
+                        <text class='dic-text' wx:key="{{index}}" wx:for="{{dicItem.words}}">{{item}}</text>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+    </radio-group>
+    <view id='dicBottom'></view>
+</scroll-view>
+<block wx:if="{{dicEdit}}">
+    <dictation-edit-modal content="{{dictation}}" bind:hideModal="hideEditModal" bind:updateDictation="updateDictation"/>
+</block>
+<block wx:if="{{dicDel}}">
+    <dictation-del-modal content="{{dictation}}" bind:hideModal="hideDelModal" bind:dicItemDel="delDicItem"/>
+</block>
+

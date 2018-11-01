@@ -15,6 +15,7 @@ import phone from './modules/coursetable/phone'
 import courses from './modules/coursetable/courses'
 import dueros from './modules/coursetable/dueros'
 import recordStatus from './modules/recordStatus'
+import dictation from './modules/dictation/dictation'
 
 Vue.use(Vuex)
 
@@ -36,7 +37,8 @@ export default new Vuex.Store({
     phone,
     courses,
     dueros,
-    recordStatus
+    recordStatus,
+    dictation
   },
   strict: false
 })
