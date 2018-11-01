@@ -19,7 +19,8 @@
     "pages/smartSpeaker/main",
     "pages/xiaoduhelp/main",
     "pages/bindXiaodu/main",
-    "pages/donate/main"
+    "pages/donate/main",
+    "pages/bindXiaomi/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

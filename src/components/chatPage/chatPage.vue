@@ -78,7 +78,10 @@ const urlMaping = {
   'course-skill': '/pages/course/main',
   'do-survey': '/pages/surveyChat/main',
   'xiaoai-speaker': '/pages/phone/main',
-  'xiaodu-speaker': '/pages/bindXiaodu/main'
+  'xiaodu-speaker': '/pages/bindXiaodu/main',
+  'xiaoai-no-screen': '/pages/phone/main',
+  'dueros-no-screen': '/pages/bindXiaodu/main',
+  'dueros-has-screen': '/pages/xiaoduhelp/main'
 }
 
 export default {
