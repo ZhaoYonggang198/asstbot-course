@@ -11,17 +11,17 @@
 
         <view class="dic-edit-name-box">
           <view class="dic-edit-name">播放方式</view>
-          <view class="dic-edit-order"><text>{{dictation.playWay=='order'? '顺序' : '乱序'}}</text></view>
+          <view class="dic-edit-order" @click="setValue($event, 'order')"><text>{{dictation.playWay=='order'? '顺序' : '乱序'}}</text></view>
         </view>
 
         <view class="dic-edit-name-box">
           <view class="dic-edit-name">播放次数</view>
-          <input class="dic-edit-add" @blur="setValue($event, 'playTimes')" @confirm="setValue($event, 'playTimes')" confirm-hold  type="text" :value="dictation.playTimes" placeholder-style="color: #999">
+          <input class="dic-edit-add" @blur="setValue($event, 'playTimes')" @confirm="setValue($event, 'playTimes')" confirm-hold  type="number" maxlength="1" minlength="1" :value="dictation.playTimes" placeholder-style="color: #999">
         </view>
 
         <view class="dic-edit-name-box">
           <view class="dic-edit-name">播放间隔</view>
-          <input class="dic-edit-add" @blur="setValue($event, 'intervel')" @confirm="setValue($event, 'intervel')" confirm-hold type="text" :value="dictation.intervel" placeholder="单位(s)" placeholder-style="color: #999">
+          <input class="dic-edit-add" @blur="setValue($event, 'intervel')" @confirm="setValue($event, 'intervel')" confirm-hold type="number" :value="dictation.intervel" placeholder="单位(s)" placeholder-style="color: #999" maxlength="2" minlength="1">
         </view>
 
         <view class="dic-edit-name-box">
@@ -95,12 +95,13 @@
         if (clickFlag) {
           clickFlag = false
           this.newWord = e.mp.detail.value
+          console.log(this.newWord)
           let newWordArr = []
           if (this.newWord) {
-            newWordArr = this.newWord.replace(/，/g, ',').split(',')
+            newWordArr = [...this.newWord.replace(/，/g, ',').split(',')]
           }
-          if (this.edit) {
-            if (newWordArr.length) {
+          if (newWordArr.length) {
+            if (this.edit) {
               this.$store.dispatch('getPinyin', newWordArr).then(res => {
                 let arr = []
                 newWordArr.map((item, index) => {
@@ -132,9 +133,7 @@
                   })
                 })
               })
-            }
-          } else {
-            if (newWordArr.length) {
+            } else {
               this.$store.dispatch('getPinyin', newWordArr).then(res => {
                 let arr = []
                 newWordArr.map((item, index) => {
@@ -169,6 +168,8 @@
                 })
               })
             }
+          } else {
+            clickFlag = true
           }
         }
       },
@@ -186,14 +187,29 @@
                 break
               }
             case 'playTimes':
-              console.log(this.playTimes, e.mp.detail.value)
               if (this.playTimes === e.mp.detail.value) {
                 clickFlag1 = true
                 return
               } else {
                 this.dictation.playTimes = e.mp.detail.value
-                this.playTimes = e.mp.detail.value
-                break
+                if (this.dictation.playTimes >= 1 && this.dictation.playTimes <= 3) {
+                  this.playTimes = e.mp.detail.value
+                  break
+                } else {
+                  wx.showModal({
+                    title: '提示',
+                    content: '播放次数最少一次，最多三次，请重新填写',
+                    success (res) {
+                      if (res.confirm) {
+                        console.log('用户点击确定')
+                      } else if (res.cancel) {
+                        console.log('用户点击取消')
+                      }
+                    }
+                  })
+                  clickFlag1 = true
+                  return
+                }
               }
             case 'intervel':
               if (this.intervel === e.mp.detail.value) {
@@ -201,9 +217,28 @@
                 return
               } else {
                 this.dictation.intervel = e.mp.detail.value
-                this.intervel = e.mp.detail.value
-                break
+                if (this.dictation.intervel >= 3 && this.dictation.intervel <= 15) {
+                  this.intervel = e.mp.detail.value
+                  break
+                } else {
+                  wx.showModal({
+                    title: '提示',
+                    content: '播放间隔最短三秒，最长15秒，请重新填写',
+                    success (res) {
+                      if (res.confirm) {
+                        console.log('用户点击确定')
+                      } else if (res.cancel) {
+                        console.log('用户点击取消')
+                      }
+                    }
+                  })
+                  clickFlag1 = true
+                  return
+                }
               }
+            case 'order':
+              this.dictation.playWay = this.dictation.playWay === 'order' ? 'disorder' : 'order'
+              break
           }
           if (this.edit) {
             this.$store.dispatch('updateDictation', {

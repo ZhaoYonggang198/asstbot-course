@@ -4,8 +4,8 @@
     <view class="dic-content">
       <view class="dic-content-inner">
         <view class="rate-box">
-          <view class="btn-rate" @click="dicConvert" v-if="dictation.playWay=='order'">乱序听写</view>
-          <view class="btn-rate" @click="dicNormal" v-else>顺序听写</view>
+          <view class="btn-rate" v-if="dictation.playWay=='order'">乱序听写</view>
+          <view class="btn-rate" v-else>顺序听写</view>
         </view>
         <view class="dic-pinyin">
           <view class="dic-circle-box">
@@ -18,8 +18,8 @@
     </view>
     <view class="dic-footer">
       <view class="btn-footer" @click="playPre">上一个</view>
-      <view class="btn-footer" v-if="playState" @click="play">PLAY</view>
-      <view class="btn-footer" v-else @click="stop">STOP</view>
+      <view class="btn-footer" v-if="playState" @click="play">播放</view>
+      <view class="btn-footer" v-else @click="stop">停止</view>
       <view class="btn-footer" @click="playNext">下一个</view>
     </view>
   </view>
@@ -31,11 +31,16 @@
       return {
         pinyin: '',
         pinyinArr: [],
+        pinyinTts: [],
         currentIndex: 0,
         rate: true,
         playState: true,
         innerAudioContext: '',
-        audioUrl: ''
+        audioUrl: '',
+        timeout: '',
+        ttsRole: 0,
+        ttsSpeed: 1,
+        times: 0
       }
     },
     methods: {
@@ -51,33 +56,120 @@
         })
         return pinyinArr
       },
+      getPinyinTts: function (wordsArr) {
+        let pinyinTtsArr = []
+        wordsArr.map((item, index) => {
+          let str = ''
+          item.pinyin.map((py, pyIndex) => {
+            str += item.term.substring(pyIndex, pyIndex + 1) + '(' + this.getPinyinForm(py[0]) + ')'
+          })
+          pinyinTtsArr.push(str)
+        })
+        return pinyinTtsArr
+      },
+      getPinyinForm: function (py) {
+        let py1 = /[āōēīūǖ]/g
+        let py2 = /[áóéíúǘ]/g
+        let py3 = /[ǎǒěǐǔǚ]/g
+        let py4 = /[àòèìùǜ]/g
+        // let reg = /[āōēīūǖáóéíúǘǎǒěǐǔǚàòèìùǜ]/g
+        // reg.test(py)
+        let num = ''
+        if (py1.test(py)) {
+          num = 1
+        } else if (py2.test(py)) {
+          num = 2
+        } else if (py3.test(py)) {
+          num = 3
+        } else if (py4.test(py)) {
+          num = 4
+        } else {
+          num = 1
+        }
+        py = py.replace(/[āáǎà]/g, 'a').replace(/[ōóǒò]/g, 'o').replace(/[ēéěè]/g, 'e').replace(/[īíǐì]/g, 'i').replace(/[ūúǔù]/g, 'u').replace(/[ǖǘǚǜ]/g, 'ü')
+        return py + num
+      },
       playPre: function () {
         if (this.currentIndex > 0) {
-          this.currentIndex = --this.currentIndex
+          this.time = 1
+          this.currentIndex -= 1
           this.pinyin = this.pinyinArr[this.currentIndex]
+          if (this.timeout) {
+            clearTimeout(this.timeout)
+          }
+          this.$store.dispatch('getPinyinVoice', {
+            text: this.pinyinTts[this.currentIndex],
+            speed: this.ttsSpeed,
+            role: this.ttsRole
+          }).then(res => {
+            this.audioUrl = res
+            this.innerAudioContext.src = this.audioUrl
+            this.innerAudioContext.play()
+          })
         }
       },
       playNext: function () {
         if (this.currentIndex < this.pinyinArr.length - 1) {
-          this.currentIndex = ++this.currentIndex
+          this.time = 1
+          this.currentIndex += 1
           this.pinyin = this.pinyinArr[this.currentIndex]
+          if (this.timeout) {
+            clearTimeout(this.timeout)
+          }
+          this.$store.dispatch('getPinyinVoice', {
+            text: this.pinyinTts[this.currentIndex],
+            speed: this.ttsSpeed,
+            role: this.ttsRole
+          }).then(res => {
+            this.audioUrl = res
+            this.innerAudioContext.src = this.audioUrl
+            this.innerAudioContext.play()
+          })
         }
       },
       play: function () {
-        const that = this
+        // const that = this
         this.playState = !this.playState
         this.innerAudioContext = wx.createInnerAudioContext()
         this.innerAudioContext.src = this.audioUrl
         this.innerAudioContext.play()
+        this.times += 1
         this.innerAudioContext.onEnded(() => {
-          that.playState = !that.playState
+          if (this.times < this.dictation.playTimes) {
+            this.times += 1
+            let time = setTimeout(() => {
+              this.innerAudioContext.play()
+              clearTimeout(time)
+            }, 1000)
+          } else {
+            this.times = 1
+            if (this.currentIndex < this.pinyinTts.length - 1) {
+              this.currentIndex += 1
+              this.$store.dispatch('getPinyinVoice', {
+                text: this.pinyinTts[this.currentIndex],
+                speed: this.ttsSpeed,
+                role: this.ttsRole
+              }).then(res => {
+                this.audioUrl = res
+                this.timeout = setTimeout(() => {
+                  this.pinyin = this.pinyinArr[this.currentIndex]
+                  if (this.currentIndex === this.pinyinTts.length - 1) {
+                    this.playState = !this.playState
+                  }
+                  this.innerAudioContext.src = this.audioUrl
+                  this.innerAudioContext.play()
+                  if (this.timeout) {
+                    clearTimeout(this.timeout)
+                  }
+                }, parseInt(this.dictation.intervel) * 1000)
+              })
+            }
+          }
         })
       },
       stop: function () {
         this.playState = !this.playState
-        console.log('stop')
-        console.log(this.currentIndex)
-        console.log(this.pinyin)
+        this.innerAudioContext.stop()
       },
       dicConvert: function () {
         this.pinyinArr = this.getPinyin(this.getConvert())
@@ -111,13 +203,22 @@
     onShow () {
       if (this.$mp.query.param) {
         this.dictation = JSON.parse(this.$mp.query.param)
-        this.pinyinArr = this.getPinyin([...this.dictation.words])
+        if (this.dictation.playWay === 'order') {
+          this.pinyinArr = this.getPinyin([...this.dictation.words])
+          this.pinyinTts = this.getPinyinTts([...this.dictation.words])
+        } else {
+          let arr = this.getConvert()
+          this.pinyinArr = this.getPinyin(arr)
+          this.pinyinTts = this.getPinyinTts(arr)
+        }
+        console.log(this.pinyinArr)
+        console.log(this.pinyinTts)
         this.pinyin = this.pinyinArr[0]
         this.currentIndex = 0
         this.$store.dispatch('getPinyinVoice', {
-          text: '杨(yang1)国(guo1)伟(wei3)',
-          speed: 1,
-          role: 2
+          text: this.pinyinTts[this.currentIndex],
+          speed: this.ttsSpeed,
+          role: this.ttsRole
         }).then(res => {
           this.audioUrl = res
         })
@@ -184,6 +285,7 @@
   .dic-circle-word{
     line-height: 40px;
     text-align: center;
+    font-size: 30px;
   }
   .dic-footer{
     display: flex;
