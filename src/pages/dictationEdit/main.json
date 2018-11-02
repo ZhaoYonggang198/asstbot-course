@@ -4,6 +4,7 @@
   "usingComponents": {
       "dictation-item": "/static/components/dictation/dictationList/index",
       "dictation-add-modal": "/static/components/dictation/dictationAddModal/index",
-      "dictation-word": "/static/components/dictation/dicWord/index"
+      "dictation-word": "/static/components/dictation/dicWord/index",
+      "dictation-modal": "/static/components/dictation/dictationModal/index"
   }
 }

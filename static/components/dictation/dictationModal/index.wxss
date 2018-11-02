@@ -27,22 +27,21 @@
 }
 .modal-content{
     padding:10px 15px;
+    display: flex;
 }
-.modal-footer{
+.hanzi{
+    padding:10px;
+    font-size:18px;
+    border-right: 1px solid #d8d8d8;
+}
+.pinyin-box{
     display:flex;
-    height:40px;
-    line-height:40px;
-    border-top:1px solid #d8d8d8;
-}
-.modal-btn{
     flex:1;
-    text-align:center;
+    justify-content: flex-start;
+    align-items:center;
 }
-.btn-success{
-    background: #19a1a8;
-    color: #fff;
-}
-.btn-fail{
-    color: #fff;
-    background: #ccc;
+.pinyin{
+    font-size:18px;
+    margin-right:10px;
+    padding:10px;
 }

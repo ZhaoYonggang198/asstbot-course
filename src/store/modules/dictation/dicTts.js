@@ -10,7 +10,6 @@ const mutations = {
 
 const actions = {
   getAudioUrl((dispatch, commit), param) {
-
 }
 }
 

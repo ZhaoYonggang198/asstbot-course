@@ -97,6 +97,21 @@ const actions = {
       arr.push(getPin(item))
     })
     return Promise.all(arr)
+  },
+  getPinyinVoice ({dispatch, commit}, words) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: hostUrl + '/tts',
+        method: 'post',
+        data: words,
+        success: function (res) {
+          resolve(hostUrl + '/' + res.data.url)
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    })
   }
 }
 

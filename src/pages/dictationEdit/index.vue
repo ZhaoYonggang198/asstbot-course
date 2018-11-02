@@ -47,6 +47,9 @@
       <view class="dic-foot-btn" @click="toPlay">听写</view>
       <!--<view class="dic-foot-btn" @click="bindPhone">关联智能音箱</view>-->
     </view>
+    <block v-if="showPinyin">
+      <dictation-modal :hanzi="hanzi" :pinyin="pinyin" @select="selectPinyin"/>
+    </block>
   </view>
 
 </template>
@@ -60,6 +63,11 @@
     data () {
       return {
         edit: true,
+        hanzi: '',
+        pinyin: '',
+        wordsIndex: '',
+        pinyinIndex: '',
+        showPinyin: false,
         dictation: {},
         activeDictation: {},
         preActive: {},
@@ -333,11 +341,41 @@
         console.log(this.activeDictation)
       },
       changePinyin: function (e, index) {
-        console.log(e.mp.detail)
+        const that = this
         let hanzi = this.dictation.words[index].term.substr(e.mp.detail, 1)
-        console.log(this.dictation.words[index].pinyin[e.mp.detail])
+        this.hanzi = hanzi
+        this.wordsIndex = index
+        this.pinyinIndex = e.mp.detail
         this.$store.dispatch('getPinyin', [hanzi]).then(res => {
-          console.log(res[0].wordPinyin[0])
+          that.pinyin = res[0].wordPinyin[0]
+          that.showPinyin = true
+        })
+      },
+      selectPinyin: function (e) {
+        this.dictation.words[this.wordsIndex].pinyin[this.pinyinIndex] = [e.mp.detail]
+        this.$store.dispatch('updateDictation', {
+          id: this.dictation.id,
+          dictateWords: {
+            title: this.dictation.title,
+            active: this.dictation.active,
+            words: this.dictation.words,
+            playWay: this.dictation.playWay,
+            playTimes: this.dictation.playTimes,
+            intervel: this.dictation.intervel
+          }
+        }).then(res => {
+          this.$store.dispatch('initDictation')
+          this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
+          this.dictation.words = [...this.dictation.words]
+          this.showPinyin = false
+          clickFlag1 = true
+        }).catch(err => {
+          clickFlag1 = true
+          this.showPinyin = false
+          console.log(err)
+          wx.showToast({
+            title: '保存失败'
+          })
         })
       },
       bindPhone: function () {

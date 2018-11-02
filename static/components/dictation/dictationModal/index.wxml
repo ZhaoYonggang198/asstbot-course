@@ -5,7 +5,7 @@
         <view class='modal-content'>
             <view class='hanzi'>{{hanzi}}</view>
             <view class='pinyin-box'>
-                <view class='pinyin' wx:for="pinyin" wx:key="index" bindtap='select' data-item="{{item}}">{{item}}</view>
+                <view class='pinyin' wx:for="{{pinyin}}" wx:key="{{index}}" bindtap='select' data-item="{{item}}">{{item}}</view>
             </view>
         </view>
     </view>
