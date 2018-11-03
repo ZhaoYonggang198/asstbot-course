@@ -137,13 +137,24 @@ view {
   justify-content: center;
 }
 .unbind-button {
-  background-color: #19a1a8;
-  color: white;
-  width: 300rpx;
+  font-size: 28rpx;
+  line-height: 1.6;
+  white-space:nowrap;
+  background:white;
+  border:3rpx solid #19a1a8;
+  color:#19a1a8;
+  border-radius:35rpx;
+  padding:10rpx 20rpx;
+  text-align:center;
+  box-shadow:0 0 0;
+  font-weight:500;
+  min-width: 60rpx;
+  width: 240rpx;
 }
 
 .unbind-button:active {
-  background: #2d8085;
+  background: #19a1a8;
+  color: white;
 }
 
 .bind-button.disabled, .bind-button.disabled:active {
