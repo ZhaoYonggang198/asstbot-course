@@ -21,7 +21,6 @@
         <view class="dic-footer">
           <view class="dic-foot-btn" @click="ShowNewModal">新增</view>
           <button class="dic-foot-btn" open-type="share">分享给...</button>
-          <view class="dic-foot-btn" @click="bindPhone">关联智能音箱</view>
         </view>
       </view>
       <block v-if="showAdd">

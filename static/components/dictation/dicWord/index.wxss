@@ -1,6 +1,7 @@
 .word-box{
     display: flex;
     padding-bottom:10px;
+    flex-wrap: wrap;
 }
 .word-inner{
     /* color: #fff; */

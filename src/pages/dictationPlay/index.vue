@@ -41,6 +41,7 @@
         innerAudioContext: '',
         audioUrl: '',
         timeout: '',
+        timeTwins: '',
         ttsRole: 1,
         ttsSpeed: 1,
         times: 0
@@ -64,9 +65,11 @@
         wordsArr.map((item, index) => {
           let str = ''
           item.pinyin.map((py, pyIndex) => {
-            str += item.term.substring(pyIndex, pyIndex + 1) + '(' + this.getPinyinForm(py[0]) + ')'
+            str += item.term.substring(pyIndex, pyIndex + 1) + '(' + this.getPinyinForm(py[0]) + ')' + ','
           })
-          pinyinTtsArr.push(str)
+          // str.slice(0, -1)
+          // console.log(str.slice(0, -1))
+          pinyinTtsArr.push(str.slice(0, -1))
         })
         return pinyinTtsArr
       },
@@ -103,6 +106,9 @@
           if (this.timeout) {
             clearTimeout(this.timeout)
           }
+          if (this.timeTwins) {
+            clearTimeout(this.timeTwins)
+          }
           this.$store.dispatch('getPinyinVoice', {
             text: this.pinyinTts[this.currentIndex],
             speed: this.ttsSpeed,
@@ -125,6 +131,9 @@
           if (this.timeout) {
             clearTimeout(this.timeout)
           }
+          if (this.timeTwins) {
+            clearTimeout(this.timeTwins)
+          }
           this.$store.dispatch('getPinyinVoice', {
             text: this.pinyinTts[this.currentIndex],
             speed: this.ttsSpeed,
@@ -146,6 +155,9 @@
         if (this.timeout) {
           clearTimeout(this.timeout)
         }
+        if (this.timeTwins) {
+          clearTimeout(this.timeTwins)
+        }
         this.innerAudioContext.stop()
       },
       playAudio: function () {
@@ -161,13 +173,12 @@
           }
           this.times += 1
           if (this.times < this.dictation.playTimes) {
-            let time
-            if (time) {
-              clearTimeout(time)
+            if (this.timeTwins) {
+              clearTimeout(this.timeTwins)
             }
-            time = setTimeout(() => {
+            this.timeTwins = setTimeout(() => {
               this.innerAudioContext.play()
-              clearTimeout(time)
+              clearTimeout(this.timeTwins)
             }, 1000)
           } else {
             this.times = 0
@@ -254,6 +265,12 @@
     onUnload () {
       if (this.innerAudioContext) {
         this.innerAudioContext.destroy()
+      }
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
+      if (this.timeTwins) {
+        clearTimeout(this.timeTwins)
       }
       this.playState = true
       this.times = 0

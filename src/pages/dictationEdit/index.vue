@@ -37,6 +37,7 @@
           <scroll-view scroll-y class="dic-edit-scroll" style="height: 100%">
             <view class="dic-edit-text-container">
               <view class="dic-edit-text-inner" v-for="(text, index) in dicWords" :key="index">
+                <view class="dic-edit-index">{{dicWords.length - index}}</view>
                 <dictation-word :content="text" @deleteText="deleteText(index)" @changePinyin="changePinyin($event, index)"/>
               </view>
             </view>
@@ -546,6 +547,7 @@
     box-sizing:border-box;
     color: #333;
     border-bottom: 1px solid #d8d8d8;
+    padding-left: 24px;
   }
   .dic-edit-text{
     font-size: 14px;
@@ -633,5 +635,15 @@
     border:1px solid #19a1a8;
     background: #19a1a8;
     color: #fff;
+  }
+  .dic-edit-index{
+    float:left;
+    width:24px;
+    margin-left:-24px;
+    padding-top:32px;
+    line-height:32px;
+    font-size:16px;
+    text-align:center;
+    color:#999;
   }
 </style>
