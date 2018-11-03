@@ -80,7 +80,7 @@ const urlMaping = {
   'do-survey': '/pages/surveyChat/main',
   'xiaoai-speaker': '/pages/phone/main',
   'xiaodu-speaker': '/pages/bindXiaodu/main',
-  'xiaoai-no-screen': '/pages/phone/main',
+  'xiaoai-no-screen': '/pages/bindXiaomi/main',
   'dueros-no-screen': '/pages/bindXiaodu/main',
   'dueros-has-screen': '/pages/xiaoduhelp/main'
 }
