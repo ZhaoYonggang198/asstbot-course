@@ -75,7 +75,7 @@
         playWay: 'order',
         title: '',
         playTimes: 2,
-        intervel: 15
+        intervel: 10
       }
     },
     computed: {
@@ -191,9 +191,9 @@
                 clickFlag1 = true
                 return
               } else {
-                this.dictation.playTimes = e.mp.detail.value
+                this.dictation.playTimes = parseInt(e.mp.detail.value)
                 if (this.dictation.playTimes >= 1 && this.dictation.playTimes <= 3) {
-                  this.playTimes = e.mp.detail.value
+                  this.playTimes = parseInt(e.mp.detail.value)
                   break
                 } else {
                   wx.showModal({
@@ -216,9 +216,9 @@
                 clickFlag1 = true
                 return
               } else {
-                this.dictation.intervel = e.mp.detail.value
+                this.dictation.intervel = parseInt(e.mp.detail.value)
                 if (this.dictation.intervel >= 3 && this.dictation.intervel <= 15) {
-                  this.intervel = e.mp.detail.value
+                  this.intervel = parseInt(e.mp.detail.value)
                   break
                 } else {
                   wx.showModal({
@@ -383,7 +383,9 @@
         this.pinyinIndex = e.mp.detail
         this.$store.dispatch('getPinyin', [hanzi]).then(res => {
           that.pinyin = res[0].wordPinyin[0]
-          that.showPinyin = true
+          if (that.pinyin.length > 1) {
+            that.showPinyin = true
+          }
         })
       },
       selectPinyin: function (e) {

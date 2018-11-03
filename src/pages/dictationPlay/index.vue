@@ -135,6 +135,7 @@
         this.innerAudioContext.play()
         this.times += 1
         this.innerAudioContext.onEnded(() => {
+          console.log(this.times, this.dictation.playTimes)
           if (this.times < this.dictation.playTimes) {
             this.times += 1
             let time = setTimeout(() => {
@@ -169,6 +170,9 @@
       },
       stop: function () {
         this.playState = !this.playState
+        if (this.timeout) {
+          clearTimeout(this.timeout)
+        }
         this.innerAudioContext.stop()
       },
       dicConvert: function () {
@@ -211,8 +215,6 @@
           this.pinyinArr = this.getPinyin(arr)
           this.pinyinTts = this.getPinyinTts(arr)
         }
-        console.log(this.pinyinArr)
-        console.log(this.pinyinTts)
         this.pinyin = this.pinyinArr[0]
         this.currentIndex = 0
         this.$store.dispatch('getPinyinVoice', {
@@ -223,6 +225,12 @@
           this.audioUrl = res
         })
       }
+    },
+    onUnload () {
+      this.innerAudioContext.destroy()
+      this.playState = true
+      this.times = 0
+      this.currentIndex = 0
     }
   }
 </script>
