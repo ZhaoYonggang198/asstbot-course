@@ -1,7 +1,7 @@
 
 <view class='modal-container'>
     <view class='modal-inner'>
-        <view class='modal-header'>多音字提示</view>
+        <view class='modal-header'>请选择正确的读音</view>
         <view class='modal-content'>
             <view class='hanzi'>{{hanzi}}</view>
             <view class='pinyin-box'>

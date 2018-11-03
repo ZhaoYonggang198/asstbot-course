@@ -1,7 +1,15 @@
 .pinyin{
     text-align:center;
-    padding:0px 8px 5px;
+    width:50px;
+    line-height:30px;
+    font-size:14px;
 }
 .hanzi{
-    text-align: center
+   text-align:center;
+    width:32px;
+    height:32px;
+    line-height:32px;
+    border:1px solid #c89b40;
+    font-size:16px;
+    margin-left:9px;
 }

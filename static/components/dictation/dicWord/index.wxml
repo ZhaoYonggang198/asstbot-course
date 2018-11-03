@@ -1,5 +1,5 @@
 <view>
-    <icon class='icon-cancel' type='cancel' size='16' color='#fff' bindtap='delete'></icon>
+    <icon class='icon-cancel' type='cancel' size='16' color='#333' bindtap='delete'></icon>
     <view class='word-box'>
         <view class='word-inner' wx:for='{{content.pinyin}}' wx:key="{{index}}" bindtap='changePinyin' data-index="{{index}}">
             <dic-pin pinyin="{{item}}" index="{{index}}" word="{{content.term}}"/>

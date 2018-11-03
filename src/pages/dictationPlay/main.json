@@ -2,5 +2,6 @@
   "enablePullDownRefresh": false,
   "disableScroll": true,
   "usingComponents": {
+    "dictation-process": "/static/components/dictation/dictationProcess/index"
   }
 }

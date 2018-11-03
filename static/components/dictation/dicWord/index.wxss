@@ -1,9 +1,11 @@
 .word-box{
     display: flex;
+    padding-bottom:10px;
 }
 .word-inner{
-    color: #fff;
+    /* color: #fff; */
 }
 .icon-cancel{
     float: right;
+    margin-top: 8px;
 }

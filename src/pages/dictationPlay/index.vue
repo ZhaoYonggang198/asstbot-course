@@ -4,8 +4,8 @@
     <view class="dic-content">
       <view class="dic-content-inner">
         <view class="rate-box">
-          <view class="btn-rate" v-if="dictation.playWay=='order'">乱序听写</view>
-          <view class="btn-rate" v-else>顺序听写</view>
+          <view class="btn-rate" v-if="dictation.playWay=='disorder'">乱序听写</view>
+          <view class="btn-rate" v-else-if="dictation.playWay=='order'">顺序听写</view>
         </view>
         <view class="dic-pinyin">
           <view class="dic-circle-box">
@@ -15,11 +15,13 @@
           </view>
         </view>
       </view>
+
+      <!--<dictation-process :index="currentIndex" :sum="pinyinArr.length"/>-->
     </view>
     <view class="dic-footer">
       <view class="btn-footer" @click="playPre">上一个</view>
-      <view class="btn-footer" v-if="playState" @click="play">播放</view>
-      <view class="btn-footer" v-else @click="stop">停止</view>
+      <view class="btn-footer btn-center" v-if="playState" @click="play">播放</view>
+      <view class="btn-footer btn-center" v-else @click="stop">停止</view>
       <view class="btn-footer" @click="playNext">下一个</view>
     </view>
   </view>
@@ -32,13 +34,14 @@
         pinyin: '',
         pinyinArr: [],
         pinyinTts: [],
+        dictation: {},
         currentIndex: 0,
         rate: true,
         playState: true,
         innerAudioContext: '',
         audioUrl: '',
         timeout: '',
-        ttsRole: 0,
+        ttsRole: 1,
         ttsSpeed: 1,
         times: 0
       }
@@ -90,10 +93,13 @@
         return py + num
       },
       playPre: function () {
+        this.innerAudioContext.offEnded()
+        if (this.innerAudioContext) {
+          this.innerAudioContext.stop()
+        }
         if (this.currentIndex > 0) {
-          this.time = 1
+          this.times = 0
           this.currentIndex -= 1
-          this.pinyin = this.pinyinArr[this.currentIndex]
           if (this.timeout) {
             clearTimeout(this.timeout)
           }
@@ -102,17 +108,20 @@
             speed: this.ttsSpeed,
             role: this.ttsRole
           }).then(res => {
+            this.pinyin = this.pinyinArr[this.currentIndex]
             this.audioUrl = res
-            this.innerAudioContext.src = this.audioUrl
-            this.innerAudioContext.play()
+            this.playAudio()
           })
         }
       },
       playNext: function () {
+        this.innerAudioContext.offEnded()
+        if (this.innerAudioContext) {
+          this.innerAudioContext.stop()
+        }
         if (this.currentIndex < this.pinyinArr.length - 1) {
-          this.time = 1
+          this.times = 0
           this.currentIndex += 1
-          this.pinyin = this.pinyinArr[this.currentIndex]
           if (this.timeout) {
             clearTimeout(this.timeout)
           }
@@ -122,28 +131,46 @@
             role: this.ttsRole
           }).then(res => {
             this.audioUrl = res
-            this.innerAudioContext.src = this.audioUrl
-            this.innerAudioContext.play()
+            this.pinyin = this.pinyinArr[this.currentIndex]
+            this.playAudio()
           })
         }
       },
       play: function () {
-        // const that = this
-        this.playState = !this.playState
-        this.innerAudioContext = wx.createInnerAudioContext()
+        this.innerAudioContext.offEnded()
+        this.times = 0
+        this.playAudio()
+      },
+      stop: function () {
+        this.playState = true
+        if (this.timeout) {
+          clearTimeout(this.timeout)
+        }
+        this.innerAudioContext.stop()
+      },
+      playAudio: function () {
+        const that = this
         this.innerAudioContext.src = this.audioUrl
         this.innerAudioContext.play()
-        this.times += 1
+        this.innerAudioContext.onPlay(() => {
+          this.playState = false
+        })
         this.innerAudioContext.onEnded(() => {
-          console.log(this.times, this.dictation.playTimes)
+          if (this.currentIndex === this.pinyinTts.length - 1 && this.times === this.dictation.playTimes - 1) {
+            that.setPlayStateTrue()
+          }
+          this.times += 1
           if (this.times < this.dictation.playTimes) {
-            this.times += 1
-            let time = setTimeout(() => {
+            let time
+            if (time) {
+              clearTimeout(time)
+            }
+            time = setTimeout(() => {
               this.innerAudioContext.play()
               clearTimeout(time)
             }, 1000)
           } else {
-            this.times = 1
+            this.times = 0
             if (this.currentIndex < this.pinyinTts.length - 1) {
               this.currentIndex += 1
               this.$store.dispatch('getPinyinVoice', {
@@ -152,11 +179,11 @@
                 role: this.ttsRole
               }).then(res => {
                 this.audioUrl = res
+                if (this.timeout) {
+                  clearTimeout(this.timeout)
+                }
                 this.timeout = setTimeout(() => {
                   this.pinyin = this.pinyinArr[this.currentIndex]
-                  if (this.currentIndex === this.pinyinTts.length - 1) {
-                    this.playState = !this.playState
-                  }
                   this.innerAudioContext.src = this.audioUrl
                   this.innerAudioContext.play()
                   if (this.timeout) {
@@ -167,13 +194,6 @@
             }
           }
         })
-      },
-      stop: function () {
-        this.playState = !this.playState
-        if (this.timeout) {
-          clearTimeout(this.timeout)
-        }
-        this.innerAudioContext.stop()
       },
       dicConvert: function () {
         this.pinyinArr = this.getPinyin(this.getConvert())
@@ -202,10 +222,15 @@
           numArr.splice(j, 1)
         }
         return newArr
+      },
+      setPlayStateTrue: function () {
+        console.log('set state true')
+        this.playState = true
       }
     },
     onShow () {
       if (this.$mp.query.param) {
+        this.innerAudioContext = wx.createInnerAudioContext()
         this.dictation = JSON.parse(this.$mp.query.param)
         if (this.dictation.playWay === 'order') {
           this.pinyinArr = this.getPinyin([...this.dictation.words])
@@ -227,7 +252,9 @@
       }
     },
     onUnload () {
-      this.innerAudioContext.destroy()
+      if (this.innerAudioContext) {
+        this.innerAudioContext.destroy()
+      }
       this.playState = true
       this.times = 0
       this.currentIndex = 0
@@ -242,12 +269,17 @@
   height: 100%;
 }
   .dic-content{
+    display: flex;
+    flex-direction: column;
     flex: 1;
     border-bottom: 1px solid #d8d8d8;
     background: #fff;
   }
   .dic-content-inner{
     padding: 50px 0px 15px;
+    height:100%;
+    box-sizing:border-box;
+
   }
   .rate-box{
     text-align: right;
@@ -265,9 +297,9 @@
     border-radius:17px;
   }
   .dic-pinyin{
-    /*display:flex;*/
-    /*justify-content:center;*/
-    /*align-items:center;*/
+    display:flex;
+    justify-content:center;
+    align-items:center;
     font-size:40px;
     color: #19a1a8;
     height: 100%;
@@ -311,5 +343,9 @@
     font-weight: 500;
     border-radius: 17px;
     padding:0 8px;
+  }
+  .btn-center{
+    width: 60px;
+    text-align: center;
   }
 </style>

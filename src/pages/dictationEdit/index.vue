@@ -11,7 +11,10 @@
 
         <view class="dic-edit-name-box">
           <view class="dic-edit-name">播放方式</view>
-          <view class="dic-edit-order" @click="setValue($event, 'order')"><text>{{dictation.playWay=='order'? '顺序' : '乱序'}}</text></view>
+          <view class="dic-edit-order" @click="setValue($event, 'order')">
+            <text class="order-text" :class="dictation.playWay=='order'? 'active' : ''">顺序</text>
+            <text class="order-text" :class="dictation.playWay=='disorder' ? 'active' : ''">乱序</text>
+          </view>
         </view>
 
         <view class="dic-edit-name-box">
@@ -33,7 +36,7 @@
           <!--<view class="dic-edit-name">词组</view>-->
           <scroll-view scroll-y class="dic-edit-scroll" style="height: 100%">
             <view class="dic-edit-text-container">
-              <view class="dic-edit-text-inner" v-for="(text, index) in dictation.words" :key="index">
+              <view class="dic-edit-text-inner" v-for="(text, index) in dicWords" :key="index">
                 <dictation-word :content="text" @deleteText="deleteText(index)" @changePinyin="changePinyin($event, index)"/>
               </view>
             </view>
@@ -42,9 +45,9 @@
       </view>
     </view>
     <view class="dic-footer">
+      <view class="dic-foot-btn" @click="toPlay">听写</view>
       <view class="dic-foot-btn" :class="{'active-btn': activeDictation.active}" v-if="edit" @click="setActive">音箱播放</view>
       <button class="dic-foot-btn" open-type="share">分享给</button>
-      <view class="dic-foot-btn" @click="toPlay">听写</view>
       <!--<view class="dic-foot-btn" @click="bindPhone">关联智能音箱</view>-->
     </view>
     <block v-if="showPinyin">
@@ -81,7 +84,11 @@
     computed: {
       ...mapState({
         dictateList: state => state.dictation.dictation
-      })
+      }),
+      dicWords: state => {
+        let arr = [...state.dictation.words].reverse()
+        return arr
+      }
     },
     methods: {
       getPinString: function (arr) {
@@ -291,7 +298,7 @@
       },
       deleteText: function (index) {
         let arr = [...this.dictation.words]
-        arr.splice(index, 1)
+        arr.splice(this.dictation.words.length - index - 1, 1)
         this.dictation.words = [...arr]
         if (this.edit) {
           this.$store.dispatch('updateDictation', {
@@ -377,14 +384,15 @@
       },
       changePinyin: function (e, index) {
         const that = this
-        let hanzi = this.dictation.words[index].term.substr(e.mp.detail, 1)
-        this.hanzi = hanzi
-        this.wordsIndex = index
-        this.pinyinIndex = e.mp.detail
+        let hanzi = this.dictation.words[this.dictation.words.length - index - 1].term.substr(e.mp.detail, 1)
+        let pinyinIndex = e.mp.detail
         this.$store.dispatch('getPinyin', [hanzi]).then(res => {
-          that.pinyin = res[0].wordPinyin[0]
-          if (that.pinyin.length > 1) {
+          if (res[0].wordPinyin[0].length > 1) {
             that.showPinyin = true
+            that.pinyin = res[0].wordPinyin[0]
+            that.hanzi = hanzi
+            that.wordsIndex = this.dictation.words.length - index - 1
+            that.pinyinIndex = pinyinIndex
           }
         })
       },
@@ -531,19 +539,13 @@
   }
   .dic-edit-text-container{
     display:flex;
-    flex-wrap:wrap;
-    /*padding-top:12px;*/
-    /*flex-direction: column;*/
+    flex-direction: column;
   }
   .dic-edit-text-inner{
-    margin-right:10px;
-    margin-top:12px;
-    background:#19a1a8;
-    padding:10px;
-    border-radius: 5px;
     line-height:13px;
-    /*height:30px;*/
     box-sizing:border-box;
+    color: #333;
+    border-bottom: 1px solid #d8d8d8;
   }
   .dic-edit-text{
     font-size: 14px;
@@ -617,6 +619,18 @@
     min-width: 60rpx;
   }
   .active-btn{
+    background: #19a1a8;
+    color: #fff;
+  }
+  .order-text{
+    border:1px solid #999;
+    padding:5px 10px;
+    border-radius:14px;
+    margin-right:10px;
+    color:#999;
+  }
+  .active{
+    border:1px solid #19a1a8;
     background: #19a1a8;
     color: #fff;
   }

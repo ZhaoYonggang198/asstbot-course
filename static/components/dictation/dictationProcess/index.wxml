@@ -1,0 +1,9 @@
+<view class='process-container'>
+    <view class='process-bar-container'>
+        <view class='process-bar-inner' style="width:{{width}}"></view>
+    </view>
+    <view class='process-num-container'>
+        <text class='process-num-current'>{{index + 1}}</text><text class='process-num-sum'>/{{sum}}</text>
+    </view>
+</view>
+
