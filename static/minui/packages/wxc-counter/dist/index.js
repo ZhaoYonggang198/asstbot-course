@@ -9,6 +9,7 @@ export default Component({
       type: [Number, String],
       value: 0,
       observer: function (newVal) {
+          console.log(newVal)
         this.setData({
           number: parseInt(newVal, 10)
         });
@@ -18,6 +19,7 @@ export default Component({
       type: [Number, String],
       value: 1,
       observer: function (newVal) {
+          console.log(newVal)
         this.setData({
           max: parseInt(newVal, 10)
         });
@@ -27,6 +29,7 @@ export default Component({
       type: [Number, String],
       value: 0,
       observer: function (newVal) {
+          console.log(newVal)
         this.setData({
           min: parseInt(newVal, 10)
         });

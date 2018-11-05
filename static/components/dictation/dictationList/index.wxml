@@ -25,9 +25,13 @@
 </scroll-view> -->
 
 <scroll-view class='dictation-scroll' scroll-y>
-    <view wx:key="dicIndex" wx:for="{{content}}" wx:for-item="dicItem" wx:for-index="dicIndex" class='dictate-item' bindtap='toEdit' data-dic="{{dicItem}}" style="background:{{dicItem.active? '#eaeaea':'#fff'}}">
+    <view wx:key="dicIndex" wx:for="{{content}}" wx:for-item="dicItem" wx:for-index="dicIndex" class='dictate-item' bindtap='toEdit' data-dic="{{dicItem}}">
     <view class='dic-num-box'>
+        <!-- <view class='dic-words-num' wx:if='{{dicItem.words.length}}' style="background:{{dicItem.active?'red':'#999'}}">{{dicItem.words.length}}</view> -->
         <view class='dic-words-num' wx:if='{{dicItem.words.length}}'>{{dicItem.words.length}}</view>
+        <!-- <image wx:if="{{!dicItem.active}}" src="https://xiaodamp.com/imbot/image/a441cd90-e0d2-11e8-b6e5-79c4537af773.png" mode='widthFix' class='speaker' style="left:5px"></image> -->
+        
+        <image wx:if="{{!!dicItem.active}}" src="https://xiaodamp.com/imbot/image/ed0effd0-e0d1-11e8-b6e5-79c4537af773.png" mode='widthFix' class='speaker' style="left: 6px"></image>
     </view>
     <view style="padding: 10px 15px 10px 5px">
         <view class='dic-title'>{{dicItem.title}}</view>

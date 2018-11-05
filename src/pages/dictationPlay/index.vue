@@ -4,8 +4,10 @@
     <view class="dic-content">
       <view class="dic-content-inner">
         <view class="rate-box">
-          <view class="btn-rate" v-if="dictation.playWay=='disorder'">乱序听写</view>
-          <view class="btn-rate" v-else-if="dictation.playWay=='order'">顺序听写</view>
+          <view class="btn-rate" @click="setOrder('order')" v-if="dictation.playWay=='disorder'&&showAble">乱序听写</view>
+          <view class="btn-rate" @click="setOrder('disorder')" v-else-if="dictation.playWay=='order'&&showAble">顺序听写</view>
+          <view class="btn-rate btn-rate-disable" disabled  v-if="dictation.playWay=='disorder'&&!showAble">乱序听写</view>
+          <view class="btn-rate btn-rate-disable" disabled  v-else-if="dictation.playWay=='order'&&!showAble">顺序听写</view>
         </view>
         <view class="dic-pinyin">
           <view class="dic-circle-box">
@@ -19,10 +21,10 @@
       <!--<dictation-process :index="currentIndex" :sum="pinyinArr.length"/>-->
     </view>
     <view class="dic-footer">
-      <view class="btn-footer" @click="playPre">上一个</view>
-      <view class="btn-footer btn-center" v-if="playState" @click="play">播放</view>
-      <view class="btn-footer btn-center" v-else @click="stop">停止</view>
-      <view class="btn-footer" @click="playNext">下一个</view>
+      <view class="btn-footer" @click="playPre"><image class="play-icon icon-pre" src="https://xiaodamp.com/imbot/image/49add8b0-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
+      <view class="btn-footer btn-center" v-if="playState" @click="play"><image class="play-icon icon-play-1" src="https://xiaodamp.com/imbot/image/43be6050-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
+      <view class="btn-footer btn-center" v-else @click="stop"><image class="play-icon" src="https://xiaodamp.com/imbot/image/3ebcca60-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
+      <view class="btn-footer" @click="playNext"><image class="play-icon icon-aft" src="https://xiaodamp.com/imbot/image/398a1250-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
     </view>
   </view>
 </template>
@@ -44,7 +46,8 @@
         timeTwins: '',
         ttsRole: 1,
         ttsSpeed: 1,
-        times: 0
+        times: 0,
+        showAble: true
       }
     },
     methods: {
@@ -166,6 +169,7 @@
         this.innerAudioContext.play()
         this.innerAudioContext.onPlay(() => {
           this.playState = false
+          this.showAble = false
         })
         this.innerAudioContext.onEnded(() => {
           if (this.currentIndex === this.pinyinTts.length - 1 && this.times === this.dictation.playTimes - 1) {
@@ -237,6 +241,41 @@
       setPlayStateTrue: function () {
         console.log('set state true')
         this.playState = true
+      },
+      setOrder: function (playWay) {
+        this.dictation.playWay = playWay
+        if (playWay === 'order') {
+          this.pinyinArr = this.getPinyin([...this.dictation.words])
+          this.pinyinTts = this.getPinyinTts([...this.dictation.words])
+        } else {
+          let arr = this.getConvert()
+          this.pinyinArr = this.getPinyin(arr)
+          this.pinyinTts = this.getPinyinTts(arr)
+        }
+        this.$store.dispatch('updateDictation', {
+          id: this.dictation.id,
+          dictateWords: {
+            title: this.dictation.title,
+            active: this.dictation.active,
+            words: this.dictation.words,
+            playWay: this.dictation.playWay,
+            playTimes: this.dictation.playTimes,
+            intervel: this.dictation.intervel
+          }
+        }).then(res => {
+          this.$store.dispatch('initDictation')
+        }).catch(err => {
+          console.log(err)
+        })
+        this.pinyin = this.pinyinArr[0]
+        this.currentIndex = 0
+        this.$store.dispatch('getPinyinVoice', {
+          text: this.pinyinTts[this.currentIndex],
+          speed: this.ttsSpeed,
+          role: this.ttsRole
+        }).then(res => {
+          this.audioUrl = res
+        })
       }
     },
     onShow () {
@@ -313,6 +352,9 @@
     padding:10px 15px;
     border-radius:17px;
   }
+  .btn-rate-disable{
+    background:#999;
+  }
   .dic-pinyin{
     display:flex;
     justify-content:center;
@@ -350,19 +392,34 @@
     padding: 10px 15px 25px 15px;
   }
   .btn-footer{
-    margin: 0 7px;
-    height: 34px;
-    line-height: 32px;
-    border: 1px solid #19a1a8;
-    color: #19a1a8;
-    box-sizing: border-box;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 17px;
-    padding:0 8px;
+    height:68rpx;
+    border:2rpx solid #19a1a8;
+    box-sizing:border-box;
+    border-radius:34rpx;
+    margin:0px 7px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width: 60px;
+  }
+  .play-icon{
+    width: 28px;
+    height: 28px;
   }
   .btn-center{
     width: 60px;
     text-align: center;
+  }
+  .icon-play-1{
+    width: 24px;
+    height: 24px;
+  }
+  .icon-aft{
+    width: 32px;
+    height: 32px;
+  }
+  .icon-pre{
+    width: 30px;
+    height: 30px;
   }
 </style>

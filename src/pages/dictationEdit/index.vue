@@ -3,7 +3,7 @@
     <title-bar :title="edit? '编辑词语' : '新增词语'"/>
     <view class="dic-edit-inner">
       <view class="dic-edit-inner-inner">
-        <view class="dic-edit-name-box" style="margin-top: -205px;padding-right: 40px">
+        <view class="dic-edit-name-box" style="margin-top: -164px;padding-right: 40px">
           <view class="dic-edit-name">词组名</view>
           <input class="dic-edit-title" type="text" :value="dictation.title" @blur="setValue($event, 'title')" @comfirm="setValue($event, 'title')">
           <view class="dic-words-num" v-if="dictation.words.length">{{dictation.words.length}}</view>
@@ -16,17 +16,16 @@
             <text class="order-text" :class="dictation.playWay=='disorder' ? 'active' : ''">乱序</text>
           </view>
         </view>
-
-        <view class="dic-edit-name-box">
-          <view class="dic-edit-name">播放次数</view>
-          <input class="dic-edit-add" @blur="setValue($event, 'playTimes')" @confirm="setValue($event, 'playTimes')" confirm-hold  type="number" maxlength="1" minlength="1" :value="dictation.playTimes" placeholder-style="color: #999">
+        <view style="display: flex">
+          <view class="dic-edit-name-box">
+            <view class="dic-edit-name">播放次数</view>
+            <input class="dic-edit-add" @blur="setValue($event, 'playTimes')" @confirm="setValue($event, 'playTimes')" confirm-hold  type="number" maxlength="1" minlength="1" :value="dictation.playTimes" placeholder-style="color: #999">
+          </view>
+          <view class="dic-edit-name-box">
+            <view class="dic-edit-name">播放间隔</view>
+            <input class="dic-edit-add" @blur="setValue($event, 'intervel')" @confirm="setValue($event, 'intervel')" confirm-hold type="number" :value="dictation.intervel" placeholder="单位(s)" placeholder-style="color: #999" maxlength="2" minlength="1">
+          </view>
         </view>
-
-        <view class="dic-edit-name-box">
-          <view class="dic-edit-name">播放间隔</view>
-          <input class="dic-edit-add" @blur="setValue($event, 'intervel')" @confirm="setValue($event, 'intervel')" confirm-hold type="number" :value="dictation.intervel" placeholder="单位(s)" placeholder-style="color: #999" maxlength="2" minlength="1">
-        </view>
-
         <view class="dic-edit-name-box">
           <view class="dic-edit-name">新词</view>
           <input class="dic-edit-add" @blur="setNew" @confirm="setNew" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999">
@@ -47,7 +46,7 @@
     </view>
     <view class="dic-footer">
       <view class="dic-foot-btn" @click="toPlay">听写</view>
-      <view class="dic-foot-btn" :class="{'active-btn': activeDictation.active}" v-if="edit" @click="setActive">音箱播放</view>
+      <view class="dic-foot-btn" :class="{'active-btn': activeDictation.active}" v-if="edit" @click="setActive">通过音箱听写</view>
       <button class="dic-foot-btn" open-type="share">分享给</button>
       <!--<view class="dic-foot-btn" @click="bindPhone">关联智能音箱</view>-->
     </view>
@@ -351,6 +350,9 @@
           })
         }
       },
+      changeTimes: function (e) {
+        console.log(e)
+      },
       setActive: function () {
         if (this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) {
           this.$store.dispatch('updateDictation', {
@@ -362,25 +364,36 @@
             }
           })
         }
-        this.activeDictation.active = !this.activeDictation.active
-        this.$store.dispatch('updateDictation', {
-          id: this.activeDictation.id,
-          dictateWords: {
-            title: this.activeDictation.title,
-            active: this.activeDictation.active,
-            words: this.activeDictation.words
-          }
-        }).then(res => {
-          this.$store.dispatch('initDictation')
-          wx.showToast({
-            title: '设置成功'
+        if ((this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) || !this.preActive.id) {
+          this.$store.dispatch('getSmartSpeakers').then(res => {
+            if (res.bindingTypes.length) {
+              this.activeDictation.active = !this.activeDictation.active
+              this.$store.dispatch('updateDictation', {
+                id: this.activeDictation.id,
+                dictateWords: {
+                  title: this.activeDictation.title,
+                  active: this.activeDictation.active,
+                  words: this.activeDictation.words
+                }
+              }).then(res => {
+                this.$store.dispatch('initDictation')
+                wx.showModal({
+                  title: '设置成功',
+                  content: '现在请对音箱说："打开词语听写"，开始听写吧！'
+                })
+              }).catch(err => {
+                console.log(err)
+                wx.showToast({
+                  title: '设置失败'
+                })
+              })
+            } else {
+              wx.navigateTo({
+                url: '/pages/smartSpeaker/main'
+              })
+            }
           })
-        }).catch(err => {
-          console.log(err)
-          wx.showToast({
-            title: '设置失败'
-          })
-        })
+        }
         console.log(this.activeDictation)
       },
       changePinyin: function (e, index) {
@@ -493,7 +506,7 @@
     padding-bottom: 15px;
     width: 100%;
     height:100%;
-    padding-top: 205px;
+    padding-top: 164px;
   }
   .dic-edit-name-box{
     padding-left:80px;

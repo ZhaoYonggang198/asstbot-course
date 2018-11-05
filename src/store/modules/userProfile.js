@@ -113,7 +113,7 @@ const actions = {
             if (response.data.bindingTypes !== undefined) {
               commit('setSmartSpeaker', response.data.bindingTypes)
             }
-            resolve()
+            resolve(response.data)
           },
           fail: (err) => {
             reject(err)
