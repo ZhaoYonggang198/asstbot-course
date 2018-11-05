@@ -2,7 +2,7 @@
 view(class="page content")
   title-bar(title="关联智能音箱")
   view(class="weui-cells weui-cells_after-title")
-    navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/phone/main")
+    navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/bindXiaomi/main")
       view(class="weui-cell__bd") 关联小爱音箱（小米）
       view(class="weui-cell__ft weui-cell__ft_in-access")
         block(v-if="xiaoaiBinded") 已关联

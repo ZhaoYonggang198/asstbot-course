@@ -7,7 +7,7 @@
           <view class="weui-cell__bd height-92">
               <input class="weui-input height-line-92 input-location" :placeholder="'请输入答案'+(index+1)"
                     @change="updateAnswerValue(index, $event.mp.detail.value)"
-                    :value="answer.value" @blur="blur" focus="true"/>
+                    :value="answer.value" @blur="blur"/>
           </view>
           <view class="icon-item-style font-style" v-if="!answer.imageUrl" @click.stop="addMedia(index)">
             <i class="icon iconfont icon-picture font-color"></i>
@@ -42,7 +42,7 @@
           <view class="weui-cell__bd height-92">
             <input class="weui-input height-line-92 input-location" :placeholder="'请输入答案'+(index+1)"
                     @change="updateAnswerValue(index, $event.mp.detail.value)"
-                    :value="answer.value"  @blur="blur"  focus="true"/>
+                    :value="answer.value"  @blur="blur"/>
           </view>
           <picker v-if="survey.type=='quiz'" @change="updateAnswerNext(index, $event.mp.detail.value)" :value="answer.next" :range="questionNames">
             <view class="weui-select height-line-92">{{displayNames[answer.next]}}</view>
@@ -100,7 +100,7 @@
             <block v-else>
               <input class="weui-input height-line-92 input-location" :placeholder="'请输入答案'+(index+1)"
                     @change="updateAnswerValue(index, $event.mp.detail.value)"
-                    :value="answer.value"  focus="true"/>
+                    :value="answer.value"/>
             </block>
           </view>
           <view class="icon-item-style font-style" v-if="!answer.imageUrl" @click.stop="addMedia(index)">

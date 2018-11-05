@@ -2,7 +2,8 @@
 view(class="modal")
   view(class="donate-modal")
     view(class="modal-title")
-      view(class="title") 小哒辛苦了
+      view(class="title" v-if="!donated") 小哒辛苦了
+      view(class="title" v-else) 
       view(class="modal-close" @click="close")
         i(class="icon iconfont icon-close")
 
@@ -50,8 +51,6 @@ export default {
       this.$emit('closeDonate')
     },
     end () {
-      this.donated = false
-      this.totalFee = ''
       this.$emit('closeDonate')
     },
     confirm () {
@@ -88,6 +87,7 @@ export default {
 
   onLoad () {
     this.donated = false
+    this.totalFee = ''
   }
 }
 </script>
