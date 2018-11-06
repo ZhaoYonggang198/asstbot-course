@@ -18,7 +18,8 @@ export default {
   onLoad () {
     wx.getSystemInfo({
       success: (res) => {
-        if (res.model.search('iPhone X') !== -1) {
+        console.log(res)
+        if (res.model.search('iPhone X') !== -1 || res.model.search('iPhone x') !== -1) {
           this.needPadding = true
         } else {
           this.needPadding = false
