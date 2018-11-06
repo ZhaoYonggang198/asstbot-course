@@ -24,6 +24,7 @@
       <view class="btn-footer" @click="playPre"><image class="play-icon icon-pre" src="https://xiaodamp.com/imbot/image/49add8b0-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
       <view class="btn-footer btn-center" v-if="playState" @click="play"><image class="play-icon icon-play-1" src="https://xiaodamp.com/imbot/image/43be6050-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
       <view class="btn-footer btn-center" v-else @click="stop"><image class="play-icon" src="https://xiaodamp.com/imbot/image/3ebcca60-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
+      <!--<view class="btn-footer btn-center" @click="rePlay">重播</view>-->
       <view class="btn-footer" @click="playNext"><image class="play-icon icon-aft" src="https://xiaodamp.com/imbot/image/398a1250-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
     </view>
   </view>
@@ -147,6 +148,29 @@
             this.playAudio()
           })
         }
+      },
+      rePlay: function () {
+        this.innerAudioContext.offEnded()
+        if (this.innerAudioContext) {
+          this.innerAudioContext.stop()
+        }
+        this.times = 0
+        this.currentIndex = 0
+        if (this.timeout) {
+          clearTimeout(this.timeout)
+        }
+        if (this.timeTwins) {
+          clearTimeout(this.timeTwins)
+        }
+        this.$store.dispatch('getPinyinVoice', {
+          text: this.pinyinTts[this.currentIndex],
+          speed: this.ttsSpeed,
+          role: this.ttsRole
+        }).then(res => {
+          this.audioUrl = res
+          this.pinyin = this.pinyinArr[this.currentIndex]
+          this.playAudio()
+        })
       },
       play: function () {
         this.innerAudioContext.offEnded()
@@ -280,6 +304,7 @@
     },
     onShow () {
       if (this.$mp.query.param) {
+        this.showAble = true
         this.innerAudioContext = wx.createInnerAudioContext()
         this.dictation = JSON.parse(this.$mp.query.param)
         if (this.dictation.playWay === 'order') {

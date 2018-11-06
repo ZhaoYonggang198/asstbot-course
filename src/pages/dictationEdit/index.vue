@@ -17,13 +17,19 @@
           </view>
         </view>
         <view style="display: flex">
-          <view class="dic-edit-name-box">
+          <view class="dic-edit-name-box half-container">
             <view class="dic-edit-name">播放次数</view>
-            <input class="dic-edit-add" @blur="setValue($event, 'playTimes')" @confirm="setValue($event, 'playTimes')" confirm-hold  type="number" maxlength="1" minlength="1" :value="dictation.playTimes" placeholder-style="color: #999">
+            <!--<input class="dic-edit-add" @blur="setValue($event, 'playTimes')" @confirm="setValue($event, 'playTimes')" confirm-hold  type="number" maxlength="1" minlength="1" :value="dictation.playTimes" placeholder-style="color: #999">-->
+            <view class="counter-container">
+              <daCounter :number="dictation.playTimes" max="3" min="1" @changenumber="setPlayTimes"/>
+            </view>
           </view>
-          <view class="dic-edit-name-box">
+          <view class="dic-edit-name-box half-container">
             <view class="dic-edit-name">播放间隔</view>
-            <input class="dic-edit-add" @blur="setValue($event, 'intervel')" @confirm="setValue($event, 'intervel')" confirm-hold type="number" :value="dictation.intervel" placeholder="单位(s)" placeholder-style="color: #999" maxlength="2" minlength="1">
+            <!--<input class="dic-edit-add" @blur="setValue($event, 'intervel')" @confirm="setValue($event, 'intervel')" confirm-hold type="number" :value="dictation.intervel" placeholder="单位(s)" placeholder-style="color: #999" maxlength="2" minlength="1">-->
+            <view class="counter-container">
+              <daCounter :number="dictation.intervel" max="15" min="1" @changenumber="setPlayIntervel"/>
+            </view>
           </view>
         </view>
         <view class="dic-edit-name-box">
@@ -46,7 +52,7 @@
     </view>
     <view class="dic-footer">
       <view class="dic-foot-btn" @click="toPlay">听写</view>
-      <view class="dic-foot-btn" :class="{'active-btn': activeDictation.active}" v-if="edit" @click="setActive">通过音箱听写</view>
+      <view class="dic-foot-btn"  v-if="edit" @click="setActive">通过音箱听写</view>
       <button class="dic-foot-btn" open-type="share">分享给</button>
       <!--<view class="dic-foot-btn" @click="bindPhone">关联智能音箱</view>-->
     </view>
@@ -60,8 +66,11 @@
 <script>
   import { mapState } from 'vuex'
   import Time from '@/utils/time'
+  import daCounter from '@/components/uicomponent/daCounter'
   let clickFlag = true
   let clickFlag1 = true
+  let t1 = ''
+  let t2 = ''
   export default {
     data () {
       return {
@@ -80,6 +89,9 @@
         playTimes: 2,
         intervel: 10
       }
+    },
+    components: {
+      daCounter
     },
     computed: {
       ...mapState({
@@ -181,26 +193,29 @@
         }
       },
       setValue: function (e, value) {
+        this.editDictation(e.mp.detail.value, value)
+      },
+      editDictation: function (newVal, value) {
         if (clickFlag1) {
           clickFlag1 = false
           switch (value) {
             case 'title':
-              if (this.title === e.mp.detail.value) {
+              if (this.title === newVal) {
                 clickFlag1 = true
                 return
               } else {
-                this.dictation.title = e.mp.detail.value
-                this.title = e.mp.detail.value
+                this.dictation.title = newVal
+                this.title = newVal
                 break
               }
             case 'playTimes':
-              if (this.playTimes === e.mp.detail.value) {
+              if (this.playTimes === newVal) {
                 clickFlag1 = true
                 return
               } else {
-                this.dictation.playTimes = parseInt(e.mp.detail.value)
+                this.dictation.playTimes = parseInt(newVal)
                 if (this.dictation.playTimes >= 1 && this.dictation.playTimes <= 3) {
-                  this.playTimes = parseInt(e.mp.detail.value)
+                  this.playTimes = parseInt(newVal)
                   break
                 } else {
                   wx.showModal({
@@ -219,13 +234,13 @@
                 }
               }
             case 'intervel':
-              if (this.intervel === e.mp.detail.value) {
+              if (this.intervel === newVal) {
                 clickFlag1 = true
                 return
               } else {
-                this.dictation.intervel = parseInt(e.mp.detail.value)
+                this.dictation.intervel = parseInt(newVal)
                 if (this.dictation.intervel >= 3 && this.dictation.intervel <= 15) {
-                  this.intervel = parseInt(e.mp.detail.value)
+                  this.intervel = parseInt(newVal)
                   break
                 } else {
                   wx.showModal({
@@ -350,8 +365,23 @@
           })
         }
       },
-      changeTimes: function (e) {
-        console.log(e)
+      setPlayTimes: function (e) {
+        if (t1) {
+          clearTimeout(t1)
+        }
+        t1 = setTimeout(() => {
+          this.editDictation(e.number, 'playTimes')
+          clearTimeout(t1)
+        }, 300)
+      },
+      setPlayIntervel: function (e) {
+        if (t2) {
+          clearTimeout(t2)
+        }
+        t2 = setTimeout(() => {
+          this.editDictation(e.number, 'intervel')
+          clearTimeout(t2)
+        }, 300)
       },
       setActive: function () {
         if (this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) {
@@ -364,7 +394,7 @@
             }
           })
         }
-        if ((this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) || !this.preActive.id) {
+        if ((this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) || !this.preActive || !this.preActive.id) {
           this.$store.dispatch('getSmartSpeakers').then(res => {
             if (res.bindingTypes.length) {
               this.activeDictation.active = !this.activeDictation.active
@@ -377,9 +407,13 @@
                 }
               }).then(res => {
                 this.$store.dispatch('initDictation')
+                if (this.activeDictation.active) {
+                  this.preActive = this.dictateList.find(item => item.id === this.activeDictation.id)
+                }
                 wx.showModal({
                   title: '设置成功',
-                  content: '现在请对音箱说："打开词语听写"，开始听写吧！'
+                  content: '现在请对音箱说："打开词语听写"，开始听写吧！',
+                  showCancel: false
                 })
               }).catch(err => {
                 console.log(err)
@@ -392,6 +426,11 @@
                 url: '/pages/smartSpeaker/main'
               })
             }
+          })
+        } else {
+          wx.showModal({
+            content: '现在请对音箱说："打开词语听写"，开始听写吧！',
+            showCancel: false
           })
         }
         console.log(this.activeDictation)
@@ -533,7 +572,7 @@
   .dic-edit-name{
     width:80px;
     float:left;
-    margin-left:-80px;
+    margin-left:-75px;
     height:40px;
     line-height:40px;
     font-weight: 500;
@@ -561,6 +600,13 @@
     color: #333;
     border-bottom: 1px solid #d8d8d8;
     padding-left: 24px;
+  }
+  .half-container{
+    width: 50%;
+  }
+  .counter-container{
+    height: 34px;
+    margin-top: 6px;
   }
   .dic-edit-text{
     font-size: 14px;
