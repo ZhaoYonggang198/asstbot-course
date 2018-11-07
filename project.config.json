@@ -37,7 +37,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 8,
 			"list": [
 				{
 					"id": 1,
@@ -96,9 +96,16 @@
 					"scene": "1008"
 				},
 				{
-					"id": -1,
+					"id": 8,
 					"name": "听写词汇",
 					"pathName": "pages/dictation/main",
+					"query": "",
+					"scene": "1008"
+				},
+				{
+					"id": -1,
+					"name": "听写入口",
+					"pathName": "pages/dictationIndex/main",
 					"query": "",
 					"scene": "1008"
 				}

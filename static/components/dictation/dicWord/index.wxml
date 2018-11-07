@@ -1,8 +1,13 @@
-<view>
+<view class='a11'>
     <icon class='icon-cancel' type='cancel' size='16' color='#333' bindtap='delete'></icon>
+<icon-play wx:if="{{!playState.value}}" bindtap="play" class='icon-play icon-play-own' type="play" size="24"/>
+<icon-play wx:elif="{{playState.value}}" bindtap="stop" class='icon-play icon-play-own' type="suspend" size="24"/>
     <view class='word-box'>
         <view class='word-inner' wx:for='{{content.pinyin}}' wx:key="{{index}}" bindtap='changePinyin' data-index="{{index}}">
             <dic-pin pinyin="{{item}}" index="{{index}}" word="{{content.term}}"/>
         </view>
+        <!-- <image wx:if="{{!playState}}" class="play" src='https://xiaodamp.com/imbot/image/5d8905e0-e1a3-11e8-b6e5-79c4537af773.png' bindtap='play'></image>
+        <image wx:elif="{{playState}}" class="play" src='https://xiaodamp.com/imbot/image/64b0b020-e1a3-11e8-b6e5-79c4537af773.png' bindtap='stop'></image> -->
+        
     </view>
 </view>

@@ -13,7 +13,7 @@
     background: #19a1a8;
 }
 .process-num-container{
-    padding: 0 5px;
+    padding: 0 0 0 5px;
 }
 .process-num-current{
 

@@ -33,17 +33,20 @@
           </view>
         </view>
         <view class="dic-edit-name-box">
-          <view class="dic-edit-name">新词</view>
-          <input class="dic-edit-add" @blur="setNew" @confirm="setNew" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999">
+          <view class="dic-edit-name">
+            新词
+            <!--<view class="dic-words-num" v-if="dictation.words.length">{{dictation.words.length}}</view>-->
+          </view>
+          <input class="dic-edit-add" focus @blur="setNew" @confirm="setNew" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
         </view>
 
         <view class="dic-edit-name-box" style="border-bottom: none;height: 100%;padding-left: 0" v-if="dictation.words.length">
           <!--<view class="dic-edit-name">词组</view>-->
-          <scroll-view scroll-y class="dic-edit-scroll" style="height: 100%">
+          <scroll-view scroll-y class="dic-edit-scroll" :scroll-into-view="scrollTop" style="height: 100%" >
             <view class="dic-edit-text-container">
-              <view class="dic-edit-text-inner" v-for="(text, index) in dicWords" :key="index">
+              <view class="dic-edit-text-inner"  :id="'scrollTop' + (dicWords.length - index)" v-for="(text, index) in dicWords" :key="index">
                 <view class="dic-edit-index">{{dicWords.length - index}}</view>
-                <dictation-word :content="text" @deleteText="deleteText(index)" @changePinyin="changePinyin($event, index)"/>
+                <dictation-word :content="text" :playState="playState[index]" :index="index" @deleteText="deleteText(index)" @changePinyin="changePinyin($event, index)" @playPinyin="playPinyin($event, index)" @stopPinyin="stopPinyin($event, index)"/>
               </view>
             </view>
           </scroll-view>
@@ -51,7 +54,7 @@
       </view>
     </view>
     <view class="dic-footer">
-      <view class="dic-foot-btn" @click="toPlay">听写</view>
+      <view class="dic-foot-btn" @click="toPlay">开始听写</view>
       <view class="dic-foot-btn"  v-if="edit" @click="setActive">通过音箱听写</view>
       <button class="dic-foot-btn" open-type="share">分享给</button>
       <!--<view class="dic-foot-btn" @click="bindPhone">关联智能音箱</view>-->
@@ -87,7 +90,14 @@
         playWay: 'order',
         title: '',
         playTimes: 2,
-        intervel: 10
+        intervel: 10,
+        ttsRole: 1,
+        ttsSpeed: 1,
+        voiceUrl: '',
+        innerAudioContext: '',
+        playIndex: '',
+        playState: [],
+        scrollTop: 'scrollTop'
       }
     },
     components: {
@@ -99,6 +109,9 @@
       }),
       dicWords: state => {
         let arr = [...state.dictation.words].reverse()
+        arr.map(item => {
+          state.playState.push({value: false})
+        })
         return arr
       }
     },
@@ -141,6 +154,7 @@
                   if (this.newWord) {
                     this.dictation.words = [...this.dictation.words, ...arr]
                   }
+                  this.scrollTop = 'scrollTop' + this.dicWords.length
                   this.newWord = ''
                   this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
                   clickFlag = true
@@ -173,6 +187,7 @@
                   if (this.newWord) {
                     this.dictation.words = [...this.dictation.words, ...arr]
                   }
+                  this.scrollTop = 'scrollTop' + (this.dicWords.length - 1)
                   this.dictation.id = res.data.id
                   this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
                   this.newWord = ''
@@ -485,9 +500,49 @@
         wx.navigateTo({
           url: '/pages/dictationPlay/main?param=' + JSON.stringify(this.dictation)
         })
+      },
+      stopPinyin: function (e, index) {
+        console.log('stop')
+        console.log(index)
+        this.playState[index].value = false
+        this.innerAudioContext.offEnded()
+        if (this.innerAudioContext) {
+          this.innerAudioContext.pause()
+          this.playIndex = ''
+        }
+      },
+      playPinyin: function (e, index) {
+        this.playState.map(item => {
+          item.value = false
+        })
+        this.playState[index].value = true
+        this.playIndex = index
+        this.$store.dispatch('getPinyinVoice', {
+          text: e.mp.detail[0],
+          speed: this.ttsSpeed,
+          role: this.ttsRole
+        }).then(res => {
+          this.voiceUrl = res
+          this.innerAudioContext.offEnded()
+          if (this.innerAudioContext) {
+            this.innerAudioContext.stop()
+          }
+          this.innerAudioContext.src = this.voiceUrl
+          this.innerAudioContext.play()
+          this.innerAudioContext.onEnded(() => {
+            this.playIndex = ''
+            this.playState[index].value = false
+          })
+        })
       }
     },
-    onShow () {
+    onShow (option) {
+      if (option && option.shareId) {
+        console.log('shareId')
+        console.log(option.shareId)
+        console.log(JSON.parse(option.shareId))
+      }
+      this.innerAudioContext = wx.createInnerAudioContext()
       if (this.$mp.query.active) {
         this.preActive = this.dictateList.find(item => item.id === this.$mp.query.active)
       }
@@ -518,10 +573,23 @@
       this.playTimes = this.dictation.playTimes
       this.intervel = this.dictation.intervel
     },
+    onHide () {
+      if (this.innerAudioContext) {
+        this.innerAudioContext.destroy()
+      }
+    },
     onShareAppMessage: function () {
       return {
         title: '词汇详情',
-        path: '/pages/dictationEdit/main'
+        path: '/pages/dictationEdit/main?shareId=' + JSON.stringify(this.dictation)
+      }
+    },
+    onLoad (option) {
+      console.log(option)
+    },
+    onUnload () {
+      if (this.innerAudioContext) {
+        this.innerAudioContext.destroy()
       }
     }
   }

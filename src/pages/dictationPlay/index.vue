@@ -15,10 +15,9 @@
               <view class="dic-circle-word">{{pinyin}}</view>
             </view>
           </view>
+          <dictation-process style="width: 100%;" :index="processIndex" :sum="pinyinArr.length"/>
         </view>
       </view>
-
-      <!--<dictation-process :index="currentIndex" :sum="pinyinArr.length"/>-->
     </view>
     <view class="dic-footer">
       <view class="btn-footer" @click="playPre"><image class="play-icon icon-pre" src="https://xiaodamp.com/imbot/image/49add8b0-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
@@ -31,6 +30,8 @@
 </template>
 
 <script>
+  let timeoutAft
+  let timeoutPre
   export default {
     data () {
       return {
@@ -48,7 +49,8 @@
         ttsRole: 1,
         ttsSpeed: 1,
         times: 0,
-        showAble: true
+        showAble: true,
+        processIndex: 0
       }
     },
     methods: {
@@ -71,8 +73,6 @@
           item.pinyin.map((py, pyIndex) => {
             str += item.term.substring(pyIndex, pyIndex + 1) + '(' + this.getPinyinForm(py[0]) + ')' + ','
           })
-          // str.slice(0, -1)
-          // console.log(str.slice(0, -1))
           pinyinTtsArr.push(str.slice(0, -1))
         })
         return pinyinTtsArr
@@ -100,6 +100,9 @@
         return py + num
       },
       playPre: function () {
+        if (timeoutPre) {
+          clearTimeout(timeoutPre)
+        }
         this.innerAudioContext.offEnded()
         if (this.innerAudioContext) {
           this.innerAudioContext.stop()
@@ -113,18 +116,24 @@
           if (this.timeTwins) {
             clearTimeout(this.timeTwins)
           }
-          this.$store.dispatch('getPinyinVoice', {
-            text: this.pinyinTts[this.currentIndex],
-            speed: this.ttsSpeed,
-            role: this.ttsRole
-          }).then(res => {
-            this.pinyin = this.pinyinArr[this.currentIndex]
-            this.audioUrl = res
-            this.playAudio()
-          })
+          timeoutPre = setTimeout(() => {
+            this.$store.dispatch('getPinyinVoice', {
+              text: this.pinyinTts[this.currentIndex],
+              speed: this.ttsSpeed,
+              role: this.ttsRole
+            }).then(res => {
+              this.pinyin = this.pinyinArr[this.currentIndex]
+              this.processIndex = this.currentIndex
+              this.audioUrl = res
+              this.playAudio()
+            })
+          }, 200)
         }
       },
       playNext: function () {
+        if (timeoutAft) {
+          clearTimeout(timeoutAft)
+        }
         this.innerAudioContext.offEnded()
         if (this.innerAudioContext) {
           this.innerAudioContext.stop()
@@ -138,15 +147,18 @@
           if (this.timeTwins) {
             clearTimeout(this.timeTwins)
           }
-          this.$store.dispatch('getPinyinVoice', {
-            text: this.pinyinTts[this.currentIndex],
-            speed: this.ttsSpeed,
-            role: this.ttsRole
-          }).then(res => {
-            this.audioUrl = res
-            this.pinyin = this.pinyinArr[this.currentIndex]
-            this.playAudio()
-          })
+          timeoutAft = setTimeout(() => {
+            this.$store.dispatch('getPinyinVoice', {
+              text: this.pinyinTts[this.currentIndex],
+              speed: this.ttsSpeed,
+              role: this.ttsRole
+            }).then(res => {
+              this.audioUrl = res
+              this.pinyin = this.pinyinArr[this.currentIndex]
+              this.processIndex = this.currentIndex
+              this.playAudio()
+            })
+          }, 200)
         }
       },
       rePlay: function () {
@@ -169,6 +181,7 @@
         }).then(res => {
           this.audioUrl = res
           this.pinyin = this.pinyinArr[this.currentIndex]
+          this.processIndex = this.currentIndex
           this.playAudio()
         })
       },
@@ -223,6 +236,7 @@
                 }
                 this.timeout = setTimeout(() => {
                   this.pinyin = this.pinyinArr[this.currentIndex]
+                  this.processIndex = this.currentIndex
                   this.innerAudioContext.src = this.audioUrl
                   this.innerAudioContext.play()
                   if (this.timeout) {
@@ -238,11 +252,13 @@
         this.pinyinArr = this.getPinyin(this.getConvert())
         this.pinyin = this.pinyinArr[0]
         this.currentIndex = 0
+        this.processIndex = this.currentIndex
       },
       dicNormal: function () {
         this.pinyinArr = this.getPinyin([...this.dictation.words])
         this.pinyin = this.pinyinArr[0]
         this.currentIndex = 0
+        this.processIndex = this.currentIndex
         this.rate = !this.rate
       },
       getConvert: function () {
@@ -293,6 +309,7 @@
         })
         this.pinyin = this.pinyinArr[0]
         this.currentIndex = 0
+        this.processIndex = this.currentIndex
         this.$store.dispatch('getPinyinVoice', {
           text: this.pinyinTts[this.currentIndex],
           speed: this.ttsSpeed,
@@ -317,6 +334,7 @@
         }
         this.pinyin = this.pinyinArr[0]
         this.currentIndex = 0
+        this.processIndex = this.currentIndex
         this.$store.dispatch('getPinyinVoice', {
           text: this.pinyinTts[this.currentIndex],
           speed: this.ttsSpeed,
@@ -326,7 +344,8 @@
         })
       }
     },
-    onUnload () {
+    onUnload (option) {
+      console.log(option)
       if (this.innerAudioContext) {
         this.innerAudioContext.destroy()
       }
@@ -339,6 +358,7 @@
       this.playState = true
       this.times = 0
       this.currentIndex = 0
+      this.processIndex = this.currentIndex
     }
   }
 </script>
@@ -382,6 +402,7 @@
   }
   .dic-pinyin{
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
     font-size:40px;
@@ -409,7 +430,9 @@
   .dic-circle-word{
     line-height: 40px;
     text-align: center;
-    font-size: 30px;
+    font-size: 40px;
+    letter-spacing: 1px;
+    font-family:Songti SC;
   }
   .dic-footer{
     display: flex;

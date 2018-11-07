@@ -3,6 +3,7 @@
   "disableScroll": true,
   "usingComponents": {
     "dictation-item": "/static/components/dictation/dictationList/index",
-      "dictation-add-modal": "/static/components/dictation/dictationAddModal/index"
+      "dictation-add-modal": "/static/components/dictation/dictationAddModal/index",
+    "dictation-add-icon": "/static/minui/packages/wxc-icon/dist/index"
   }
 }

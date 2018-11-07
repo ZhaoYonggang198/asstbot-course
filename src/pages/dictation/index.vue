@@ -1,31 +1,31 @@
 <template>
     <view class='dictation-inner'>
       <title-bar title='词汇列表'/>
+      <!--<view class="dictation-add-container" @click="ShowNewModal">-->
+        <!--<view class="dic-add-icon">-->
+          <!--<dictation-add-icon type="add" size="40" color="#fff"/>-->
+        <!--</view>-->
+        <!--<view class="dic-add-word">添加词汇</view>-->
+      <!--</view>-->
       <view class='dictation-container'>
-          <!--<dictation-item style="height: 100%" :content="dictateList" @selectDic="selectDic" @updateDictation="updateDictation" @deleteDictation="deleteDictation"/>-->
-        <dictation-item style="height: 100%" :content="dictateList" @toEdit="toEdit" @deleteDictation="deleteDictation"/>
+        <!--<movable-area class="dictation-movable">-->
+          <!--<movable-view class="dic-movable-view" x="300" y="700" direction="all" out-of-bounds=false  @click="ShowNewModal">-->
+            <!--<dictation-add-icon type="add" size="40" color="#fff"/>-->
+          <!--</movable-view>-->
+          <dictation-item style="height: 100%" :content="dictateList" @toEdit="toEdit" @deleteDictation="deleteDictation"/>
+        <!--</movable-area>-->
       </view>
       <view class="dic-foot-container">
-        <!--<view class="dic-foot-add" @click="ShowNewModal">新增词条</view>-->
-        <view class="dic-foot-select" v-if="select.id">
-          <view class="dic-foot-select-tip">已选词条</view>
-          <view>
-            <view class="dic-foot-select-title">{{select.title}}</view>
-            <scroll-view scroll-y style="max-height: 150px">
-              <view class="dic-foot-select-text-container">
-                <text class="dic-foot-select-text" :key="index" v-for="(word, index) in select.words">{{word.term}}</text>
-              </view>
-            </scroll-view>
+        <view class="dic-footer">
+          <view class="dic-foot-btn" @click="ShowNewModal">
+            <view class="dic-add-row dic-add-item"></view>
+            <view class="dic-add-col dic-add-item"></view>
           </view>
         </view>
-        <view class="dic-footer">
-          <view class="dic-foot-btn" @click="ShowNewModal">新增</view>
-          <button class="dic-foot-btn" open-type="share">分享给...</button>
-        </view>
       </view>
-      <block v-if="showAdd">
-        <dictation-add-modal @hideNewModal="hideNewModal" @newDictation="newDictation"/>
-      </block>
+      <!--<block v-if="showAdd">-->
+        <!--<dictation-add-modal @hideNewModal="hideNewModal" @newDictation="newDictation"/>-->
+      <!--</block>-->
     </view>
 </template>
 
@@ -284,10 +284,46 @@
     display: flex;
     flex-direction: column;
   }
+  .dictation-add-container{
+    margin-bottom:15px;
+    background:#fff;
+    padding:0 10px;
+    height:40px;
+    display: flex;
+  }
+  .dic-add-icon{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #19a8a1;
+  }
+  .dic-add-word{
+    line-height:40px;
+    font-weight:500;
+    font-size:16px;
+    padding-left:10px;
+  }
   .dictation-container{
     display: flex;
     flex-direction: column;
     flex: 1;
+  }
+  .dictation-movable{
+    height: 100%;
+    width: 100%;
+  }
+  .dic-movable-view{
+    width: 60px;
+    height: 60px;
+    background: #25CEC2;
+    border-radius: 50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index: 1;
+    box-shadow:0px 0px 10px #0c5053;
   }
   .dictation-scroll{
     height: 100%;
@@ -308,26 +344,49 @@
     min-height: 41px;
     height: auto;
     justify-content: center;
-    margin-bottom: 50rpx;
-    margin-top: 20rpx;
+    margin-bottom: 25px;
+    margin-top: 10px;
   }
   .dic-foot-btn{
-    font-size: 28rpx;
-    margin-left: 15rpx;
-    margin-right: 15rpx;
-    line-height: 32px;
-    height: 34px;
-    box-sizing: border-box;
-    white-space: nowrap;
-    background: #f2f2f2;
-    border: 1px solid #19a1a8;
-    color: #19a1a8;
+    /*font-size: 28rpx;*/
+    /*margin-left: 15rpx;*/
+    /*margin-right: 15rpx;*/
+    /*line-height: 32px;*/
+    /*height: 34px;*/
+    /*box-sizing: border-box;*/
+    /*white-space: nowrap;*/
+    /*background: #f2f2f2;*/
+    /*border: 1px solid #19a1a8;*/
+    /*color: #19a1a8;*/
     border-radius: 35rpx;
-    padding: 0rpx 20rpx;
-    text-align: center;
+    /*padding: 0rpx 20rpx;*/
+    /*text-align: center;*/
     box-shadow: 0 0 0;
-    font-weight: 500;
-    min-width: 60rpx;
+    /*font-weight: 500;*/
+    /*min-width: 60rpx;*/
+    position: relative;
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:#25CEC2;
+  }
+  .dic-add-item{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto auto;
+    background: #fff;
+    border-radius: 2px;
+  }
+  .dic-add-row{
+    width: 20px;
+    height: 4px;
+  }
+  .dic-add-col{
+    width: 4px;
+    height: 20px;
   }
   .dic-foot-select{
     border-bottom: 1px solid #d8d8d8;

@@ -9,4 +9,27 @@
 .icon-cancel{
     float: right;
     margin-top: 8px;
+    width:30px;
+    height:64px;
+    text-align:right;
+}
+.icon-play{
+   display:flex;
+    justify-content:center;
+    align-items:center;
+    width:30px;
+    height:64px;
+}
+.play{
+    width:24px;
+    height:24px;
+    margin-left:13px;
+    margin-top:34px;
+}
+.icon-play-own{
+    display:block;
+    padding-top:34px;
+    padding-left:3px;
+    box-sizing:border-box;
+    float: right;
 }
