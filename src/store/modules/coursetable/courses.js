@@ -55,30 +55,14 @@ var getFrontEndCoursePerInterval = function (backendCourse, dayBackend, interval
     return []
   }
 
-  let backendInfo = dayInfo[intervalBackend]
   let backendAddition = dayInfo[intervalBackend + 'Info']
 
-  if (!backendInfo && !backendAddition) {
+  if (!backendAddition) {
     return []
   }
-
-  if (!backendAddition) {
-    return backendInfo.map((coursename) => {
-      return {
-        name: coursename,
-        location: '',
-        startTime: '',
-        endTime: '',
-        week: 'both',
-        teacher: '',
-        share: true
-      }
-    })
-  } else {
-    return backendAddition.map((course) => {
-      return { week: 'both', teacher: '', share: true, ...course }
-    })
-  }
+  return backendAddition.map((course) => {
+    return { week: 'both', teacher: '', share: true, ...course }
+  })
 }
 
 var getFrontEndCourse = function (backendCourse) {
@@ -109,10 +93,6 @@ var getBackEndCourse = function (frontEnd) {
     for (var intervalIdx in intervals) {
       backend[weekdays[dayIdx].backend][intervals[intervalIdx].backend + 'Info'] =
         frontEnd[dayIdx].interval[intervalIdx].course
-      backend[weekdays[dayIdx].backend][intervals[intervalIdx].backend] =
-        frontEnd[dayIdx].interval[intervalIdx].course.map((course) => {
-          return course.name
-        })
     }
   }
   return backend
