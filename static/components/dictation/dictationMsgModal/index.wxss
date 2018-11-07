@@ -27,6 +27,46 @@
 .modal-content{
     padding:10px 15px;
 }
+.modal-tip{
+    font-size:16px;
+    padding-bottom:10px;
+}
+.dic-name-container{
+    padding-left: 60px;
+    padding-bottom: 10px;
+    font-size: 16px;
+}
+.dic-name-label{
+    float: left;
+    margin-left: -60px;
+}
+.dic-name{
+    font-size: 16px;
+}
+.dic-content-container{
+    padding-left: 60px;
+}
+.dic-scroll{
+    max-height: 200px;
+}
+.dic-content-label{
+    float: left;
+    margin-left: -60px;
+    font-size: 16px;
+}
+.dic-content-inner{
+    display: flex;
+    flex-wrap: wrap;
+}
+.dic-content-inner-text{
+    border:1px solid #c89b40;
+    margin-right:10px;
+    margin-bottom:10px;
+    height:32px;
+    line-height:32px;
+    border-radius:16px;
+    padding:0 10px;
+}
 .modal-footer{
     display:flex;
     height:40px;

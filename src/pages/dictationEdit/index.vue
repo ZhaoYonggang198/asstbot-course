@@ -70,6 +70,7 @@
   import { mapState } from 'vuex'
   import Time from '@/utils/time'
   import daCounter from '@/components/uicomponent/daCounter'
+  import wechat from '@/store/modules/wechat'
   let clickFlag = true
   let clickFlag1 = true
   let t1 = ''
@@ -97,7 +98,8 @@
         innerAudioContext: '',
         playIndex: '',
         playState: [],
-        scrollTop: 'scrollTop'
+        scrollTop: 'scrollTop',
+        openId: ''
       }
     },
     components: {
@@ -537,11 +539,9 @@
       }
     },
     onShow (option) {
-      if (option && option.shareId) {
-        console.log('shareId')
-        console.log(option.shareId)
-        console.log(JSON.parse(option.shareId))
-      }
+      wechat.getOpenId().then(res => {
+        this.openId = res
+      })
       this.innerAudioContext = wx.createInnerAudioContext()
       if (this.$mp.query.active) {
         this.preActive = this.dictateList.find(item => item.id === this.$mp.query.active)
@@ -581,11 +581,10 @@
     onShareAppMessage: function () {
       return {
         title: '词汇详情',
-        path: '/pages/dictationEdit/main?shareId=' + JSON.stringify(this.dictation)
+        path: '/pages/dictation/main?openId=' + this.openId + '&shareId=' + JSON.stringify(this.dictation)
       }
     },
     onLoad (option) {
-      console.log(option)
     },
     onUnload () {
       if (this.innerAudioContext) {

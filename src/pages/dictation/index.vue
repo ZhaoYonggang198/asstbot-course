@@ -1,204 +1,43 @@
 <template>
     <view class='dictation-inner'>
       <title-bar title='词汇列表'/>
-      <!--<view class="dictation-add-container" @click="ShowNewModal">-->
-        <!--<view class="dic-add-icon">-->
-          <!--<dictation-add-icon type="add" size="40" color="#fff"/>-->
+      <!--<view class='dictation-add-container' @click='ShowNewModal'>-->
+        <!--<view class='dic-add-icon'>-->
+          <!--<dictation-add-icon type='add' size='40' color='#fff'/>-->
         <!--</view>-->
-        <!--<view class="dic-add-word">添加词汇</view>-->
+        <!--<view class='dic-add-word'>添加词汇</view>-->
       <!--</view>-->
       <view class='dictation-container'>
-        <!--<movable-area class="dictation-movable">-->
-          <!--<movable-view class="dic-movable-view" x="300" y="700" direction="all" out-of-bounds=false  @click="ShowNewModal">-->
-            <!--<dictation-add-icon type="add" size="40" color="#fff"/>-->
+        <!--<movable-area class='dictation-movable'>-->
+          <!--<movable-view class='dic-movable-view' x='300' y='700' direction='all' out-of-bounds=false  @click='ShowNewModal'>-->
+            <!--<dictation-add-icon type='add' size='40' color='#fff'/>-->
           <!--</movable-view>-->
-          <dictation-item style="height: 100%" :content="dictateList" @toEdit="toEdit" @deleteDictation="deleteDictation"/>
+          <dictation-item style='height: 100%' :content='dictateList' @toEdit='toEdit' @deleteDictation='deleteDictation'/>
         <!--</movable-area>-->
       </view>
-      <view class="dic-foot-container">
-        <view class="dic-footer">
-          <view class="dic-foot-btn" @click="ShowNewModal">
-            <view class="dic-add-row dic-add-item"></view>
-            <view class="dic-add-col dic-add-item"></view>
+      <view class='dic-foot-container'>
+        <view class='dic-footer'>
+          <view class='dic-foot-btn' @click='ShowNewModal'>
+            <view class='dic-add-row dic-add-item'></view>
+            <view class='dic-add-col dic-add-item'></view>
           </view>
         </view>
       </view>
-      <!--<block v-if="showAdd">-->
-        <!--<dictation-add-modal @hideNewModal="hideNewModal" @newDictation="newDictation"/>-->
-      <!--</block>-->
+      <block v-if='showAdd'>
+        <dictation-add-modal :content='dictation' @addCancel='hideNewModal' @addSuccess='addSuccess'/>
+      </block>
     </view>
 </template>
 
 <script>
+  import wechat from '@/store/modules/wechat'
   import { mapState } from 'vuex'
   export default {
     data () {
       return {
-        // dictateList: [
-        //   {
-        //     title: '语文第一课',
-        //     active: false,
-        //     words: [
-        //       '高粱撒在麦地里',
-        //       '穿冬衣摇夏扇',
-        //       '冬天不戴帽子',
-        //       '春凳折了靠背儿',
-        //       '大眠起来的春蚕',
-        //       '春天的蜜蜂',
-        //       '穿凉鞋戴棉帽',
-        //       '冬天摇蒲扇'
-        //     ],
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'createTime': '2018-10-23',
-        //     'updateTime': '2018-10-23',
-        //     'id': '52330001'
-        //   },
-        //   {
-        //     title: '语文第二课',
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'active': true,
-        //     'words': [
-        //       '池上红衣伴倚阑',
-        //       '栖鸦常带夕阳还',
-        //       '殷云度雨疏桐落',
-        //       '明月生凉宝扇闲',
-        //       '乡梦窄',
-        //       '水天宽',
-        //       '小窗愁黛淡秋山',
-        //       '吴鸿好为传归信',
-        //       '杨柳阊门屋数间'
-        //     ],
-        //     'id': '52330002'
-        //   },
-        //   {
-        //     title: '语文第三课',
-        //     active: false,
-        //     words: [
-        //       '夫人之相与',
-        //       '俯仰一世',
-        //       '或取诸怀抱',
-        //       '悟言一室之内',
-        //       '或因寄所托',
-        //       '放浪形骸之外',
-        //       '虽趣舍万殊',
-        //       '静躁不同',
-        //       '当其欣于所遇',
-        //       '暂得于己',
-        //       '快然自足',
-        //       '不知老之将至'
-        //     ],
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'createTime': '2018-10-23',
-        //     'updateTime': '2018-10-23',
-        //     'id': '52330003'
-        //   },
-        //   {
-        //     title: '语文第四课',
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'active': true,
-        //     'words': [
-        //       '和风细雨',
-        //       '雨露之恩',
-        //       '恩恩爱爱',
-        //       '爱日惜力',
-        //       '力可拔山',
-        //       '山栖谷隐',
-        //       '隐姓埋名',
-        //       '名士风流',
-        //       '流离失所'
-        //     ],
-        //     'id': '52330004'
-        //   },
-        //   {
-        //     title: '语文第五课',
-        //     active: false,
-        //     words: [
-        //       '及其所之既倦',
-        //       '情随事迁',
-        //       '感慨系之矣',
-        //       '向之所欣',
-        //       '俯仰之间',
-        //       '已为陈迹',
-        //       '犹不能不以之兴怀'
-        //     ],
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'createTime': '2018-10-23',
-        //     'updateTime': '2018-10-23',
-        //     'id': '52330005'
-        //   },
-        //   {
-        //     title: '语文第六课',
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'active': true,
-        //     'words': [
-        //       '况修短随化',
-        //       '终期于尽',
-        //       '古人云',
-        //       '死生亦大矣',
-        //       '岂不痛哉'
-        //     ],
-        //     'id': '52330006'
-        //   },
-        //   {
-        //     title: '语文第七课',
-        //     active: false,
-        //     words: [
-        //       '每览昔人兴感之由',
-        //       '若合一契',
-        //       '未尝不临文嗟悼',
-        //       '不能喻之于怀',
-        //       '固知一死生为虚诞',
-        //       '齐彭殇为妄作',
-        //       '后之视今',
-        //       '亦犹今之视昔',
-        //       '悲夫',
-        //       '故列叙时人',
-        //       '录其所述',
-        //       '虽世殊事异',
-        //       '所以兴怀',
-        //       '其致一也',
-        //       '后之览者',
-        //       '亦将有感于斯文'
-        //     ],
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'createTime': '2018-10-23',
-        //     'updateTime': '2018-10-23',
-        //     'id': '52330007'
-        //   },
-        //   {
-        //     title: '语文第八课',
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'active': true,
-        //     'words': [
-        //       '青，取之于蓝，而青于蓝',
-        //       '冰，水为之，而寒于水',
-        //       '木直中绳，輮以为轮，其曲中规',
-        //       '虽有槁暴（pù），不复挺者，輮使之然也',
-        //       '故木受绳则直，金就砺则利',
-        //       '君子博学而日参省乎己，则知明而行无过矣'
-        //     ],
-        //     'id': '52330008'
-        //   },
-        //   {
-        //     title: '语文第九课',
-        //     active: false,
-        //     words: [
-        //       '故不登高山，不知天之高也',
-        //       '不临深溪，不知地之厚也',
-        //       '不闻先王之遗言，不知学问之大也',
-        //       '干、越、夷、貉之子，生而同声',
-        //       '长而异俗，教使之然也',
-        //       '吾尝终日而思矣，不如须臾之所学也',
-        //       '吾尝跂而望矣，不如登高之博见也'
-        //     ],
-        //     'darwinId': 'weixin_oESUr5Arz8hmqlkTJjmrR_539Pz8',
-        //     'createTime': '2018-10-23',
-        //     'updateTime': '2018-10-23',
-        //     'id': '52330009'
-        //   }
-        // ],
         select: {},
-        showAdd: false
+        showAdd: false,
+        dictation: {}
       }
     },
     components: {
@@ -215,39 +54,55 @@
       }
     },
     methods: {
-      selectDic: function (dic) {
-        this.select = {...dic.mp.detail}
-      },
+      // selectDic: function (dic) {
+      //   this.select = {...dic.mp.detail}
+      // },
       ShowNewModal: function () {
-        // this.showAdd = true
         wx.navigateTo({
           url: '/pages/dictationEdit/main'
         })
       },
       hideNewModal: function () {
         this.showAdd = false
+        this.dictation = {}
       },
-      newDictation: function (e) {
-        this.$store.dispatch('newDictation', e.mp.detail).then(res => {
-          this.$store.dispatch('initDictation')
-        }).catch(err => {
-          console.log(err)
-        })
-      },
-      updateDictation: function (e) {
-        this.$store.dispatch('updateDictation', {
-          id: e.mp.detail.id,
+      addSuccess: function () {
+        this.$store.dispatch('newDictation', {
+          openId: '',
           dictateWords: {
-            title: e.mp.detail.title,
-            active: e.mp.detail.active,
-            words: e.mp.detail.words
+            title: this.dictation.title,
+            active: false,
+            playWay: this.dictation.playWay,
+            playTimes: this.dictation.playTimes,
+            intervel: this.dictation.intervel,
+            words: this.dictation.words
           }
         }).then(res => {
+          this.hideNewModal()
           this.$store.dispatch('initDictation')
-        }).catch(err => {
-          console.log(err)
         })
       },
+      // newDictation: function (e) {
+      //   this.$store.dispatch('newDictation', e.mp.detail).then(res => {
+      //     this.$store.dispatch('initDictation')
+      //   }).catch(err => {
+      //     console.log(err)
+      //   })
+      // },
+      // updateDictation: function (e) {
+      //   this.$store.dispatch('updateDictation', {
+      //     id: e.mp.detail.id,
+      //     dictateWords: {
+      //       title: e.mp.detail.title,
+      //       active: e.mp.detail.active,
+      //       words: e.mp.detail.words
+      //     }
+      //   }).then(res => {
+      //     this.$store.dispatch('initDictation')
+      //   }).catch(err => {
+      //     console.log(err)
+      //   })
+      // },
       deleteDictation: function (e) {
         this.$store.dispatch('deleteDictation', e.mp.detail).then(res => {
           this.$store.dispatch('initDictation')
@@ -259,14 +114,23 @@
         wx.navigateTo({
           url: '/pages/dictationEdit/main?param=' + e.mp.detail.id + '&active=' + this.activeDictation.id
         })
-      },
-      bindPhone: function () {
-        wx.navigateTo({
-          url: '/pages/smartSpeaker/main'
-        })
       }
+      // bindPhone: function () {
+      //   wx.navigateTo({
+      //     url: '/pages/smartSpeaker/main'
+      //   })
+      // }
     },
-    onLoad () {
+    onLoad (option) {
+      wechat.getOpenId().then(res => {
+        this.openId = res
+        if (option && option.openId) {
+          if (option.openId !== res) {
+            this.dictation = JSON.parse(option.shareId)
+            this.showAdd = true
+          }
+        }
+      })
       this.$store.dispatch('initDictation')
     },
     onShareAppMessage: function () {
