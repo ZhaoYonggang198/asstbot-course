@@ -2,12 +2,7 @@
 view(class="page")
   title-bar(title="关联小米音箱")
   block(v-if="!xiaoaiBinded")
-    view(style="text-align:center;font-size:18px;color:#0c5053") 点击图片可放大查看
-    swiper(indicator-dots="true" autoplay="true" interval="5000" circular="true" class="swiper-wrapper")
-      swiper-item(v-for="(item, index) in helpDesc" :key="index")
-        view(class="swiper-item")
-          image(:src="item.image" mode="aspectFit" @click="previewImage(item.image)")
-          view(class="page__desc") {{index + 1}}. {{item.desc}}
+    bind-speaker-help(:desc="helpDesc")
   i-panel(:title="bindPhone?'已绑定手机：' + bindPhone:''" class="form")
     block(v-if="!bindPhone")
       i-input(:value="inputPhone" @change="phonechange" type="number" maxlength="11" title="手机号" placeholder="请输入手机号")
@@ -23,6 +18,7 @@ view(class="page")
 <script>
 
 import { mapState, mapActions } from 'vuex'
+import bindSpeakerHelp from '@/components/bindSpeakerHelp'
 
 export default {
   data () {
@@ -53,6 +49,10 @@ export default {
         }
       ]
     }
+  },
+
+  components: {
+    bindSpeakerHelp
   },
 
   computed: {
@@ -172,13 +172,6 @@ export default {
           clearInterval(this.intervalId)
         }
       }, 1000)
-    },
-
-    previewImage (imageUrl) {
-      wx.previewImage({
-        current: imageUrl,
-        urls: this.helpDesc.map((item) => { return item.image })
-      })
     }
   },
 
@@ -220,24 +213,6 @@ export default {
 
 .weui-cell_input {
   padding-right: 5px;
-}
-
-.swiper-wrapper {
-  padding-top: 20rpx;
-  height: 550rpx;
-  width: 100%;
-  background: white;
-}
-
-.swiper-item {
-  text-align: center;
-  padding-left: 50rpx;
-  padding-right: 50rpx;
-}
-
-.swiper-item image {
-  height: 416rpx;
-  width: 240rpx;
 }
 
 .bottom-button {
