@@ -1,19 +1,8 @@
 <template>
     <view class='dictation-inner'>
       <title-bar title='词汇列表'/>
-      <!--<view class='dictation-add-container' @click='ShowNewModal'>-->
-        <!--<view class='dic-add-icon'>-->
-          <!--<dictation-add-icon type='add' size='40' color='#fff'/>-->
-        <!--</view>-->
-        <!--<view class='dic-add-word'>添加词汇</view>-->
-      <!--</view>-->
       <view class='dictation-container'>
-        <!--<movable-area class='dictation-movable'>-->
-          <!--<movable-view class='dic-movable-view' x='300' y='700' direction='all' out-of-bounds=false  @click='ShowNewModal'>-->
-            <!--<dictation-add-icon type='add' size='40' color='#fff'/>-->
-          <!--</movable-view>-->
           <dictation-item style='height: 100%' :content='dictateList' @toEdit='toEdit' @deleteDictation='deleteDictation'/>
-        <!--</movable-area>-->
       </view>
       <view class='dic-foot-container'>
         <view class='dic-footer'>
@@ -54,9 +43,6 @@
       }
     },
     methods: {
-      // selectDic: function (dic) {
-      //   this.select = {...dic.mp.detail}
-      // },
       ShowNewModal: function () {
         wx.navigateTo({
           url: '/pages/dictationEdit/main'
@@ -82,27 +68,6 @@
           this.$store.dispatch('initDictation')
         })
       },
-      // newDictation: function (e) {
-      //   this.$store.dispatch('newDictation', e.mp.detail).then(res => {
-      //     this.$store.dispatch('initDictation')
-      //   }).catch(err => {
-      //     console.log(err)
-      //   })
-      // },
-      // updateDictation: function (e) {
-      //   this.$store.dispatch('updateDictation', {
-      //     id: e.mp.detail.id,
-      //     dictateWords: {
-      //       title: e.mp.detail.title,
-      //       active: e.mp.detail.active,
-      //       words: e.mp.detail.words
-      //     }
-      //   }).then(res => {
-      //     this.$store.dispatch('initDictation')
-      //   }).catch(err => {
-      //     console.log(err)
-      //   })
-      // },
       deleteDictation: function (e) {
         this.$store.dispatch('deleteDictation', e.mp.detail).then(res => {
           this.$store.dispatch('initDictation')
@@ -115,11 +80,6 @@
           url: '/pages/dictationEdit/main?param=' + e.mp.detail.id + '&active=' + this.activeDictation.id
         })
       }
-      // bindPhone: function () {
-      //   wx.navigateTo({
-      //     url: '/pages/smartSpeaker/main'
-      //   })
-      // }
     },
     onLoad (option) {
       wechat.getOpenId().then(res => {
@@ -208,7 +168,7 @@
     min-height: 41px;
     height: auto;
     justify-content: center;
-    margin-bottom: 25px;
+    margin-bottom: 35px;
     margin-top: 10px;
   }
   .dic-foot-btn{
@@ -229,10 +189,11 @@
     /*font-weight: 500;*/
     /*min-width: 60rpx;*/
     position: relative;
-    width:50px;
-    height:50px;
+    width:55px;
+    height:55px;
     border-radius:50%;
     background:#25CEC2;
+    box-shadow: 0 0 10px #0c5053;
   }
   .dic-add-item{
     position: absolute;

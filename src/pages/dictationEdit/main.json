@@ -6,6 +6,7 @@
       "dictation-add-modal": "/static/components/dictation/dictationAddModal/index",
       "dictation-word": "/static/components/dictation/dicWord/index",
       "dictation-modal": "/static/components/dictation/dictationModal/index",
-    "dic-count": "../../../static/minui/packages/wxc-counter/dist/index"
+    "dic-count": "../../../static/minui/packages/wxc-counter/dist/index",
+    "icon-com": "../../../static/minui/packages/wxc-icon/dist/index"
   }
 }

@@ -16,6 +16,7 @@
             </view>
           </view>
           <dictation-process style="width: 100%;" :index="processIndex" :sum="pinyinArr.length"/>
+
         </view>
       </view>
     </view>

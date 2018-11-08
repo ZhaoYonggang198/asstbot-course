@@ -32,12 +32,16 @@
             </view>
           </view>
         </view>
-        <view class="dic-edit-name-box">
+        <view class="dic-edit-name-box dic-edit-new">
           <view class="dic-edit-name">
             新词
             <!--<view class="dic-words-num" v-if="dictation.words.length">{{dictation.words.length}}</view>-->
           </view>
-          <input class="dic-edit-add" focus @blur="setNew" @confirm="setNew" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
+          <input class="dic-edit-add" :focus="dictation.words.length? false : true" @blur="setNew" @confirm="setNew" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
+          <view class="add-icon">
+            <icon-com type="add" size="20" color="#333"/>
+          </view>
+
         </view>
 
         <view class="dic-edit-name-box" style="border-bottom: none;height: 100%;padding-left: 0" v-if="dictation.words.length">
@@ -125,11 +129,44 @@
         })
         return word
       },
+      getPolyphoneString: function (arr) {
+        let word = []
+        arr.map(item => {
+          word.push(item)
+        })
+        return word
+      },
+      getArr: function (newWordArr, res, arr) {
+        const that = this
+        return new Promise((resolve, reject) => {
+          newWordArr.map((item, index) => {
+            (function (item, index) {
+              let pinyin = that.getPinString(res[index].termPinyin)
+              let polyphone = that.getPolyphoneString(res[index].wordPinyin)
+              let tts = that.getPinyinTts([{term: item, pinyin: pinyin, polyphone: polyphone}])
+              Promise.all([that.$store.dispatch('getPinyinVoice', {
+                text: tts[0],
+                speed: that.ttsSpeed,
+                role: that.ttsRole
+              }), that.$store.dispatch('getPinyinVoice', {
+                text: tts[0],
+                speed: that.ttsSpeed,
+                role: 0
+              })]).then(ttsRes => {
+                arr.push({term: item, pinyin: pinyin, polyphone: polyphone, ttsMale: ttsRes[0], ttsFemale: ttsRes[1]})
+                if (arr.length >= newWordArr.length) {
+                  resolve(arr)
+                }
+              })
+            })(item, index)
+          })
+        })
+      },
       setNew: function (e) {
+        const that = this
         if (clickFlag) {
           clickFlag = false
           this.newWord = e.mp.detail.value
-          console.log(this.newWord)
           let newWordArr = []
           if (this.newWord) {
             newWordArr = [...this.newWord.replace(/，/g, ',').split(',')]
@@ -138,68 +175,66 @@
             if (this.edit) {
               this.$store.dispatch('getPinyin', newWordArr).then(res => {
                 let arr = []
-                newWordArr.map((item, index) => {
-                  arr.push({term: item, pinyin: this.getPinString(res[index].termPinyin)})
-                })
-                this.$store.dispatch('updateDictation', {
-                  id: this.dictation.id,
-                  dictateWords: {
-                    title: this.dictation.title,
-                    active: this.dictation.active,
-                    playWay: this.dictation.playWay,
-                    playTimes: this.dictation.playTimes,
-                    intervel: this.dictation.intervel,
-                    words: this.dictation.words.concat(arr)
-                  }
-                }).then(res => {
-                  this.$store.dispatch('initDictation')
-                  if (this.newWord) {
-                    this.dictation.words = [...this.dictation.words, ...arr]
-                  }
-                  this.scrollTop = 'scrollTop' + this.dicWords.length
-                  this.newWord = ''
-                  this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
-                  clickFlag = true
-                }).catch(err => {
-                  clickFlag = true
-                  console.log(err)
-                  wx.showToast({
-                    title: '添加失败'
+                that.getArr(newWordArr, res, arr).then(resp => {
+                  this.$store.dispatch('updateDictation', {
+                    id: this.dictation.id,
+                    dictateWords: {
+                      title: this.dictation.title,
+                      active: this.dictation.active,
+                      playWay: this.dictation.playWay,
+                      playTimes: this.dictation.playTimes,
+                      intervel: this.dictation.intervel,
+                      words: this.dictation.words.concat(resp)
+                    }
+                  }).then(res => {
+                    this.$store.dispatch('initDictation')
+                    if (this.newWord) {
+                      this.dictation.words = [...this.dictation.words, ...resp]
+                    }
+                    this.scrollTop = 'scrollTop' + this.dicWords.length
+                    this.newWord = ''
+                    this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
+                    clickFlag = true
+                  }).catch(err => {
+                    clickFlag = true
+                    console.log(err)
+                    wx.showToast({
+                      title: '添加失败'
+                    })
                   })
                 })
               })
             } else {
               this.$store.dispatch('getPinyin', newWordArr).then(res => {
                 let arr = []
-                newWordArr.map((item, index) => {
-                  arr.push({term: item, pinyin: this.getPinString(res[index].termPinyin)})
-                })
-                this.$store.dispatch('newDictation', {
-                  openId: '',
-                  dictateWords: {
-                    title: this.dictation.title,
-                    active: false,
-                    playWay: this.playWay,
-                    playTimes: this.playTimes,
-                    intervel: this.intervel,
-                    words: this.dictation.words.concat(arr)
-                  }
-                }).then(res => {
-                  this.$store.dispatch('initDictation')
-                  if (this.newWord) {
-                    this.dictation.words = [...this.dictation.words, ...arr]
-                  }
-                  this.scrollTop = 'scrollTop' + (this.dicWords.length - 1)
-                  this.dictation.id = res.data.id
-                  this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
-                  this.newWord = ''
-                  this.edit = true
-                  clickFlag = true
-                }).catch(err => {
-                  clickFlag = true
-                  console.log(err)
-                  wx.showToast({
-                    title: '添加失败'
+                that.getArr(newWordArr, res, arr).then(resp => {
+                  this.$store.dispatch('newDictation', {
+                    openId: '',
+                    dictateWords: {
+                      title: this.dictation.title,
+                      active: false,
+                      playWay: this.playWay,
+                      playTimes: this.playTimes,
+                      intervel: this.intervel,
+                      words: this.dictation.words.concat(resp)
+                    }
+                  }).then(res => {
+                    this.$store.dispatch('initDictation')
+                    if (this.newWord) {
+                      this.dictation.words = [...this.dictation.words, ...resp]
+                    }
+                    this.scrollTop = 'scrollTop' + (this.dicWords.length - 1)
+                    this.dictation.id = res.data.id
+                    this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
+                    this.newWord = ''
+                    this.edit = true
+                    clickFlag = true
+                  }).catch(err => {
+                    clickFlag = true
+                    console.log(err)
+                    wx.showToast({
+                      title: '添加失败'
+                    })
                   })
                 })
               })
@@ -536,6 +571,39 @@
             this.playState[index].value = false
           })
         })
+      },
+      getPinyinTts: function (wordsArr) {
+        let pinyinTtsArr = []
+        wordsArr.map((item, index) => {
+          let str = ''
+          item.pinyin.map((py, pyIndex) => {
+            str += item.term.substring(pyIndex, pyIndex + 1) + '(' + this.getPinyinForm(py[0]) + ')' + ','
+          })
+          pinyinTtsArr.push(str.slice(0, -1))
+        })
+        return pinyinTtsArr
+      },
+      getPinyinForm: function (py) {
+        let py1 = /[āōēīūǖ]/g
+        let py2 = /[áóéíúǘ]/g
+        let py3 = /[ǎǒěǐǔǚ]/g
+        let py4 = /[àòèìùǜ]/g
+        // let reg = /[āōēīūǖáóéíúǘǎǒěǐǔǚàòèìùǜ]/g
+        // reg.test(py)
+        let num = ''
+        if (py1.test(py)) {
+          num = 1
+        } else if (py2.test(py)) {
+          num = 2
+        } else if (py3.test(py)) {
+          num = 3
+        } else if (py4.test(py)) {
+          num = 4
+        } else {
+          num = 1
+        }
+        py = py.replace(/[āáǎà]/g, 'a').replace(/[ōóǒò]/g, 'o').replace(/[ēéěè]/g, 'e').replace(/[īíǐì]/g, 'i').replace(/[ūúǔù]/g, 'u').replace(/[ǖǘǚǜ]/g, 'ü')
+        return py + num
       }
     },
     onShow (option) {
@@ -686,11 +754,26 @@
     width:30px;
     text-align:center;
   }
+  .dic-edit-new{
+    padding-right: 30px;
+  }
   .dic-edit-add{
     line-height:40px;
     height:40px;
     border-radius:5px;
     font-size:16px;
+  }
+  .add-icon{
+    float:right;
+    margin-right:-30px;
+    width:30px;
+    height:40px;
+    margin-top:-40px;
+    text-align:right;
+    line-height:40px;
+    box-sizing:border-box;
+    padding-right:3px;
+
   }
   .dic-tip{
     font-size: 14px;

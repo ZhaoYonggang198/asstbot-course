@@ -1,23 +1,29 @@
 .process-container{
     display: flex;
     padding: 10px 15px;
+    flex-direction: column
 }
 .process-bar-container{
     flex: 1;
-    height: 24px;
+    height: 10px;
     background: #999;
+    overflow: hidden;
+    border-radius: 5px;
 }
 .process-bar-inner{
     width: 0%;
     height: 100%;
-    background: #19a1a8;
+    background: #188ae2;
 }
 .process-num-container{
-    padding: 0 0 0 5px;
+    padding: 0 5px;
+    font-size: 20px;
+    margin-top: 5px;
+    text-align: center
 }
 .process-num-current{
-
+    color: #188ae2
 }
 .process-num-sum{
-
+    color: #188ae2
 }

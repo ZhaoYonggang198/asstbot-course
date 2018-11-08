@@ -1,8 +1,7 @@
-<view class='modal-container'>
+<view class='modal-container' catchtouchmove>
     <view class='modal-inner'>
-        <view class='modal-header'>添加提示</view>
+        <view class='modal-header'>确定要添加该词组？</view>
         <view class='modal-content'>
-            <view class='modal-tip'>确定要添加该词组？</view>
             <view class='dic-name-container'>
                 <text class='dic-name-label'>词组名</text>
                 <view class='dic-name'>{{content.title}}</view>
