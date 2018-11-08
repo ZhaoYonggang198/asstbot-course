@@ -11,6 +11,7 @@
             <view class='dic-add-col dic-add-item'></view>
           </view>
         </view>
+
       </view>
       <block v-if='showAdd'>
         <dictation-add-modal :content='dictation' @addCancel='hideNewModal' @addSuccess='addSuccess'/>

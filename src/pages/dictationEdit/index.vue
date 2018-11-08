@@ -3,7 +3,7 @@
     <title-bar :title="edit? '编辑词语' : '新增词语'"/>
     <view class="dic-edit-inner">
       <view class="dic-edit-inner-inner">
-        <view class="dic-edit-name-box" style="margin-top: -164px;padding-right: 40px">
+        <view class="dic-edit-name-box" style="margin-top: -172px;padding-right: 40px">
           <view class="dic-edit-name">词组名</view>
           <input class="dic-edit-title" type="text" :value="dictation.title" @blur="setValue($event, 'title')" @comfirm="setValue($event, 'title')">
           <view class="dic-words-num" v-if="dictation.words.length">{{dictation.words.length}}</view>
@@ -15,7 +15,7 @@
             <text class="order-text" :class="dictation.playWay=='disorder' ? 'active' : ''">乱序</text>
           </view>
         </view>
-        <view style="display: flex">
+        <view style="display: flex;height: 42px;">
           <view class="dic-edit-name-box half-container">
             <view class="dic-edit-name">播放次数</view>
             <view class="counter-container">
@@ -636,12 +636,12 @@
     padding-bottom: 15px;
     width: 100%;
     height:100%;
-    padding-top: 164px;
+    padding-top: 172px;
   }
   .dic-edit-name-box{
     padding-left:80px;
     border-bottom:1px solid #d8d8d8;
-    min-height:41px;
+    height:42px;
   }
   .dic-words-num{
     display:inline-block;
