@@ -6,8 +6,5 @@
         <view class='word-inner' wx:for='{{content.pinyin}}' wx:key="{{index}}" bindtap='changePinyin' data-index="{{index}}">
             <dic-pin pinyin="{{item}}" index="{{index}}" word="{{content.term}}"/>
         </view>
-        <!-- <image wx:if="{{!playState}}" class="play" src='https://xiaodamp.com/imbot/image/5d8905e0-e1a3-11e8-b6e5-79c4537af773.png' bindtap='play'></image>
-        <image wx:elif="{{playState}}" class="play" src='https://xiaodamp.com/imbot/image/64b0b020-e1a3-11e8-b6e5-79c4537af773.png' bindtap='stop'></image> -->
-        
     </view>
 </view>
