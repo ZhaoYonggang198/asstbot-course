@@ -1,0 +1,15 @@
+<block wx:for="{{skillList}}" wx:for-index="index" wx:for-item="skill" wx:key="{{index}}">
+  <i-cell-group>
+    <i-cell title="{{skill.name}}" label='"{{skill.request[0]}}"' bindtap="toggleActive" data-id="{{index}}">
+      <i-icon type="packup" size="28" slot="footer" wx:if="{{activeIndex==index}}" bindtap="toggleActive" data-id="{{index}}"/>
+      <i-icon type="unfold" size="28" slot="footer" wx:else  bindtap="toggleActive" data-id="{{index}}"/>
+    </i-cell>
+  </i-cell-group>
+  <view class="request-wrapper" wx:if="{{activeIndex==index}}">
+    <block wx:for="{{skill.request}}" wx:for-index="requestIndex" wx:for-item="request" wx:key="{{requestIndex}}">
+      <view class="request" bindtap="clickOnRequest" data-id="{{requestIndex}}" data-request="{{request}}">
+        {{request}}
+      </view>
+    </block>
+  </view>
+</block>

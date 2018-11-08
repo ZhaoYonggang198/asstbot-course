@@ -2,7 +2,10 @@
   <block>
     <view class="content" style="flex-direction: column">
       <videoplayer :src="videoSrc" v-if="videoPlay" @videoEnded="videoPlay=false"></videoplayer>
-      <scroll-view scroll-y='true' :scroll-into-view="scrollToView" style="height: 100%">
+      <view class="skill-list-header" v-if="skillListShow">
+        <i class="icon iconfont icon-close" @click="closeSkillList"></i>
+      </view>
+      <scroll-view scroll-y='true' :scroll-into-view="scrollToView" style="height: 100%" v-show="!skillListShow">
         <view class="message-list">
           <block v-for="(conversation, i) in messageList" :key="conversation">
             <view class="conversation" :id="'bottom'+i" :class="{'last-child':i==(messageList.length-1), 'focus-input': keyboardInput}">
@@ -42,9 +45,17 @@
             </view>
           </block>
         </view>
+
       </scroll-view>
-      <!-- <message-list :messagesList="messageList" :survey="survey" :localmsgsending="localMsgSending"
-          @renderFinish="msgDisplayFinish" @renderBegin="msgDisplayBegin"/> -->
+      <scroll-view scroll-y="true" :scroll-top="skillPosition" v-if="skillListShow" style="height: 100%" id="skill-list">
+        <view class="skill-list-wrapper">
+ 
+          <skill-list :skillList="activeSkillList" @requestClick="requestClick" @skillActive="skillActive">
+          </skill-list>
+          <!-- <view class="skill-list-footer">
+          </view> -->
+        </view>
+      </scroll-view>
     </view>
     <view class="footer">
       <record-status/>
@@ -95,7 +106,9 @@ export default {
       videoSrc: '',
       keyboardInput: false,
       ttsPlaying: false,
-      inDonating: false
+      inDonating: false,
+      skillListShow: false,
+      skillPosition: 0
     }
   },
   props: {
@@ -172,6 +185,9 @@ export default {
     activeInputPromtMsg () {
       return this.activeSomeKindOfMsg(['input-prompt'])
     },
+    activeSkillList () {
+      return this.activeSomeKindOfMsg(['skill-list'])
+    },
     activeTtsMsg () {
       if (!this.activeMsg) {
         return []
@@ -218,6 +234,10 @@ export default {
     },
     msgDisplayFinish () {
       this.displayFinish = true
+      if (this.activeSkillList && this.activeSkillList.items.length !== 0) {
+        this.skillListShow = true
+        this.skillPosition = 0
+      }
       this.toDoRedirect()
     },
     toDoRedirect () {
@@ -312,6 +332,32 @@ export default {
     },
     closeDonate () {
       this.inDonating = false
+    },
+    requestClick (event) {
+      this.$store.dispatch('sendQuery', event.mp.detail.value)
+      this.closeSkillList()
+    },
+    closeSkillList () {
+      console.log('closeSkillList')
+      this.skillListShow = false
+      setTimeout(() => {
+        this.scrollToView = ''
+        this.scrollToView = `bottom${this.messageList.length - 1}`
+      }, 0)
+    },
+    skillActive (event) {
+      const query = wx.createSelectorQuery()
+      query.select('#skill-list').boundingClientRect()
+      query.select('#skill-list').scrollOffset()
+      query.exec(res => {
+        console.log(res[0])
+        console.log(res[1].scrollTop)
+        if (event.mp.detail.value > 400) {
+          this.skillPosition = res[1].scrollTop + 100
+        } else if (event.mp.detail.value > 500) {
+          this.skillPosition = res[1].scrollTop + 200
+        }
+      })
     }
   },
 
@@ -365,5 +411,16 @@ export default {
   .conversation.last-child.focus-input .record-area {
     height: 0;
     overflow: hidden;
+  }
+
+  .skill-list-wrapper {
+    height: 100%;
+  }
+
+  .skill-list-header {
+    padding: 15rpx 20rpx;
+  }
+  .skill-list-footer {
+    height: 100rpx;
   }
 </style>
