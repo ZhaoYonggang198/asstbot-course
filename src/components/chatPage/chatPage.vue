@@ -234,7 +234,7 @@ export default {
     },
     msgDisplayFinish () {
       this.displayFinish = true
-      if (this.activeSkillList && this.activeSkillList.items.length !== 0) {
+      if (this.activeSkillList.items !== undefined && this.activeSkillList.items.length !== 0) {
         this.skillListShow = true
         this.skillPosition = 0
       }
