@@ -31,7 +31,7 @@
         <view class='dic-words-num' wx:if='{{dicItem.words.length}}'>{{dicItem.words.length}}</view>
         <!-- <image wx:if="{{!dicItem.active}}" src="https://xiaodamp.com/imbot/image/a441cd90-e0d2-11e8-b6e5-79c4537af773.png" mode='widthFix' class='speaker' style="left:5px"></image> -->
         
-        <image wx:if="{{!!dicItem.active}}" src="https://xiaodamp.com/imbot/image/ed0effd0-e0d1-11e8-b6e5-79c4537af773.png" mode='widthFix' class='speaker' style="left: 6px"></image>
+        <image wx:if="{{!!dicItem.active}}" src="https://xiaodamp.com/imbot/image/dadf8d40-e1c9-11e8-b6e5-79c4537af773.png"  class='speaker' style="left: 6px"></image>
     </view>
     <view style="padding: 10px 15px 10px 5px">
         <view class='dic-title'>{{dicItem.title}}</view>

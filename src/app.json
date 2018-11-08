@@ -21,6 +21,7 @@
     "pages/dictation/main",
     "pages/dictationEdit/main",
     "pages/dictationPlay/main",
+    "pages/dictationIndex/main",
     "pages/bindXiaodu/main",
     "pages/donate/main",
     "pages/bindXiaomi/main"

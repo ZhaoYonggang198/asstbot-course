@@ -7,6 +7,12 @@ Component({
       content: {
           type: Object,
           value: {}
+      },
+      playState: {
+          type: Object,
+          value: {},
+          observer: function (value) {
+          }
       }
   },
 
@@ -14,7 +20,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+      
   },
 
   /**
@@ -25,7 +31,17 @@ Component({
           this.triggerEvent('deleteText')
       },
       changePinyin: function (e) {
-          this.triggerEvent('changePinyin', e.currentTarget.dataset.index)
+          const index = e.currentTarget.dataset.index
+          const { polyphone, term } = this.properties.content
+          const hanzi = term.substr(index, 1)
+          this.triggerEvent('changePinyin', { index, polyphone: polyphone[index], hanzi })
+      },
+      play: function () {
+          const {ttsFemale, ttsMale} = this.properties.content
+          this.triggerEvent('playPinyin', { ttsFemale, ttsMale})
+      },
+      stop: function () {
+          this.triggerEvent('stopPinyin')
       }
   }
 })

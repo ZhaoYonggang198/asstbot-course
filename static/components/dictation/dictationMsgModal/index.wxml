@@ -1,0 +1,23 @@
+<view class='modal-container' catchtouchmove>
+    <view class='modal-inner'>
+        <view class='modal-header'>确定要添加该词组？</view>
+        <view class='modal-content'>
+            <view class='dic-name-container'>
+                <text class='dic-name-label'>词组名</text>
+                <view class='dic-name'>{{content.title}}</view>
+            </view>
+            <view class='dic-content-container'>
+                <text class='dic-content-label'>词组</text>
+                <scroll-view class='dic-scroll' scroll-y>
+                    <view class='dic-content-inner'>
+                        <view class='dic-content-inner-text' wx:for="{{content.words}}" wx:key="{{index}}">{{item.term}}</view>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+        <view class='modal-footer'>
+            <view class='modal-btn btn-success' bindtap='success'>确定</view>
+            <view class='modal-btn btn-fail' bindtap='fail'>取消</view>
+        </view>
+    </view>
+</view>

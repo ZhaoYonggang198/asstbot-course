@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-      "dic-pin": "../dicPin/index"
+      "dic-pin": "../dicPin/index",
+      "icon-play": "../../../iview/icon/index"
   }
 }

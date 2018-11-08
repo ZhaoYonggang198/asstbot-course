@@ -1,8 +1,10 @@
 .pinyin{
     text-align:center;
-    width:50px;
+    width:60px;
     line-height:30px;
-    font-size:14px;
+    font-size:19px;
+    letter-spacing:1rpx;
+    font-family:Songti SC;
 }
 .hanzi{
    text-align:center;
@@ -11,5 +13,5 @@
     line-height:32px;
     border:1px solid #c89b40;
     font-size:16px;
-    margin-left:9px;
+    margin-left:14px;
 }
