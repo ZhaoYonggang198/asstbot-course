@@ -19,8 +19,8 @@
           <view class="dic-edit-name-box half-container">
             <view class="dic-edit-name">播放角色</view>
             <view class="dic-edit-order">
-              <text class="order-text" :class="dictation.ttsSex==1? 'active' : ''" @click="setRole(1)">男生</text>
-              <text class="order-text" :class="dictation.ttsSex==0 ? 'active' : ''" @click="setRole(0)">女生</text>
+              <text class="order-text" :class="dictation.ttsSex==1? 'active' : ''" @click="setRole(1)">男声</text>
+              <text class="order-text" :class="dictation.ttsSex==0 ? 'active' : ''" @click="setRole(0)">女声</text>
             </view>
           </view>
         </view>
@@ -175,7 +175,7 @@
           if (/[0-9a-zA-Z]/g.test(this.newWord)) {
             wx.showModal({
               title: '词语格式提醒',
-              content: '目前只支持中文词语,请重新输入',
+              content: '目前只支持中文词语,请重新输入新的中文词语',
               showCancel: false,
               complete: function () {
                 clickFlag = true
