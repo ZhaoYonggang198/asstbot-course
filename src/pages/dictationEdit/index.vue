@@ -38,15 +38,15 @@
             </view>
           </view>
         </view>
-        <view class="dic-edit-name-box dic-edit-new">
+        <view class="dic-edit-name-box">
           <view class="dic-edit-name">
             新词
           </view>
-          <input class="dic-edit-add" v-if="dictation.words.length>0" @blur="setNew" @confirm="setNew" @focus="focus" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
-          <input class="dic-edit-add" v-if="dictation.words.length<1" focus @blur="setNew" @confirm="setNew" @focus="focus" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
-          <view class="add-icon">
-            <icon-com type="add" size="20" color="#333"/>
-          </view>
+          <!--<input class="dic-edit-add" v-if="dictation.words.length>0" @blur="setNew" @confirm="setNew" @focus="focus" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">-->
+          <input class="dic-edit-add" @blur="setNew" @confirm="setNew" @focus="focus" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
+          <!--<view class="add-icon">-->
+            <!--<icon-com type="add" size="20" color="#333"/>-->
+          <!--</view>-->
         </view>
         <view class="dic-edit-name-box" style="border-bottom: none;height: 100%;padding-left: 0" v-if="dictation.words.length">
           <scroll-view scroll-y class="dic-edit-scroll" :scroll-into-view="scrollTop" style="height: 100%" >
@@ -172,82 +172,93 @@
         if (clickFlag) {
           clickFlag = false
           this.newWord = e.mp.detail.value
-          let newWordArr = []
-          if (this.newWord) {
-            newWordArr = [...this.newWord.replace(/，/g, ',').split(',')]
-          }
-          if (newWordArr.length) {
-            if (this.edit) {
-              this.$store.dispatch('getPinyin', newWordArr).then(res => {
-                let arr = []
-                that.getArr(newWordArr, res, arr).then(resp => {
-                  this.$store.dispatch('updateDictation', {
-                    id: this.dictation.id,
-                    dictateWords: {
-                      title: this.dictation.title,
-                      active: this.dictation.active,
-                      playWay: this.dictation.playWay,
-                      playTimes: this.dictation.playTimes,
-                      intervel: this.dictation.intervel,
-                      ttsSex: this.dictation.ttsSex,
-                      words: this.dictation.words.concat(resp)
-                    }
-                  }).then(res => {
-                    this.$store.dispatch('initDictation')
-                    if (this.newWord) {
-                      this.dictation.words = [...this.dictation.words, ...resp]
-                    }
-                    this.scrollTop = 'scrollTop' + this.dicWords.length
-                    this.newWord = ''
-                    this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
-                    clickFlag = true
-                  }).catch(err => {
-                    clickFlag = true
-                    console.log(err)
-                    wx.showToast({
-                      title: '添加失败'
-                    })
-                  })
-                })
-              })
-            } else {
-              this.$store.dispatch('getPinyin', newWordArr).then(res => {
-                let arr = []
-                that.getArr(newWordArr, res, arr).then(resp => {
-                  this.$store.dispatch('newDictation', {
-                    openId: '',
-                    dictateWords: {
-                      title: this.dictation.title,
-                      active: false,
-                      playWay: this.playWay,
-                      playTimes: this.playTimes,
-                      intervel: this.intervel,
-                      ttsSex: this.dictation.ttsSex,
-                      words: this.dictation.words.concat(resp)
-                    }
-                  }).then(res => {
-                    this.$store.dispatch('initDictation')
-                    if (this.newWord) {
-                      this.dictation.words = [...this.dictation.words, ...resp]
-                    }
-                    this.scrollTop = 'scrollTop' + (this.dicWords.length - 1)
-                    this.dictation.id = res.data.id
-                    this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
-                    this.newWord = ''
-                    this.edit = true
-                    clickFlag = true
-                  }).catch(err => {
-                    clickFlag = true
-                    console.log(err)
-                    wx.showToast({
-                      title: '添加失败'
-                    })
-                  })
-                })
-              })
-            }
+          if (/[0-9a-zA-Z]/g.test(this.newWord)) {
+            wx.showModal({
+              title: '词语格式提醒',
+              content: '目前只支持中文词语,请重新输入',
+              showCancel: false,
+              complete: function () {
+                clickFlag = true
+              }
+            })
           } else {
-            clickFlag = true
+            let newWordArr = []
+            if (this.newWord) {
+              newWordArr = [...this.newWord.replace(/，/g, ',').split(',')]
+            }
+            if (newWordArr.length) {
+              if (this.edit) {
+                this.$store.dispatch('getPinyin', newWordArr).then(res => {
+                  let arr = []
+                  that.getArr(newWordArr, res, arr).then(resp => {
+                    this.$store.dispatch('updateDictation', {
+                      id: this.dictation.id,
+                      dictateWords: {
+                        title: this.dictation.title,
+                        active: this.dictation.active,
+                        playWay: this.dictation.playWay,
+                        playTimes: this.dictation.playTimes,
+                        intervel: this.dictation.intervel,
+                        ttsSex: this.dictation.ttsSex,
+                        words: this.dictation.words.concat(resp)
+                      }
+                    }).then(res => {
+                      this.$store.dispatch('initDictation')
+                      if (this.newWord) {
+                        this.dictation.words = [...this.dictation.words, ...resp]
+                      }
+                      this.scrollTop = 'scrollTop' + this.dicWords.length
+                      this.newWord = ''
+                      this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
+                      clickFlag = true
+                    }).catch(err => {
+                      clickFlag = true
+                      console.log(err)
+                      wx.showToast({
+                        title: '添加失败'
+                      })
+                    })
+                  })
+                })
+              } else {
+                this.$store.dispatch('getPinyin', newWordArr).then(res => {
+                  let arr = []
+                  that.getArr(newWordArr, res, arr).then(resp => {
+                    this.$store.dispatch('newDictation', {
+                      openId: '',
+                      dictateWords: {
+                        title: this.dictation.title,
+                        active: false,
+                        playWay: this.playWay,
+                        playTimes: this.playTimes,
+                        intervel: this.intervel,
+                        ttsSex: this.dictation.ttsSex,
+                        words: this.dictation.words.concat(resp)
+                      }
+                    }).then(res => {
+                      this.$store.dispatch('initDictation')
+                      if (this.newWord) {
+                        this.dictation.words = [...this.dictation.words, ...resp]
+                      }
+                      this.scrollTop = 'scrollTop' + (this.dicWords.length - 1)
+                      this.dictation.id = res.data.id
+                      this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
+                      this.newWord = ''
+                      this.edit = true
+                      clickFlag = true
+                    }).catch(err => {
+                      clickFlag = true
+                      console.log(err)
+                      wx.showToast({
+                        title: '添加失败'
+                      })
+                    })
+                  })
+                })
+              }
+            } else {
+              clickFlag = true
+            }
           }
         }
       },
@@ -426,7 +437,7 @@
           clearTimeout(t2)
         }, 300)
       },
-      setActive: function () {
+      setActive () {
         if (this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) {
           this.$store.dispatch('updateDictation', {
             id: this.preActive.id,
@@ -444,16 +455,17 @@
         if ((this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) || !this.preActive || !this.preActive.id) {
           this.$store.dispatch('getSmartSpeakers').then(res => {
             if (res.bindingTypes.length) {
+              console.log(this.activeDictation)
               this.activeDictation.active = !this.activeDictation.active
               this.$store.dispatch('updateDictation', {
                 id: this.activeDictation.id,
                 dictateWords: {
                   title: this.activeDictation.title,
                   active: this.activeDictation.active,
-                  playWay: this.preActive.playWay || 'order',
-                  playTimes: this.preActive.playTimes || 2,
-                  intervel: this.preActive.intervel || 10,
-                  ttsSex: this.preActive.ttsSex,
+                  playWay: this.activeDictation.playWay || 'order',
+                  playTimes: this.activeDictation.playTimes || 2,
+                  intervel: this.activeDictation.intervel || 10,
+                  ttsSex: this.activeDictation.ttsSex,
                   words: this.activeDictation.words
                 }
               }).then(res => {
@@ -624,7 +636,7 @@
       if (this.$mp.query.active) {
         this.preActive = this.dictateList.find(item => item.id === this.$mp.query.active)
         if (this.preActive) {
-          this.preActive.ttsSex = this.preActive.ttsSex === undefined ? 1 : 0
+          this.preActive.ttsSex = this.preActive.ttsSex === undefined ? 1 : this.preActive.ttsSex
         }
       }
 
@@ -642,7 +654,7 @@
           playWay: 'order',
           ttsSex: 1,
           playTimes: 2,
-          intervel: 15
+          intervel: 10
         }
         this.activeDictation = {
           title: Time.getFormatTime(),
@@ -651,7 +663,7 @@
           ttsSex: 1,
           playWay: 'order',
           playTimes: 2,
-          intervel: 15
+          intervel: 10
         }
         this.edit = false
       }

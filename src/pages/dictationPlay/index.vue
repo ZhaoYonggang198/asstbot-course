@@ -98,6 +98,7 @@
           this.pinyin = this.pinyinArr[this.currentIndex]
           this.setAudioUrl()
           // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+          console.log('next:' + this.audioUrl)
           this.playAudio()
         }
       },
@@ -119,6 +120,7 @@
           // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
           this.pinyin = this.pinyinArr[this.currentIndex]
           this.processIndex = this.currentIndex
+          console.log('pre:' + this.audioUrl)
           this.playAudio()
         }
       },
@@ -189,7 +191,6 @@
               this.timeout = setTimeout(() => {
                 this.currentIndex += 1
                 this.setAudioUrl()
-                // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
                 this.pinyin = this.pinyinArr[this.currentIndex]
                 this.processIndex = this.currentIndex
                 this.innerAudioContext.src = this.audioUrl
@@ -314,11 +315,6 @@
         this.currentIndex = 0
         this.processIndex = -1
         this.pinyin = this.pinyinArr[this.currentIndex]
-        // if (this.dictation.ttsSex === 1) {
-        //   this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
-        // } else {
-        //   this.audioUrl = this.ttsArr[this.currentIndex].ttsFemale
-        // }
         this.setAudioUrl()
       }
     },
