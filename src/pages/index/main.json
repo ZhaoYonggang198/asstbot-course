@@ -6,6 +6,7 @@
     "message-item": "/static/components/messageItem/index",
     "bot-avatar": "/static/components/botAvatar/index",
     "bot-say-receiving": "/static/components/botSay/receiving/index",
-    "exhibition-action": "/static/components/commandArea/exhibitionAction/index"
+    "exhibition-action": "/static/components/commandArea/exhibitionAction/index",
+    "skill-list": "/static/components/skillList/index"
   }
 }
