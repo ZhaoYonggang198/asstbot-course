@@ -50,7 +50,7 @@
       <scroll-view scroll-y="true" :scroll-top="skillPosition" v-if="skillListShow" style="height: 100%" id="skill-list">
         <view class="skill-list-wrapper">
  
-          <skill-list :skillList="activeSkillList" @requestClick="requestClick" @skillActive="skillActive">
+          <skill-list :skillList="activeSkillList.items" @requestClick="requestClick" @skillActive="skillActive">
           </skill-list>
           <!-- <view class="skill-list-footer">
           </view> -->
@@ -145,6 +145,12 @@ export default {
         this.scrollToView = ''
         this.scrollToView = 'localMsgSending'
       }
+    },
+    activeSkillList: function (val) {
+      if (!val.items) {
+        this.skillListShow = false
+        this.skillPosition = 0
+      }
     }
   },
   computed: {
@@ -186,7 +192,7 @@ export default {
       return this.activeSomeKindOfMsg(['input-prompt'])
     },
     activeSkillList () {
-      return this.activeSomeKindOfMsg(['skill-list'])
+      return this.activeSomeKindOfMsg(['activeSkillList'])
     },
     activeTtsMsg () {
       if (!this.activeMsg) {
