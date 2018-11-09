@@ -20,6 +20,10 @@ Component({
                   hanzi: value.substr(this.properties.index, 1)
               })
           }
+      },
+      poly: {
+          type: Array,
+          value: []
       }
   },
 

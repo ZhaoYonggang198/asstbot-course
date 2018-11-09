@@ -83,6 +83,7 @@
       }
     },
     onLoad (option) {
+      console.log(wechat)
       wechat.getOpenId().then(res => {
         this.openId = res
         if (option && option.openId) {

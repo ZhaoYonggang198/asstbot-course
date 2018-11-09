@@ -1,4 +1,4 @@
 <block>
     <view class='pinyin'>{{pinyin}}</view>
-    <view class='hanzi'>{{hanzi}}</view>
+    <view style="border: 1px solid {{poly.length>1?'#ff5777':'c89b40'}}" class='hanzi'>{{hanzi}}</view>
 </block>

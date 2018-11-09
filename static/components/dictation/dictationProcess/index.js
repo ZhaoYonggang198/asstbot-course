@@ -9,6 +9,7 @@ Component({
           value: 0,
           observer: function(value){
               if (value != undefined){
+                  console.log(parseInt((value + 1) / this.properties.sum * 100) + '%')
                   this.setData({
                       width: parseInt((value + 1) / this.properties.sum * 100) + '%'
                   })
@@ -19,8 +20,9 @@ Component({
           type: Number,
           value: 0,
           observer: function (value) {
+              console.log(this.properties.index)
               this.setData({
-                  width: parseInt(1 / value * 100) + '%'
+                  width: parseInt((this.properties.index + 1) / value * 100) + '%'
               })
           }
       }

@@ -3,8 +3,8 @@
 <icon-play wx:if="{{!playState.value}}" bindtap="play" class='icon-play icon-play-own' type="play" size="24"/>
 <icon-play wx:elif="{{playState.value}}" bindtap="stop" class='icon-play icon-play-own' type="suspend" size="24"/>
     <view class='word-box'>
-        <view class='word-inner' wx:for='{{content.pinyin}}' wx:key="{{index}}" bindtap='changePinyin' data-index="{{index}}">
-            <dic-pin pinyin="{{item}}" index="{{index}}" word="{{content.term}}"/>
+        <view class='word-inner' wx:for='{{content.pinyin}}' wx:key="{{index}}" bindtap='changePinyin' data-index="{{index}}" >
+            <dic-pin poly="{{content.polyphone[index]}}" pinyin="{{item}}" index="{{index}}" word="{{content.term}}"/>
         </view>
     </view>
 </view>

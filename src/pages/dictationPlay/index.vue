@@ -8,6 +8,10 @@
           <view class="btn-rate" @click="setOrder('disorder')" v-else-if="dictation.playWay=='order'&&showAble">顺序听写</view>
           <view class="btn-rate btn-rate-disable" disabled  v-if="dictation.playWay=='disorder'&&!showAble">乱序听写</view>
           <view class="btn-rate btn-rate-disable" disabled  v-else-if="dictation.playWay=='order'&&!showAble">顺序听写</view>
+          <view class="btn-rate" @click="setRole()" v-if="dictation.ttsSex==1&&showAble">男声播放</view>
+          <view class="btn-rate" @click="setRole()" v-else-if="dictation.ttsSex==0&&showAble">女声播放</view>
+          <view class="btn-rate btn-rate-disable" disabled  v-if="dictation.ttsSex==1&&!showAble">男声播放</view>
+          <view class="btn-rate btn-rate-disable" disabled  v-else-if="dictation.ttsSex==0&&!showAble">女声播放</view>
         </view>
         <view class="dic-pinyin">
           <view class="dic-circle-box">
@@ -77,11 +81,11 @@
         return ttsArr
       },
       playPre: function () {
-        this.innerAudioContext.offEnded()
-        if (this.innerAudioContext) {
-          this.innerAudioContext.stop()
-        }
         if (this.currentIndex > 0) {
+          this.innerAudioContext.offEnded()
+          if (this.innerAudioContext) {
+            this.innerAudioContext.stop()
+          }
           if (this.timeout) {
             clearTimeout(this.timeout)
           }
@@ -92,16 +96,17 @@
           this.currentIndex -= 1
           this.processIndex = this.currentIndex
           this.pinyin = this.pinyinArr[this.currentIndex]
-          this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+          this.setAudioUrl()
+          // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
           this.playAudio()
         }
       },
       playNext: function () {
-        this.innerAudioContext.offEnded()
-        if (this.innerAudioContext) {
-          this.innerAudioContext.stop()
-        }
         if (this.currentIndex < this.pinyinArr.length - 1) {
+          this.innerAudioContext.offEnded()
+          if (this.innerAudioContext) {
+            this.innerAudioContext.stop()
+          }
           if (this.timeout) {
             clearTimeout(this.timeout)
           }
@@ -110,7 +115,8 @@
           }
           this.times = 0
           this.currentIndex += 1
-          this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+          this.setAudioUrl()
+          // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
           this.pinyin = this.pinyinArr[this.currentIndex]
           this.processIndex = this.currentIndex
           this.playAudio()
@@ -131,10 +137,14 @@
         this.currentIndex = 0
         this.processIndex = this.currentIndex
         this.pinyin = this.pinyinArr[this.currentIndex]
-        this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+        this.setAudioUrl()
+        // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
         this.playAudio()
       },
       play: function () {
+        if (this.processIndex < 0) {
+          this.processIndex = 0
+        }
         this.innerAudioContext.offEnded()
         this.times = 0
         this.playAudio()
@@ -178,7 +188,8 @@
               }
               this.timeout = setTimeout(() => {
                 this.currentIndex += 1
-                this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+                this.setAudioUrl()
+                // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
                 this.pinyin = this.pinyinArr[this.currentIndex]
                 this.processIndex = this.currentIndex
                 this.innerAudioContext.src = this.audioUrl
@@ -243,7 +254,8 @@
             words: this.dictation.words,
             playWay: this.dictation.playWay,
             playTimes: this.dictation.playTimes,
-            intervel: this.dictation.intervel
+            intervel: this.dictation.intervel,
+            ttsSex: this.dictation.ttsSex
           }
         }).then(res => {
           this.$store.dispatch('initDictation')
@@ -253,7 +265,36 @@
         this.currentIndex = 0
         this.processIndex = this.currentIndex
         this.pinyin = this.pinyinArr[this.currentIndex]
-        this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+        this.setAudioUrl()
+        // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+      },
+      setRole: function () {
+        this.dictation.ttsSex = this.dictation.ttsSex === 1 ? 0 : 1
+        this.setAudioUrl()
+        console.log(this.dictation.ttsSex)
+        this.$store.dispatch('updateDictation', {
+          id: this.dictation.id,
+          dictateWords: {
+            title: this.dictation.title,
+            active: this.dictation.active,
+            words: this.dictation.words,
+            playWay: this.dictation.playWay,
+            playTimes: this.dictation.playTimes,
+            intervel: this.dictation.intervel,
+            ttsSex: this.dictation.ttsSex
+          }
+        }).then(res => {
+          this.$store.dispatch('initDictation')
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      setAudioUrl: function () {
+        if (this.dictation.ttsSex === 1) {
+          this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+        } else {
+          this.audioUrl = this.ttsArr[this.currentIndex].ttsFemale
+        }
       }
     },
     onShow () {
@@ -261,6 +302,7 @@
         this.showAble = true
         this.innerAudioContext = wx.createInnerAudioContext()
         this.dictation = JSON.parse(this.$mp.query.param)
+        this.dictation.ttsSex = this.dictation.ttsSex === undefined ? 1 : this.dictation.ttsSex
         if (this.dictation.playWay === 'order') {
           this.pinyinArr = this.getPinyin([...this.dictation.words])
           this.ttsArr = this.getTts([...this.dictation.words])
@@ -270,9 +312,14 @@
           this.ttsArr = this.getTts(arr)
         }
         this.currentIndex = 0
-        this.processIndex = this.currentIndex
+        this.processIndex = -1
         this.pinyin = this.pinyinArr[this.currentIndex]
-        this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+        // if (this.dictation.ttsSex === 1) {
+        //   this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
+        // } else {
+        //   this.audioUrl = this.ttsArr[this.currentIndex].ttsFemale
+        // }
+        this.setAudioUrl()
       }
     },
     onUnload (option) {
@@ -327,6 +374,7 @@
     color:#fff;
     padding:10px 15px;
     border-radius:17px;
+    margin-left: 5px;
   }
   .btn-rate-disable{
     background:#999;
