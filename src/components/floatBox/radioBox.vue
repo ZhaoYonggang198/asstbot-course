@@ -18,7 +18,6 @@
             @touchmove="touchMove"
             @touchend="touchEnd"
             @touch="touchOn"
-            @click="selectItem(option)"
             :class="{'have background-fff': havaImage, 'no-image user-msg-box-color': !havaImage}">
           <block v-if="havaImage">
             <view class="image-box imageBox">
@@ -29,6 +28,9 @@
           <block v-else>
             <view class="value valueBox">{{option.caption}}</view>
           </block>
+          <form @submit="submitForm($event, option)" report-submit>
+            <button :id="index" form-type="submit" style="display:none"/>
+          </form>
         </label>
         <label v-else
             class="option-container light form-control"
@@ -57,6 +59,7 @@
 
 <script>
   import { getLineCount } from '@/utils/layout'
+  import formId from '@/utils/formId'
   export default {
     data () {
       return {
@@ -95,7 +98,6 @@
       },
       selectItem (obj) {
         if (this.touchEndTime - this.touchStartTime < 800) {
-          console.log(obj)
           if (obj.type && obj.type === 'donate') {
             this.$emit('donateclick')
           } else {
@@ -132,6 +134,10 @@
           clearTimeout(this.timeout)
           this.timeout = ''
         }
+      },
+      submitForm (event, option) {
+        formId.save(event.mp.detail.formId)
+        this.selectItem(option)
       }
     },
     created () {

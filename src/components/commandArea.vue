@@ -35,6 +35,7 @@
 import { mapState } from 'vuex'
 import recordButton from './widget/recordButton'
 import devicePadding from './view/devicePadding'
+import formId from '@/utils/formId'
 
 function getRecordAuth (showToast) {
   return new Promise((resolve, reject) => {
@@ -135,6 +136,7 @@ export default {
       this.currentMessage = ev.mp.detail.value
     },
     sendMessage (ev) {
+      formId.save(ev.mp.detail.formId)
       if (this.currentMessage && this.currentMessage !== this.displayText) {
         this.$store.dispatch('sendQuery', this.currentMessage).then(res => {
           this.$store.commit('clearState')
