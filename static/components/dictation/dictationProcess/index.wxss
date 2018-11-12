@@ -6,7 +6,7 @@
 .process-bar-container{
     flex: 1;
     height: 10px;
-    background: #999;
+    background: #ddd;
     overflow: hidden;
     border-radius: 5px;
 }

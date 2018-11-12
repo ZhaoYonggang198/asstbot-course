@@ -14,7 +14,12 @@ Component({
       },
       currentPinyin: {
           type: String,
-          value: ''
+          value: '',
+          observer: function (value) {
+              this.setData({
+                  current: value
+              })
+          }
       }
   },
 
@@ -22,7 +27,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+      current: ''
   },
 
   /**
@@ -30,6 +35,9 @@ Component({
    */
   methods: {
       select: function (e) {
+          this.setData({
+              current: e.currentTarget.dataset.item
+          })
           this.triggerEvent('select', e.currentTarget.dataset.item)
       }
   }
