@@ -21,6 +21,7 @@
 
 <script>
   import wechat from '@/store/modules/wechat'
+  import Time from '@/utils/time'
   import { mapState } from 'vuex'
   export default {
     data () {
@@ -34,19 +35,36 @@
     },
     computed: {
       ...mapState({
-        dictateList: state => state.dictation.dictation
+        dictateList: state => {
+          console.log(state)
+          return state.dictation.dictation
+        }
       }),
       activeDictation: state => {
         if (state.dictateList && state.dictateList.length) {
           let active = state.dictateList.find(item => item.active) || {}
           return active
         }
+        return {}
       }
     },
     methods: {
       ShowNewModal: function () {
-        wx.navigateTo({
-          url: '/pages/dictationEdit/main'
+        this.$store.dispatch('newDictation', {
+          openId: '',
+          dictateWords: {
+            title: Time.getFormatTime(),
+            active: false,
+            playWay: 'order',
+            playTimes: 2,
+            intervel: 10,
+            ttsSex: 'ttsMale',
+            words: []
+          }
+        }).then(res => {
+          wx.navigateTo({
+            url: '/pages/dictationEdit/main?param=' + res.data.id + '&active=' + this.activeDictation.id
+          })
         })
       },
       hideNewModal: function () {

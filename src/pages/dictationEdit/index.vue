@@ -19,8 +19,8 @@
           <view class="dic-edit-name-box half-container">
             <view class="dic-edit-name">播放角色</view>
             <view class="dic-edit-order">
-              <text class="order-text" :class="dictation.ttsSex==1? 'active' : ''" @click="setRole(1)">男声</text>
-              <text class="order-text" :class="dictation.ttsSex==0 ? 'active' : ''" @click="setRole(0)">女声</text>
+              <text class="order-text" :class="(dictation.ttsSex=='ttsMale' || dictation.ttsSex == 1)? 'active' : ''" @click="setRole('ttsMale')">男声</text>
+              <text class="order-text" :class="(dictation.ttsSex=='ttsFemale' || dictation.ttsSex == 0) ? 'active' : ''" @click="setRole('ttsFemale')">女声</text>
             </view>
           </view>
         </view>
@@ -43,7 +43,7 @@
             新词
           </view>
           <!--<input class="dic-edit-add" v-if="dictation.words.length>0" @blur="setNew" @confirm="setNew" @focus="focus" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">-->
-          <input class="dic-edit-add" @blur="setNew" @confirm="setNew" @focus="focus" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
+          <input class="dic-edit-add" @blur="setNew" @confirm="setNew" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
           <!--<view class="add-icon">-->
             <!--<icon-com type="add" size="20" color="#333"/>-->
           <!--</view>-->
@@ -62,11 +62,11 @@
     </view>
     <view class="dic-footer">
       <view class="dic-foot-btn" @click="toPlay">开始听写</view>
-      <view class="dic-foot-btn"  v-if="edit" @click="setActive">通过音箱听写</view>
+      <view class="dic-foot-btn" @click="setActive">通过音箱听写</view>
       <button class="dic-foot-btn" open-type="share">分享给</button>
     </view>
     <block v-if="showPinyin">
-      <dictation-modal :hanzi="hanzi" :pinyin="pinyin" @select="selectPinyin"/>
+      <dictation-modal :hanzi="hanzi" :pinyin="pinyin" :currentPinyin="currentPinyin" @select="selectPinyin"/>
     </block>
   </view>
 
@@ -74,7 +74,6 @@
 
 <script>
   import { mapState } from 'vuex'
-  import Time from '@/utils/time'
   import daCounter from '@/components/uicomponent/daCounter'
   import wechat from '@/store/modules/wechat'
   let clickFlag = true
@@ -84,9 +83,10 @@
   export default {
     data () {
       return {
-        edit: true,
+        edit: false,
         hanzi: '',
         pinyin: '',
+        currentPinyin: '',
         wordsIndex: '',
         pinyinIndex: '',
         showPinyin: false,
@@ -105,8 +105,7 @@
         playIndex: '',
         playState: [],
         scrollTop: 'scrollTop',
-        openId: '',
-        focusFlag: false
+        openId: ''
       }
     },
     components: {
@@ -187,75 +186,39 @@
               newWordArr = [...this.newWord.replace(/，/g, ',').split(',')]
             }
             if (newWordArr.length) {
-              if (this.edit) {
-                this.$store.dispatch('getPinyin', newWordArr).then(res => {
-                  let arr = []
-                  that.getArr(newWordArr, res, arr).then(resp => {
-                    this.$store.dispatch('updateDictation', {
-                      id: this.dictation.id,
-                      dictateWords: {
-                        title: this.dictation.title,
-                        active: this.dictation.active,
-                        playWay: this.dictation.playWay,
-                        playTimes: this.dictation.playTimes,
-                        intervel: this.dictation.intervel,
-                        ttsSex: this.dictation.ttsSex,
-                        words: this.dictation.words.concat(resp)
-                      }
-                    }).then(res => {
-                      this.$store.dispatch('initDictation')
-                      if (this.newWord) {
-                        this.dictation.words = [...this.dictation.words, ...resp]
-                      }
-                      this.scrollTop = 'scrollTop' + this.dicWords.length
-                      this.newWord = ''
-                      this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
-                      clickFlag = true
-                    }).catch(err => {
-                      clickFlag = true
-                      console.log(err)
-                      wx.showToast({
-                        title: '添加失败'
-                      })
+              this.$store.dispatch('getPinyin', newWordArr).then(res => {
+                let arr = []
+                that.getArr(newWordArr, res, arr).then(resp => {
+                  this.$store.dispatch('updateDictation', {
+                    id: this.dictation.id,
+                    dictateWords: {
+                      title: this.dictation.title,
+                      active: this.dictation.active,
+                      playWay: this.dictation.playWay,
+                      playTimes: this.dictation.playTimes,
+                      intervel: this.dictation.intervel,
+                      ttsSex: this.dictation.ttsSex,
+                      words: this.dictation.words.concat(resp)
+                    }
+                  }).then(res => {
+                    this.edit = true
+                    this.$store.dispatch('initDictation')
+                    if (this.newWord) {
+                      this.dictation.words = [...this.dictation.words, ...resp]
+                    }
+                    this.scrollTop = 'scrollTop' + this.dicWords.length
+                    this.newWord = ''
+                    this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
+                    clickFlag = true
+                  }).catch(err => {
+                    clickFlag = true
+                    console.log(err)
+                    wx.showToast({
+                      title: '添加失败'
                     })
                   })
                 })
-              } else {
-                this.$store.dispatch('getPinyin', newWordArr).then(res => {
-                  let arr = []
-                  that.getArr(newWordArr, res, arr).then(resp => {
-                    this.$store.dispatch('newDictation', {
-                      openId: '',
-                      dictateWords: {
-                        title: this.dictation.title,
-                        active: false,
-                        playWay: this.playWay,
-                        playTimes: this.playTimes,
-                        intervel: this.intervel,
-                        ttsSex: this.dictation.ttsSex,
-                        words: this.dictation.words.concat(resp)
-                      }
-                    }).then(res => {
-                      this.$store.dispatch('initDictation')
-                      if (this.newWord) {
-                        this.dictation.words = [...this.dictation.words, ...resp]
-                      }
-                      this.scrollTop = 'scrollTop' + (this.dicWords.length - 1)
-                      this.dictation.id = res.data.id
-                      this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
-                      this.newWord = ''
-                      this.edit = true
-                      clickFlag = true
-                    }).catch(err => {
-                      clickFlag = true
-                      console.log(err)
-                      wx.showToast({
-                        title: '添加失败'
-                      })
-                    })
-                  })
-                })
-              }
+              })
             } else {
               clickFlag = true
             }
@@ -332,57 +295,30 @@
               this.dictation.playWay = newVal
               break
             case 'role':
-              this.dictation.ttsSex = parseInt(newVal)
+              this.dictation.ttsSex = newVal
           }
-          if (this.edit) {
-            this.$store.dispatch('updateDictation', {
-              id: this.dictation.id,
-              dictateWords: {
-                title: this.dictation.title,
-                active: this.dictation.active,
-                words: this.dictation.words,
-                playWay: this.dictation.playWay,
-                playTimes: this.dictation.playTimes,
-                intervel: this.dictation.intervel,
-                ttsSex: this.dictation.ttsSex
-              }
-            }).then(res => {
-              this.$store.dispatch('initDictation')
-              this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
-              clickFlag1 = true
-            }).catch(err => {
-              clickFlag1 = true
-              console.log(err)
-              wx.showToast({
-                title: '保存失败'
-              })
+          this.$store.dispatch('updateDictation', {
+            id: this.dictation.id,
+            dictateWords: {
+              title: this.dictation.title,
+              active: this.dictation.active,
+              words: this.dictation.words,
+              playWay: this.dictation.playWay,
+              playTimes: this.dictation.playTimes,
+              intervel: this.dictation.intervel,
+              ttsSex: this.dictation.ttsSex
+            }
+          }).then(res => {
+            this.$store.dispatch('initDictation')
+            this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
+            clickFlag1 = true
+          }).catch(err => {
+            clickFlag1 = true
+            console.log(err)
+            wx.showToast({
+              title: '保存失败'
             })
-          } else {
-            this.$store.dispatch('newDictation', {
-              openId: '',
-              dictateWords: {
-                title: this.dictation.title,
-                active: false,
-                words: this.dictation.words,
-                playWay: this.dictation.playWay,
-                playTimes: this.dictation.playTimes,
-                intervel: this.dictation.intervel,
-                ttsSex: this.dictation.ttsSex
-              }
-            }).then(res => {
-              this.$store.dispatch('initDictation')
-              this.dictation.id = res.data.id
-              this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
-              this.edit = true
-              clickFlag1 = true
-            }).catch(err => {
-              console.log(err)
-              wx.showToast({
-                title: '保存失败'
-              })
-              clickFlag1 = true
-            })
-          }
+          })
         }
       },
       deleteText: function (index) {
@@ -438,70 +374,80 @@
         }, 300)
       },
       setActive () {
-        if (this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) {
-          this.$store.dispatch('updateDictation', {
-            id: this.preActive.id,
-            dictateWords: {
-              title: this.preActive.title,
-              active: !this.preActive.active,
-              playWay: this.preActive.playWay || 'order',
-              playTimes: this.preActive.playTimes || 2,
-              intervel: this.preActive.intervel || 10,
-              ttsSex: this.preActive.ttsSex,
-              words: this.preActive.words
-            }
-          })
-        }
-        if ((this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) || !this.preActive || !this.preActive.id) {
-          this.$store.dispatch('getSmartSpeakers').then(res => {
-            if (res.bindingTypes.length) {
-              console.log(this.activeDictation)
-              this.activeDictation.active = !this.activeDictation.active
-              this.$store.dispatch('updateDictation', {
-                id: this.activeDictation.id,
-                dictateWords: {
-                  title: this.activeDictation.title,
-                  active: this.activeDictation.active,
-                  playWay: this.activeDictation.playWay || 'order',
-                  playTimes: this.activeDictation.playTimes || 2,
-                  intervel: this.activeDictation.intervel || 10,
-                  ttsSex: this.activeDictation.ttsSex,
-                  words: this.activeDictation.words
-                }
-              }).then(res => {
-                this.$store.dispatch('initDictation')
-                if (this.activeDictation.active) {
-                  this.preActive = this.dictateList.find(item => item.id === this.activeDictation.id)
-                }
-                wx.showModal({
-                  title: '设置成功',
-                  content: '现在请对音箱说："打开词语听写"，开始听写吧！',
-                  showCancel: false
+        if (this.dictation.words.length) {
+          if (this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) {
+            this.$store.dispatch('updateDictation', {
+              id: this.preActive.id,
+              dictateWords: {
+                title: this.preActive.title,
+                active: !this.preActive.active,
+                playWay: this.preActive.playWay || 'order',
+                playTimes: this.preActive.playTimes || 2,
+                intervel: this.preActive.intervel || 10,
+                ttsSex: this.preActive.ttsSex,
+                words: this.preActive.words
+              }
+            })
+          }
+          if ((this.preActive && this.preActive.id && this.preActive.id !== this.activeDictation.id) || !this.preActive || !this.preActive.id) {
+            this.$store.dispatch('getSmartSpeakers').then(res => {
+              if (res.bindingTypes.length) {
+                console.log(this.activeDictation)
+                this.activeDictation.active = !this.activeDictation.active
+                this.$store.dispatch('updateDictation', {
+                  id: this.activeDictation.id,
+                  dictateWords: {
+                    title: this.activeDictation.title,
+                    active: this.activeDictation.active,
+                    playWay: this.activeDictation.playWay || 'order',
+                    playTimes: this.activeDictation.playTimes || 2,
+                    intervel: this.activeDictation.intervel || 10,
+                    ttsSex: this.activeDictation.ttsSex,
+                    words: this.activeDictation.words
+                  }
+                }).then(res => {
+                  this.$store.dispatch('initDictation')
+                  if (this.activeDictation.active) {
+                    this.preActive = this.dictateList.find(item => item.id === this.activeDictation.id)
+                  }
+                  wx.showModal({
+                    title: '设置成功',
+                    content: '现在请对音箱说："打开词语听写"，开始听写吧！',
+                    showCancel: false
+                  })
+                }).catch(err => {
+                  console.log(err)
+                  wx.showToast({
+                    title: '设置失败'
+                  })
                 })
-              }).catch(err => {
-                console.log(err)
-                wx.showToast({
-                  title: '设置失败'
+              } else {
+                wx.navigateTo({
+                  url: '/pages/smartSpeaker/main'
                 })
-              })
-            } else {
-              wx.navigateTo({
-                url: '/pages/smartSpeaker/main'
-              })
-            }
-          })
+              }
+            })
+          } else {
+            wx.showModal({
+              content: '现在请对音箱说："打开词语听写"，开始听写吧！',
+              showCancel: false
+            })
+          }
         } else {
           wx.showModal({
-            content: '现在请对音箱说："打开词语听写"，开始听写吧！',
+            title: '还没有听写词汇',
+            content: '请添加听写词汇，然后在设置音箱播放',
             showCancel: false
           })
         }
       },
       changePinyin: function (e, ourterIndex) {
-        const {index, polyphone, hanzi} = e.mp.detail
+        const {index, polyphone, hanzi, pinyin} = e.mp.detail
+        console.log(index, polyphone, hanzi, pinyin)
         if (polyphone.length > 1) {
           this.showPinyin = true
           this.pinyin = polyphone
+          this.currentPinyin = pinyin
           this.hanzi = hanzi
           this.wordsIndex = this.dictation.words.length - ourterIndex - 1
           this.pinyinIndex = index
@@ -534,6 +480,7 @@
               ttsSex: that.dictation.ttsSex
             }
           }).then(res => {
+            this.edit = true
             that.$store.dispatch('initDictation')
             that.activeDictation = JSON.parse(JSON.stringify(that.dictation))
             that.dictation.words = [...that.dictation.words]
@@ -550,9 +497,17 @@
         })
       },
       toPlay: function () {
-        wx.redirectTo({
-          url: '/pages/dictationPlay/main?param=' + JSON.stringify(this.dictation)
-        })
+        if (this.dictation.words.length) {
+          wx.navigateTo({
+            url: '/pages/dictationPlay/main?param=' + JSON.stringify(this.dictation)
+          })
+        } else {
+          wx.showModal({
+            title: '没有要听写的单词',
+            content: '请添加要听写的单词',
+            showCancel: false
+          })
+        }
       },
       stopPinyin: function (e, index) {
         this.playState[index].value = false
@@ -569,7 +524,7 @@
         })
         this.playState[index].value = true
         this.playIndex = index
-        if (this.dictation.ttsSex === 1) {
+        if (this.dictation.ttsSex === 'ttsMale' || this.dictation.ttsSex === 1) {
           this.voiceUrl = ttsMale
         } else {
           this.voiceUrl = ttsFemale
@@ -621,60 +576,54 @@
         }
         py = py.replace(/[āáǎà]/g, 'a').replace(/[ōóǒò]/g, 'o').replace(/[ēéěè]/g, 'e').replace(/[īíǐì]/g, 'i').replace(/[ūúǔù]/g, 'u').replace(/[ǖǘǚǜ]/g, 'ü')
         return py + num
-      },
-      focus: function () {
-        console.log('focus')
-        this.focusFlag = true
       }
     },
     onShow (option) {
-      this.focusFlag = false
+      // this.$store.dispatch('getPinyinVoice', {
+      //   text: '现(xian4)在(zai4)开(kai1)始(shi3)听(ting1)写(xie3)',
+      //   speed: 5,
+      //   role: 1
+      // })
+      // this.$store.dispatch('getPinyinVoice', {
+      //   text: '现(xian4)在(zai4)开(kai1)始(shi3)听(ting1)写(xie3)',
+      //   speed: 5,
+      //   role: 0
+      // })
+      // this.$store.dispatch('getPinyinVoice', {
+      //   text: '全(quan2)部(bu4)词(ci2)汇(hui4)已(yi3)经(jing1)听(ting1)写(xie3)完(wan2)成(cheng2)',
+      //   speed: 5,
+      //   role: 1
+      // })
+      // this.$store.dispatch('getPinyinVoice', {
+      //   text: '全(quan2)部(bu4)词(ci2)汇(hui4)已(yi3)经(jing1)听(ting1)写(xie3)完(wan2)成(cheng2)',
+      //   speed: 5,
+      //   role: 0
+      // })
       wechat.getOpenId().then(res => {
         this.openId = res
       })
       this.innerAudioContext = wx.createInnerAudioContext()
-      if (this.$mp.query.active) {
-        this.preActive = this.dictateList.find(item => item.id === this.$mp.query.active)
-        if (this.preActive) {
-          this.preActive.ttsSex = this.preActive.ttsSex === undefined ? 1 : this.preActive.ttsSex
+      this.$store.dispatch('initDictation').then(res => {
+        if (this.$mp.query.active !== 'undefined') {
+          this.preActive = res.data.data.find(item => item.id === this.$mp.query.active)
+          if (this.preActive) {
+            this.preActive.ttsSex = this.preActive.ttsSex === undefined ? 'ttsMale' : this.preActive.ttsSex
+          }
         }
-      }
-
-      if (this.$mp.query.param) {
-        this.dictation = this.dictateList.find(item => item.id === this.$mp.query.param)
-        this.activeDictation = this.dictateList.find(item => item.id === this.$mp.query.param)
-        this.dictation.ttsSex = this.dictation.ttsSex === undefined ? 1 : this.dictation.ttsSex
-        this.activeDictation.ttsSex = this.activeDictation.ttsSex === undefined ? 1 : this.activeDictation.ttsSex
-        this.edit = true
-      } else {
-        this.dictation = {
-          title: Time.getFormatTime(),
-          words: [],
-          active: false,
-          playWay: 'order',
-          ttsSex: 1,
-          playTimes: 2,
-          intervel: 10
-        }
-        this.activeDictation = {
-          title: Time.getFormatTime(),
-          words: [],
-          active: false,
-          ttsSex: 1,
-          playWay: 'order',
-          playTimes: 2,
-          intervel: 10
-        }
+        this.dictation = res.data.data.find(item => item.id === this.$mp.query.param)
+        this.activeDictation = res.data.data.find(item => item.id === this.$mp.query.param)
+        this.dictation.ttsSex = this.dictation.ttsSex === undefined ? 'ttsMale' : this.dictation.ttsSex
+        this.activeDictation.ttsSex = this.activeDictation.ttsSex === undefined ? 'ttsMale' : this.activeDictation.ttsSex
         this.edit = false
-      }
-      this.title = this.dictation.title
-      this.playTimes = this.dictation.playTimes
-      this.intervel = this.dictation.intervel
+        this.title = this.dictation.title
+        this.playTimes = this.dictation.playTimes
+        this.intervel = this.dictation.intervel
+      })
     },
     onHide () {
-      if (this.innerAudioContext) {
-        this.innerAudioContext.destroy()
-      }
+      // if (this.innerAudioContext) {
+      //   this.innerAudioContext.destroy()
+      // }
     },
     onShareAppMessage: function () {
       return {
@@ -685,9 +634,14 @@
     onLoad (option) {
     },
     onUnload () {
-      if (this.innerAudioContext) {
-        this.innerAudioContext.destroy()
+      if (!this.dictation.words.length) {
+        this.$store.dispatch('deleteDictation', this.dictation.id).then(res => {
+          this.$store.dispatch('initDictation')
+        })
       }
+      // if (this.innerAudioContext) {
+      //   this.innerAudioContext.destroy()
+      // }
     }
   }
 </script>

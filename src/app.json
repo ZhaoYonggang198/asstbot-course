@@ -33,5 +33,6 @@
     "navigationBarTextStyle": "white",
     "navigationStyle": "custom",
     "enablePullDownRefresh": false
-  }
+  },
+  "requiredBackgroundModes": ["audio"]
 }

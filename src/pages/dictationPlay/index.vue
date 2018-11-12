@@ -8,10 +8,10 @@
           <view class="btn-rate" @click="setOrder('disorder')" v-else-if="dictation.playWay=='order'&&showAble">顺序听写</view>
           <view class="btn-rate btn-rate-disable" disabled  v-if="dictation.playWay=='disorder'&&!showAble">乱序听写</view>
           <view class="btn-rate btn-rate-disable" disabled  v-else-if="dictation.playWay=='order'&&!showAble">顺序听写</view>
-          <view class="btn-rate" @click="setRole()" v-if="dictation.ttsSex==1&&showAble">男声播放</view>
-          <view class="btn-rate" @click="setRole()" v-else-if="dictation.ttsSex==0&&showAble">女声播放</view>
-          <view class="btn-rate btn-rate-disable" disabled  v-if="dictation.ttsSex==1&&!showAble">男声播放</view>
-          <view class="btn-rate btn-rate-disable" disabled  v-else-if="dictation.ttsSex==0&&!showAble">女声播放</view>
+          <view class="btn-rate" @click="setRole()" v-if="(dictation.ttsSex==1 || dictation.ttsSex=='ttsMale')&&showAble">男声播放</view>
+          <view class="btn-rate" @click="setRole()" v-else-if="(dictation.ttsSex==0 || dictation.ttsSex=='ttsFemale')&&showAble">女声播放</view>
+          <view class="btn-rate btn-rate-disable" disabled  v-if="(dictation.ttsSex==1 || dictation.ttsSex=='ttsMale')&&!showAble">男声播放</view>
+          <view class="btn-rate btn-rate-disable" disabled  v-else-if="(dictation.ttsSex==0 || dictation.ttsSex=='ttsFemale')&&!showAble">女声播放</view>
         </view>
         <view class="dic-pinyin">
           <view class="dic-circle-box">
@@ -25,11 +25,11 @@
       </view>
     </view>
     <view class="dic-footer">
-      <view class="btn-footer" @click="playPre"><image class="play-icon icon-pre" src="https://xiaodamp.com/imbot/image/49add8b0-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
+      <view class="btn-footer" @click="playPreBack"><image class="play-icon icon-pre" src="https://xiaodamp.com/imbot/image/49add8b0-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
       <view class="btn-footer btn-center" v-if="playState" @click="play"><image class="play-icon icon-play-1" src="https://xiaodamp.com/imbot/image/43be6050-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
-      <view class="btn-footer btn-center" v-else @click="stop"><image class="play-icon" src="https://xiaodamp.com/imbot/image/3ebcca60-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
+      <view class="btn-footer btn-center" v-else @click="stopBackAudio"><image class="play-icon" src="https://xiaodamp.com/imbot/image/3ebcca60-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
       <!--<view class="btn-footer btn-center" @click="rePlay">重播</view>-->
-      <view class="btn-footer" @click="playNext"><image class="play-icon icon-aft" src="https://xiaodamp.com/imbot/image/398a1250-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
+      <view class="btn-footer" @click="playNextBack"><image class="play-icon icon-aft" src="https://xiaodamp.com/imbot/image/398a1250-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
     </view>
   </view>
 </template>
@@ -49,6 +49,8 @@
         audioUrl: '',
         timeout: '',
         timeTwins: '',
+        timeoutBack: '',
+        timeTwinsBack: '',
         ttsRole: 1,
         ttsSpeed: 1,
         times: 0,
@@ -102,6 +104,24 @@
           this.playAudio()
         }
       },
+      playPreBack: function () {
+        if (this.currentIndex > 0) {
+          if (this.backgroundAudioContext) {
+            this.backgroundAudioContext.stop()
+          }
+          if (this.timeoutBack) {
+            clearTimeout(this.timeoutBack)
+          }
+          if (this.timeTwinsBack) {
+            clearTimeout(this.timeTwinsBack)
+          }
+          this.times = 0
+          this.currentIndex -= 1
+          this.processIndex = this.currentIndex
+          this.pinyin = this.pinyinArr[this.currentIndex]
+          this.playBackAudio()
+        }
+      },
       playNext: function () {
         if (this.currentIndex < this.pinyinArr.length - 1) {
           this.innerAudioContext.offEnded()
@@ -116,12 +136,32 @@
           }
           this.times = 0
           this.currentIndex += 1
+          console.log('这里执行了P139，值为： ' + this.currentIndex)
           this.setAudioUrl()
           // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
           this.pinyin = this.pinyinArr[this.currentIndex]
           this.processIndex = this.currentIndex
           console.log('pre:' + this.audioUrl)
           this.playAudio()
+        }
+      },
+      playNextBack: function () {
+        if (this.currentIndex < this.pinyinArr.length - 1) {
+          if (this.backgroundAudioContext) {
+            this.backgroundAudioContext.stop()
+          }
+          if (this.timeoutBack) {
+            clearTimeout(this.timeoutBack)
+          }
+          if (this.timeTwinsBack) {
+            clearTimeout(this.timeTwinsBack)
+          }
+          this.times = 0
+          this.currentIndex += 1
+          console.log('这里执行了P160，值为： ' + this.currentIndex)
+          this.pinyin = this.pinyinArr[this.currentIndex]
+          this.processIndex = this.currentIndex
+          this.playBackAudio()
         }
       },
       rePlay: function () {
@@ -145,11 +185,22 @@
       },
       play: function () {
         if (this.processIndex < 0) {
-          this.processIndex = 0
+          this.backgroundAudioContext.title = '现在开始听写'
+          this.backgroundAudioContext.src = (this.dictation.ttsSex === 0 || this.dictation.ttsSex === 'ttsFemale') ? 'https://xiaodamp.cn/asst/tts/5df1c480-e65e-11e8-9774-bd7f39b40d24.mp3' : 'https://xiaodamp.cn/asst/tts/5de2f770-e65e-11e8-9774-bd7f39b40d24.mp3'
+          setTimeout(() => {
+            this.processIndex = 0
+            this.times = 0
+            console.log('这里应该是0，实际是：' + this.currentIndex)
+            this.playBackAudio(this.ttsArr, this.currentIndex)
+          }, 5500)
+        } else {
+          this.playBackAudio(this.ttsArr, this.currentIndex)
         }
-        this.innerAudioContext.offEnded()
-        this.times = 0
-        this.playAudio()
+        // if (this.processIndex < 0) {
+        //   this.processIndex = 0
+        // }
+        // this.times = 0
+        // this.playBackAudio(this.ttsArr, this.currentIndex)
       },
       stop: function () {
         this.playState = true
@@ -160,6 +211,16 @@
           clearTimeout(this.timeTwins)
         }
         this.innerAudioContext.stop()
+      },
+      stopBackAudio: function () {
+        this.playState = true
+        if (this.timeoutBack) {
+          clearTimeout(this.timeoutBack)
+        }
+        if (this.timeTwinsBack) {
+          clearTimeout(this.timeTwinsBack)
+        }
+        this.backgroundAudioContext.stop()
       },
       playAudio: function () {
         const that = this
@@ -190,6 +251,7 @@
               }
               this.timeout = setTimeout(() => {
                 this.currentIndex += 1
+                console.log('这里执行了P253，值为： ' + this.currentIndex)
                 this.setAudioUrl()
                 this.pinyin = this.pinyinArr[this.currentIndex]
                 this.processIndex = this.currentIndex
@@ -201,6 +263,54 @@
               }, parseInt(this.dictation.intervel) * 1000)
             }
           }
+        })
+      },
+      playBackAudio: function () {
+        this.backgroundAudioContext.title = this.pinyinArr[this.currentIndex]
+        this.backgroundAudioContext.src = (this.dictation.ttsSex === 0 || this.dictation.ttsSex === 'ttsFemale') ? this.ttsArr[this.currentIndex].ttsFemale : this.ttsArr[this.currentIndex].ttsMale
+        this.backgroundAudioContext.onPlay(() => {
+          this.playState = false
+          this.showAble = false
+        })
+        this.backgroundAudioContext.onEnded(() => {
+          if (this.processIndex >= 0) {
+            if (this.currentIndex === this.ttsArr.length - 1 && this.times === this.dictation.playTimes - 1) {
+              this.setPlayStateTrue()
+              setTimeout(() => {
+                this.backgroundAudioContext.title = '全部词汇已经听写完成'
+                this.backgroundAudioContext.src = (this.dictation.ttsSex === 0 || this.dictation.ttsSex === 'ttsFemale') ? ' https://xiaodamp.cn/asst/tts/5de73d30-e65e-11e8-9774-bd7f39b40d24.mp3' : 'https://xiaodamp.cn/asst/tts/5dee4210-e65e-11e8-9774-bd7f39b40d24.mp3'
+              }, 1000)
+            }
+            this.times += 1
+            if (this.times < this.dictation.playTimes) {
+              if (this.timeTwinsBack) {
+                clearTimeout(this.timeTwinsBack)
+              }
+              this.timeTwinsBack = setTimeout(() => {
+                this.playBackAudio()
+              }, 1000)
+            } else {
+              if (this.currentIndex < this.ttsArr.length - 1) {
+                this.times = 0
+                if (this.timeoutBack) {
+                  clearTimeout(this.timeoutBack)
+                }
+                this.timeoutBack = setTimeout(() => {
+                  this.currentIndex += 1
+                  console.log('这里执行了P297，值为： ' + this.currentIndex)
+                  this.pinyin = this.pinyinArr[this.currentIndex]
+                  this.processIndex = this.currentIndex
+                  this.playBackAudio()
+                }, this.dictation.intervel * 1000)
+              }
+            }
+          }
+        })
+        this.backgroundAudioContext.onNext(() => {
+          this.playNextBack()
+        })
+        this.backgroundAudioContext.onPrev(() => {
+          this.playPreBack()
         })
       },
       dicConvert: function () {
@@ -270,9 +380,8 @@
         // this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
       },
       setRole: function () {
-        this.dictation.ttsSex = this.dictation.ttsSex === 1 ? 0 : 1
+        this.dictation.ttsSex = (this.dictation.ttsSex === 1 || this.dictation.ttsSex === 'ttsMale') ? 'ttsFemale' : 'ttsMale'
         this.setAudioUrl()
-        console.log(this.dictation.ttsSex)
         this.$store.dispatch('updateDictation', {
           id: this.dictation.id,
           dictateWords: {
@@ -291,7 +400,7 @@
         })
       },
       setAudioUrl: function () {
-        if (this.dictation.ttsSex === 1) {
+        if (this.dictation.ttsSex === 1 || this.dictation.ttsSex === 'ttsMale') {
           this.audioUrl = this.ttsArr[this.currentIndex].ttsMale
         } else {
           this.audioUrl = this.ttsArr[this.currentIndex].ttsFemale
@@ -299,40 +408,48 @@
       }
     },
     onShow () {
-      if (this.$mp.query.param) {
-        this.showAble = true
-        this.innerAudioContext = wx.createInnerAudioContext()
-        this.dictation = JSON.parse(this.$mp.query.param)
-        this.dictation.ttsSex = this.dictation.ttsSex === undefined ? 1 : this.dictation.ttsSex
-        if (this.dictation.playWay === 'order') {
-          this.pinyinArr = this.getPinyin([...this.dictation.words])
-          this.ttsArr = this.getTts([...this.dictation.words])
-        } else {
-          let arr = this.getConvert()
-          this.pinyinArr = this.getPinyin(arr)
-          this.ttsArr = this.getTts(arr)
+      if (this.currentIndex > 0) {
+      } else {
+        if (this.$mp.query.param) {
+          this.showAble = true
+          // this.innerAudioContext = wx.createInnerAudioContext()
+          this.backgroundAudioContext = wx.getBackgroundAudioManager()
+          this.dictation = JSON.parse(this.$mp.query.param)
+          this.dictation.ttsSex = this.dictation.ttsSex === undefined ? 'ttsMale' : this.dictation.ttsSex
+          if (this.dictation.playWay === 'order') {
+            this.pinyinArr = this.getPinyin([...this.dictation.words])
+            this.ttsArr = this.getTts([...this.dictation.words])
+          } else {
+            let arr = this.getConvert()
+            this.pinyinArr = this.getPinyin(arr)
+            this.ttsArr = this.getTts(arr)
+          }
+          this.currentIndex = 0
+          this.processIndex = -1
+          this.pinyin = this.pinyinArr[this.currentIndex]
+          this.setAudioUrl()
         }
-        this.currentIndex = 0
-        this.processIndex = -1
-        this.pinyin = this.pinyinArr[this.currentIndex]
-        this.setAudioUrl()
       }
     },
     onUnload (option) {
-      console.log(option)
-      if (this.innerAudioContext) {
-        this.innerAudioContext.destroy()
+      console.log('unload')
+      if (this.backgroundAudioContext) {
+        this.backgroundAudioContext.stop()
       }
-      if (this.timeout) {
-        clearTimeout(this.timeout)
+      if (this.timeoutBack) {
+        clearTimeout(this.timeoutBack)
       }
-      if (this.timeTwins) {
-        clearTimeout(this.timeTwins)
+      if (this.timeTwinsBack) {
+        clearTimeout(this.timeTwinsBack)
       }
+      this.backgroundAudioContext = ''
       this.playState = true
       this.times = 0
       this.currentIndex = 0
-      this.processIndex = this.currentIndex
+      this.processIndex = -1
+    },
+    onHide () {
+      console.log('hide')
     }
   }
 </script>

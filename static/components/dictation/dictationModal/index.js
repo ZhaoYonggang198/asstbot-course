@@ -11,6 +11,10 @@ Component({
       pinyin: {
           type: Array,
           value: []
+      },
+      currentPinyin: {
+          type: String,
+          value: ''
       }
   },
 

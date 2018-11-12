@@ -55,3 +55,7 @@
     min-width:30px;
     text-align:center;
 }
+.active{
+    background: #19a1a8;
+    color: #fff;
+}

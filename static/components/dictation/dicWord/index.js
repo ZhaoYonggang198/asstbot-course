@@ -32,9 +32,10 @@ Component({
       },
       changePinyin: function (e) {
           const index = e.currentTarget.dataset.index
+          const pinyin = e.currentTarget.dataset.pinyin
           const { polyphone, term } = this.properties.content
           const hanzi = term.substr(index, 1)
-          this.triggerEvent('changePinyin', { index, polyphone: polyphone[index], hanzi })
+          this.triggerEvent('changePinyin', { index, polyphone: polyphone[index], hanzi, pinyin})
       },
       play: function () {
           const {ttsFemale, ttsMale} = this.properties.content
