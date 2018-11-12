@@ -530,6 +530,7 @@
     display: flex;
     justify-content: center;
     padding: 10px 15px 25px 15px;
+    align-items: center;
   }
   .btn-footer{
     height:68rpx;
@@ -548,6 +549,8 @@
   }
   .btn-center{
     width: 60px;
+    height: 60px;
+    border-radius: 50%;
     text-align: center;
   }
   .icon-play-1{
