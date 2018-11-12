@@ -93,7 +93,8 @@ const urlMaping = {
   'xiaodu-speaker': '/pages/bindXiaodu/main',
   'xiaoai-no-screen': '/pages/bindXiaomi/main',
   'dueros-no-screen': '/pages/bindXiaodu/main',
-  'dueros-has-screen': '/pages/xiaoduhelp/main'
+  'dueros-has-screen': '/pages/xiaoduhelp/main',
+  'dingdong-no-screen': '/pages/bindJingdong/main'
 }
 
 export default {
