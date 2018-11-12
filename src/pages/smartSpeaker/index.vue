@@ -17,6 +17,11 @@ view(class="page content")
       view(class="weui-cell__ft weui-cell__ft_in-access")
         block(v-if="baiduBinded") 已关联
         block(v-else) 未关联
+    navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/bindJingdong/main")
+      view(class="weui-cell__bd") 关联叮咚音箱（京东）
+      view(class="weui-cell__ft weui-cell__ft_in-access")
+        block(v-if="baiduBinded") 已关联
+        block(v-else) 未关联
 </template>
 
 <script>
@@ -32,7 +37,8 @@ export default {
   computed: {
     ...mapState({
       xiaoaiBinded: state => (state.userProfile.smartSpeakes.indexOf('xiaoai') !== -1),
-      baiduBinded: state => (state.userProfile.smartSpeakes.indexOf('dueros') !== -1)
+      baiduBinded: state => (state.userProfile.smartSpeakes.indexOf('dueros') !== -1),
+      jingdongBinded: state => (state.userProfile.smartSpeakes.indexOf('dingdong') !== -1)
     })
   },
 

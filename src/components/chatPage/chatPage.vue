@@ -1,10 +1,10 @@
 <template>
   <block>
+    <view class="skill-list-header" v-if="skillListShow">
+      <i class="icon iconfont icon-close" @click="closeSkillList"></i>
+    </view>
     <view class="content" style="flex-direction: column">
       <videoplayer :src="videoSrc" v-if="videoPlay" @videoEnded="videoPlay=false"></videoplayer>
-      <view class="skill-list-header" v-if="skillListShow">
-        <i class="icon iconfont icon-close" @click="closeSkillList"></i>
-      </view>
       <scroll-view scroll-y='true' :scroll-into-view="scrollToView" style="height: 100%" v-show="!skillListShow">
         <view class="message-list">
           <block v-for="(conversation, i) in messageList" :key="conversation">
@@ -93,7 +93,8 @@ const urlMaping = {
   'xiaodu-speaker': '/pages/bindXiaodu/main',
   'xiaoai-no-screen': '/pages/bindXiaomi/main',
   'dueros-no-screen': '/pages/bindXiaodu/main',
-  'dueros-has-screen': '/pages/xiaoduhelp/main'
+  'dueros-has-screen': '/pages/xiaoduhelp/main',
+  'dingdong-no-screen': '/pages/bindJingdong/main'
 }
 
 export default {
