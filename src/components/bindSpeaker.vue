@@ -11,7 +11,7 @@ view
         block(v-else) 未关联
     view(class="weui-cell weui-cell_input" v-if="!speakerBinded")
       view(class="weui-cell__hd")
-        view(class="weui-label") 语音验证码
+        view(class="weui-label") {{codeLabel}}
       view(class="weui-cell__bd")
         input(class="weui-input" placeholder="请输入验证码" type="number" :value="code" maxlength="5" focus @input="inputCode")
       view(class="weui-cell__ft")
@@ -46,6 +46,10 @@ export default {
     },
     bindSteps: {
       type: Array
+    },
+    codeLabel: {
+      type: String,
+      default: '语音验证码'
     }
   },
 

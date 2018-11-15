@@ -24,7 +24,8 @@
     "pages/bindXiaodu/main",
     "pages/donate/main",
     "pages/bindXiaomi/main",
-    "pages/bindJingdong/main"
+    "pages/bindJingdong/main",
+    "pages/lottery/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
