@@ -1,7 +1,7 @@
 <template>
-  <form report-submit="true" @submit="sendMessage" class="footer">
+  <form report-submit="true" @submit="saveFormId" class="footer">
     <view class="weui-flex primary-color light">
-      <view class="placeholder">
+      <view class="placeholder" @click="hideBottomBox">
         <button class="input-widget form-control primary-color" size="small" @click="changeToVoiceMode" v-if="!voiceMode">
           <i class="icon iconfont icon-translation"></i>
         </button>
@@ -12,7 +12,7 @@
       <block>
         <view class="weui-flex__item"  v-if="!voiceMode">
 
-          <input class="word-textarea primary-color revert textarea-style-2"  adjust-position="true" :value="currentMessage" :cursorSpacing="14"
+          <input class="word-textarea primary-color revert textarea-style-2"  adjust-position="true" :value="currentMessage" :cursorSpacing="0"
           :maxlength="textLength" :placeholder="placehodlerText" :type="textType"
           confirm-type="send" confirm-hold="true"
           @input="valueInput" @confirm="confirm" @focus="textFocus" @blur="textBlur"/>
@@ -23,10 +23,28 @@
         </view>
       </block>
     <view class="placeholder">
-      <button class="input-widget form-control secondary-color buttonSend" size="small" formType="submit" :disabled="(currentMessage=='') && !items.length">
-        <i class="icon iconfont icon-arrows"></i>
+      <!--<button class="input-widget form-control secondary-color buttonSend" size="small" formType="submit" :disabled="(currentMessage=='') && !items.length">-->
+        <!--<i class="icon iconfont icon-arrows"></i>-->
+      <!--</button>-->
+      <button class="input-widget form-control buttonSend primary-color" size="small" formType="submit" @click.stop="showBottomBox">
+        <i v-if="!showBottomBar" class="icon iconfont icon-add"></i>
+        <i v-else class="icon iconfont icon-close"></i>
       </button>
     </view>
+    </view>
+    <view class="foot-bottom-bar" :style="{height: keyBoardHeight}">
+      <swiper :indicator-dots="bottomContainer.length > 1? true : false">
+        <block v-for="(item, index) in bottomContainer" :key="index">
+          <swiper-item class="swiper-container">
+            <view class="swiper-item" v-for="(it, ix) in item" :key="ix" @click="selectItem(it)">
+              <view class="icon-skill">
+                <image :src="it.src"></image>
+              </view>
+              <text class="skill-name">{{it.value}}</text>
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
     </view>
     <device-padding></device-padding>
   </form>
@@ -71,7 +89,9 @@ export default {
     return {
       currentMessage: '',
       voiceMode: false,
-      pullUp: false
+      pullUp: false,
+      showBottomBar: false,
+      keyBoardHeight: '0px'
     }
   },
   computed: {
@@ -117,6 +137,10 @@ export default {
     displayFinish: {
       type: Boolean,
       default: false
+    },
+    bottomContainer: {
+      type: Array,
+      default: []
     }
   },
   watch: {
@@ -150,6 +174,9 @@ export default {
         this.$store.commit('clearState')
       }
     },
+    saveFormId (ev) {
+      formId.save(ev.mp.detail.formId)
+    },
     confirm (e) {
       if (e.mp.detail.value) {
         this.$store.dispatch('sendQuery', e.mp.detail.value)
@@ -170,6 +197,7 @@ export default {
       if (e.mp.detail.height > 0) {
         this.$emit('keyboardUp', e.mp.detail.height)
       }
+      this.showBottomBar = false
       // const that = this
       // wx.getSystemInfo({
       //   success: function (res) {
@@ -189,6 +217,9 @@ export default {
     textBlur (e) {
       this.pullUp = false
       this.$emit('keyboardDown')
+      this.showBottomBar = this.keyBoardHeight !== '0px'
+      this.keyBoardHeight = this.keyBoardHeight === '0px' ? '0px' : '170px'
+      console.log(this.showBottomBar)
     },
     changeToVoiceMode () {
       getRecordAuth(true).then(() => {
@@ -210,6 +241,25 @@ export default {
         .catch((err) => {
           console.error(err)
         })
+    },
+    showBottomBox () {
+      this.showBottomBar = !this.showBottomBar
+      this.keyBoardHeight = this.showBottomBar ? '170px' : '0px'
+      // setTimeout(() => {
+      //   this.$emit('scollToBottom')
+      // }, 500)
+    },
+    hideBottomBox () {
+      this.showBottomBar = false
+      this.keyBoardHeight = '0px'
+      // setTimeout(() => {
+      //   this.$emit('scollToBottom')
+      // }, 500)
+    },
+    selectItem (obj) {
+      this.$store.dispatch('sentRadioReply', {...obj, value: obj.value ? obj.value : obj.caption})
+      this.showBottomBar = false
+      this.keyBoardHeight = '0px'
     }
   },
   onLoad () {
@@ -275,8 +325,6 @@ export default {
     height:100%;
   }
 
-
-
   .input-widget .iconfont{
     font-size: 40rpx!important;
   }
@@ -312,5 +360,39 @@ export default {
   }
   button::after {
     border-radius: 0;
+  }
+  .foot-bottom-bar{
+    transition: height .5s;
+    height: 0px;
+    overflow: hidden;
+    width: 100%;
+    background: #fafafa;
+  }
+  .foot-bottom-bar-active{
+    height: 170px;
+  }
+  .swiper-container{
+    display: flex;
+    flex-wrap: wrap;
+    padding:10px 0;
+  }
+  .swiper-item{
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .icon-skill{
+    /*border:1px solid #d8d8d8;*/
+    border-radius:50%;
+    width:40px;
+    height:40px;
+    line-height:40px;
+    text-align:center;
+  }
+  .skill-name{
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
   }
 </style>

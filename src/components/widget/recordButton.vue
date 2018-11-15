@@ -21,7 +21,7 @@ export default {
   computed: {
     recordOperationText () {
       if (this.recordStatus === 'idle') {
-        return '按住 说话'
+        return '按住对我讲话'
       } else if (this.recordStatus === 'readyToCancel') {
         return '松开手指，取消发送'
       } else {

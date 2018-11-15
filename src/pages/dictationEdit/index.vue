@@ -171,7 +171,7 @@
         if (clickFlag) {
           clickFlag = false
           this.newWord = e.mp.detail.value
-          if (/[0-9a-zA-Z]/g.test(this.newWord)) {
+          if (/[0-9a-zA-Z。！？]/g.test(this.newWord)) {
             wx.showModal({
               title: '词语格式提醒',
               content: '目前只支持中文词语,请重新输入新的中文词语',
@@ -443,7 +443,6 @@
       },
       changePinyin: function (e, ourterIndex) {
         const {index, polyphone, hanzi, pinyin} = e.mp.detail
-        console.log(index, polyphone, hanzi, pinyin)
         if (polyphone.length > 1) {
           this.showPinyin = true
           this.pinyin = polyphone
@@ -611,6 +610,7 @@
           }
         }
         this.dictation = res.data.data.find(item => item.id === this.$mp.query.param)
+        console.log(this.dictation)
         this.activeDictation = res.data.data.find(item => item.id === this.$mp.query.param)
         this.dictation.ttsSex = this.dictation.ttsSex === undefined ? 'ttsMale' : this.dictation.ttsSex
         this.activeDictation.ttsSex = this.activeDictation.ttsSex === undefined ? 'ttsMale' : this.activeDictation.ttsSex

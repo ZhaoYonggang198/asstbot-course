@@ -9,7 +9,7 @@
         <view class="message-list">
           <block v-for="(conversation, i) in messageList" :key="conversation">
             <view class="conversation" :id="'bottom'+i" :class="{'last-child':i==(messageList.length-1), 'focus-input': keyboardInput}">
-              <view style="height: 80rpx;" v-if="i==(messageList.length-1) || i == 0" />
+              <view style="height: 20px;" v-if="i==(messageList.length-1) || i == 0" />
               <view style="z-index: 1" v-for="(messages, j) in conversation" :key="j">
                 <message-item :survey="survey" :lastBotMsg="i==(messageList.length-1)&&messages.to!==undefined"
                           :messages="messages" :userAuthed="userAuthed"
@@ -45,11 +45,11 @@
             </view>
           </block>
         </view>
-
+        <view id="bottomMaxBottom"></view>
       </scroll-view>
       <scroll-view scroll-y="true" :scroll-top="skillPosition" v-if="skillListShow" style="height: 100%" id="skill-list">
         <view class="skill-list-wrapper">
- 
+
           <skill-list :skillList="activeSkillList.items" @requestClick="requestClick" @skillActive="skillActive">
           </skill-list>
           <!-- <view class="skill-list-footer">
@@ -61,8 +61,8 @@
       <record-status/>
       <select-box v-if="displayFinish" :messageAction="activeBoxMsg" @donateclick="donateclick"/>
       <command-area @msgSendStatus="handleMsgSendStatus"
-          :inputPromt="activeInputPromtMsg"
-          :displayFinish="displayFinish" @keyboardUp="keyboardUp" @keyboardDown="keyboardDown"
+          :inputPromt="activeInputPromtMsg" :bottomContainer="footSkillArr"
+          :displayFinish="displayFinish" @keyboardUp="keyboardUp" @keyboardDown="keyboardDown" @scollToBottom="scrollToBottom1"
           :needFocus="messageList.length>5"/>
     </view>
     <donate v-if="inDonating" @closeDonate="closeDonate"/>
@@ -109,7 +109,147 @@ export default {
       ttsPlaying: false,
       inDonating: false,
       skillListShow: false,
-      skillPosition: 0
+      skillPosition: 0,
+      arr: [
+        {
+          caption: '1',
+          value: '1',
+          type: 'button',
+          event: 'event1'
+        },
+        {
+          caption: '2',
+          value: '2',
+          type: 'button',
+          event: 'event2'
+        },
+        {
+          caption: '3',
+          value: '3',
+          type: 'button',
+          event: 'event3'
+        },
+        {
+          caption: '4',
+          value: '4',
+          type: 'button',
+          event: 'event4'
+        },
+        {
+          caption: '5',
+          value: '5',
+          type: 'button',
+          event: 'event5'
+        },
+        {
+          caption: '6',
+          value: '6',
+          type: 'button',
+          event: 'event6'
+        },
+        {
+          caption: '7',
+          value: '7',
+          type: 'button',
+          event: 'event7'
+        },
+        {
+          caption: '8',
+          value: '8',
+          type: 'button',
+          event: 'event8'
+        },
+        {
+          caption: '9',
+          value: '9',
+          type: 'button',
+          event: 'event9'
+        },
+        {
+          caption: '10',
+          value: '10',
+          type: 'button',
+          event: 'event10'
+        },
+        {
+          caption: '11',
+          value: '11',
+          type: 'button',
+          event: 'event11'
+        },
+        {
+          caption: '12',
+          value: '12',
+          type: 'button',
+          event: 'event12'
+        },
+        {
+          caption: '13',
+          value: '13',
+          type: 'button',
+          event: 'event13'
+        },
+        {
+          caption: '14',
+          value: '14',
+          type: 'button',
+          event: 'event14'
+        },
+        {
+          caption: '15',
+          value: '15',
+          type: 'button',
+          event: 'event15'
+        },
+        {
+          caption: '16',
+          value: '16',
+          type: 'button',
+          event: 'event16'
+        },
+        {
+          caption: '17',
+          value: '17',
+          type: 'button',
+          event: 'event17'
+        },
+        {
+          caption: '18',
+          value: '18',
+          type: 'button',
+          event: 'event18'
+        },
+        {
+          caption: '19',
+          value: '19',
+          type: 'button',
+          event: 'event19'
+        },
+        {
+          caption: '20',
+          value: '20',
+          type: 'button',
+          event: 'event20'
+        },
+        {
+          caption: '21',
+          value: '21',
+          type: 'button',
+          event: 'event21'
+        },
+        {
+          caption: '22',
+          value: '22',
+          type: 'button',
+          event: 'event22'
+        },
+        {
+          caption: '23',
+          value: '23',
+          type: 'button',
+          event: 'event23'
+        }
+      ]
     }
   },
   props: {
@@ -158,7 +298,8 @@ export default {
     ...mapState({
       userAuthed: state => state.userProfile.authed,
       recordAuthed: state => state.recordStatus.authed,
-      recordStatus: state => state.recordStatus.status
+      recordStatus: state => state.recordStatus.status,
+      footSkillArr: state => state.skillBox.boxItemArr
     }),
 
     messageList () {
@@ -229,8 +370,9 @@ export default {
       let message = this.activeMsg.msgs.filter((msg) => {
         return array.indexOf(msg.type) !== -1
       })
-
       if (message.length >= 1) {
+        this.$store.dispatch('initBoxItem', message[0].items)
+        // this.$store.dispatch('initBoxItem', this.arr)
         return message[0]
       } else {
         return {}
@@ -301,6 +443,16 @@ export default {
     },
     renderUpdate () {
       this.scollToBottom()
+    },
+    scrollToBottom1 () {
+      console.log(12121212)
+      const that = this
+      this.scrollToView = ''
+      that.scrollToView = 'bottomMaxBottom'
+      setTimeout(function () {
+        that.scrollToView = ''
+        that.scrollToView = 'bottomMaxBottom'
+      }, 200)
     },
     scollToBottom () {
       const that = this

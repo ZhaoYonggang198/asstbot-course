@@ -6,12 +6,10 @@
     <image src="../../static/image/bot-title-bar.png" class="background"/>
     <view class="logo">
       <da-logo />
-      <!-- <return-button v-else/> -->
     </view>
-    <!-- <view class="title primary-color dark">{{title}}</view> -->
     <view class="avatar-wrapper">
       <view class="avatar">
-        <bod-avatar :url="avatarUrl" size="50"></bod-avatar>
+        <bod-avatar :url="avatarUrl" size="40"></bod-avatar>
       </view>
     </view>
   </view>
@@ -47,39 +45,51 @@ export default {
 @import "../../../static/base.less";
 .logo {
   position: absolute;
-  left: 20rpx;
-  bottom: 20rpx;
-  width: 195rpx;
-  height: 84rpx;
+  left: 10px;
+  bottom: 5px;
+  width: 80px;
+  height: 35px;
+  /*height: 84rpx;*/
 }
 
 .background {
   display: block;
   font-size: 0;
-  height: 146rpx;
+  /*height: 146rpx;*/
+  height: 45px;
+  background: #2b3343;
   width: 750rpx;
 }
 
 .avatar-wrapper {
   position: absolute;
-  width: 112rpx;
-  height: 112rpx;
+  /*width: 112rpx;*/
+  /*height: 112rpx;*/
   right: 81rpx;
-  bottom: -78rpx;
+  /*bottom: -78rpx;*/
   background-color: @background-color;
   border-radius: 50%;
-  padding: 12rpx;
+  /*padding: 12rpx;*/
   z-index: 500;
+
+  width:40px;
+  height:40px;
+  padding:0;
+  bottom: 3px;
+  left:50%;
+  margin-left:-17px;
+
 
 }
 
 .avatar {
-  width: 100rpx;
-  height: 100rpx;
+  /*width: 100rpx;*/
+  /*height: 100rpx;*/
   border-radius: 50%;
-  border: solid #25CEC2 6rpx;
+  /*border: solid #25CEC2 6rpx;*/
+  width: 100%;
+  height: 100%;
 
-  
 }
 
 .title {

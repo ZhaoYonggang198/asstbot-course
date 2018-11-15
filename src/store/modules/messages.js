@@ -115,6 +115,7 @@ var _impleSendmessage = (commit, id, type, data) => {
   }
   commit('appendMessage', message)
   return new Promise((resolve, reject) => {
+    console.log(data)
     wx.request({
       url,
       data: message,

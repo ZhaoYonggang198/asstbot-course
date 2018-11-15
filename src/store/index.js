@@ -16,6 +16,7 @@ import courses from './modules/coursetable/courses'
 import dueros from './modules/coursetable/dueros'
 import recordStatus from './modules/recordStatus'
 import dictation from './modules/dictation/dictation'
+import skillBox from './modules/skillBox'
 
 Vue.use(Vuex)
 
@@ -38,7 +39,8 @@ export default new Vuex.Store({
     courses,
     dueros,
     recordStatus,
-    dictation
+    dictation,
+    skillBox
   },
   strict: false
 })

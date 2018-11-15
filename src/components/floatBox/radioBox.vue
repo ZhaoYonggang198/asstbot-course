@@ -9,9 +9,9 @@
         </block>
         <block v-else>
           <view class="value valueBox">{{action.caption}}</view>
-        </block>        
+        </block>
       </label>
-      <block v-for="option in list.items" :key="option" v-if="list.type==='radio'">
+      <block v-for="option in listArr.items" :key="option" v-if="listArr.type==='radio'">
         <label v-if="!option.type || option.type !== 'share'"
             class="option-container light form-control"
             @touchstart="touchStart(option)"
@@ -90,6 +90,12 @@
           }
         }
         return `list-${itemLength}`
+      },
+      listArr: state => {
+        if (state.list && state.list.items.length) {
+          let arr = state.list.items.filter(item => !item.type || item.type !== 'button')
+          return {...state.list, items: arr}
+        }
       }
     },
     methods: {
