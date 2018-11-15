@@ -6,6 +6,7 @@ view(class="page")
         deviceType="dingdong"
         unbindHint="你还没有和叮咚音箱关联"
         bindedHint="你已经绑定成功，快到小程序里配置课程表吧"
+        codeLabel="验证码"
         :bindSteps="bindSteps")
 </template>
 

@@ -15,7 +15,6 @@
     "pages/surveyTitleAndIntro/main",
     "pages/course/main",
     "pages/sharedcourse/main",
-    "pages/phone/main",
     "pages/smartSpeaker/main",
     "pages/xiaoduhelp/main",
     "pages/dictation/main",
@@ -25,7 +24,8 @@
     "pages/bindXiaodu/main",
     "pages/donate/main",
     "pages/bindXiaomi/main",
-    "pages/bindJingdong/main"
+    "pages/bindJingdong/main",
+    "pages/lottery/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
