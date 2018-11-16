@@ -1,21 +1,30 @@
 <template>
 <view class="page">
   <title-bar title="幸运大抽奖"/>
-
   <view class='lottery-content'>
     <view class="score-wrapper">
       <view class="desc">你的积分:</view>
-      <text class="score">{{score}}</text>
+      <text class="score">{{remainScore}}</text>
     </view>
     <view class="score-decl" @click="scoreDecl">
       积分说明
     </view>
-    <canvas canvas-id='bgCanvas' id='canvas-bg' class='canvasII'></canvas>
-    <view class='canvasI' :style="isRotate?'transform:rotate('+isRotate+'deg)':''" @>
-      <canvas canvas-id='canvasI' id="canvas-one" class='canvasI' ></canvas>
+    <view canvas-id='bgCanvas' id='canvas-bg' class='canvasII' :style="'transform:rotate('+lightDeg*30+'deg)'">
+      <image src="../../static/image/lottery-bottom.svg" mode="scaleToFill"
+        lazy-load="false"></image>
     </view>
-    <cover-image class='start' src='../../../static/image/lottery1.png' @click='start' />
+    <view class='canvasI' :style="rotateDeg?'transform:rotate('+rotateDeg+'deg)':''" @>
+      <view canvas-id='canvasI' id="canvas-one" class='canvasI' >
+        <image src="../../static/image/lottery-disk.svg" mode="scaleToFill"
+          lazy-load="false"/>
+      </view>
+    </view>
+    <view class='start'  @click='start'>
+      <image class='start' src='../../static/image/lottery-button.svg' mode="scaleToFill"
+          lazy-load="false"/>
+    </view>
   </view>
+
   <view class='lottery-desc'>
     <view class='title'>活动奖品</view>
     <view class='prize'>
@@ -31,162 +40,151 @@
       <view class='desc'>100积分</view>
     </view>
   </view>
+  <view class='prize-list'>
+    <view class='prize' @click="prizeClicked">
+      <text>你的奖品</text>
+    </view>
+  </view>
+  <view class="modal-mask class-mask" :class="modalVisible ? 'modal-mask-show' : ''" @click="modalVisible=false"/>
+  <view class="modal" :class="modalVisible ? 'modal-show' : ''">
+    <view class="modal-main">
+      <view class="con-wrapper" v-if="true">
+        <view class="con-title">
+          <image src="../../static/image/congratulation.svg" mode="scaleToFill"
+            lazy-load="false"/>          
+        </view>
+        <view class="con-content">
+          <view class="text">{{conText}}</view>
+        </view>
+        <block v-if="grade == 1 || grade == 2">
+          <input class="con-input" :value="phone" type="number" title="联系电话" placeholder="请输入手机号" @input="phoneChange"/>
+          <view class="tip">
+            <text>输入手机号，工作人员随后会联系你</text>
+          </view>
+          <view class="con-footer">
+            <button class="button cancel" @click="modalVisible=false">取消</button>
+            <button class="button confirm" :disabled="phone.length !== 11" @click="prizeUser">提交</button>
+          </view>
+        </block>
+        <block v-else>
+          <view class="con-footer">
+            <button class="button cancel" @click="modalVisible=false">再逛逛</button>
+          </view>          
+        </block>
+      </view>
+    </view>
+  </view>
 </view>
 </template>
 
 <script>
-const ctx = wx.createCanvasContext('canvasI')// 创建id为canvasI的绘图
-const ctx2 = wx.createCanvasContext('bgCanvas')// //创建id为canvasI的绘图
-var mytime// 跑马灯定时器名称
-var lamp = 0// 判断跑马灯闪烁标记
-var w2 = ''
-var h2 = ''
-var w1 = ''
-var h1 = ''
-const prize1 = 'https://xiaodamp.cn/asst/re'
-const prize2 = '../../../static/image/lottery1.png'
-const prize3 = '../../../static/image/lottery1.png'
+import { mapState } from 'vuex'
+
+var mytime = ''
+
 export default {
   data: {
-    itemsNum: 6, // 大转盘等分数
-    itemsArc: 0, // 大转盘每等分角度
-    color: ['#FFB932', '#ffd57c'],
-    text: ['一等奖', '谢谢参与', '二等奖', '谢谢参与', '三等奖', '谢谢参与'], // 每个扇形中的文字填充
-    images: [prize1, prize1, prize2, prize2, prize3, prize2],
-    isRotate: 0,
-    score: 500
+    rotateDeg: 0,
+    lightDeg: 0,
+    prizeList: [],
+    modalVisible: false,
+    grade: 1,
+    phone: '',
+    inRotate: false,
+    rotateTimer: {}
+  },
+  computed: {
+    conText () {
+      const texts = ['很遗憾，你没有中奖，下次再来吧', '你获得了一台小度在家音箱', '你获得了一台小度智能音箱', '你获得了三等奖']
+      return texts[this.grade]
+    },
+    ...mapState({
+      remainScore: state => state.lottery.remainScore,
+      drawTimes: state => state.lottery.drawTimes
+    })
   },
   methods: {
-    start () {
-      console.log('start')
-      if (this.score > 100) {
-        let that = this
-        let n = that.isRotate // 传入指定的旋转角度，内部指定获奖结果。在指定角度上加上旋转基数模拟转盘随机旋转。
-        // 随机获奖结果
-        let rand = Math.random() * 1000 // 取一个随机的旋转角度，使获奖结果随机化
-        n = n + rand - (rand % 60) + 1440 // 1440为旋转基数，最低要旋转1440度，即4圈。rand-(rand%60) 这个是让指针永远停在扇形中心的算法。n + 是为了重复点击的时候有足够的旋转角度。
-        console.log(n % 360)
-        that.isRotate = n
-        this.score = this.score - 100
+    updateRotate () {
+      let num = 0
+      if (this.grade === 0) {
+        num = (parseInt(Math.random() * 1000) % 3) * 2
+      } else if (this.grade === 1) {
+        num = 5
+      } else if (this.grade === 2) {
+        num = 3
+      } else if (this.grade === 3) {
+        num = 1
       } else {
-        wx.showModal({
-          title: '你目前的积分不足，快点去攒积分吧',
-          showCancel: false,
-          confirmText: '确定',
-          confirmColor: '#3CC51F',
-          success: res => {
-            if (res.confirm) {
-            }
+        num = 0
+      }
+
+      let rotateCircle = parseInt(this.rotateDeg / 360)
+      this.rotateDeg = rotateCircle * 360 + 1440 + num * 60
+    },
+    start () {
+      if (this.inRotate) {
+        return
+      }
+      if (this.drawTimes > 0) {
+        let that = this
+        clearTimeout(this.rotateTimer)
+
+        this.$store.dispatch('luckyDraw').then((result) => {
+          that.grade = result.grand
+          that.updateRotate()
+          if (this.grade > 0) {
+            this.inRotate = true
+            this.rotateTimer = setTimeout(() => {
+              this.modalVisible = true
+              this.inRotate = false
+            }, 3500)
           }
+        })
+      } else {
+        wx.showToast({
+          title: '你目前的积分不足，\n快点去攒积分吧',
+          icon: 'none',
+          duration: 2000,
+          mask: false
         })
       }
     },
     light () { // 跑马灯绘制
-      let that = this
-      let itemsNum = that.itemsNum
-      lamp++
-      if (lamp >= 2) {
-        lamp = 0
-      }
-      ctx2.beginPath()
-      ctx2.arc(w2, h2, w2, 0, 2 * Math.PI) // 绘制底色为红色的圆形
-      ctx2.setFillStyle('#DF1E14')
-      ctx2.fill()
-      ctx2.beginPath()
-      ctx2.arc(w2, h2, w2 - 15, 0, 2 * Math.PI) // 绘制底色为深黄的圆形
-      ctx2.setFillStyle('#F5AD26')
-      ctx2.fill()
-      for (let i = 0; i < itemsNum * 2; i++) { // 跑马灯小圆圈比大圆盘等分数量多一倍。
-        ctx2.save()
-        ctx2.beginPath()
-        ctx2.translate(w2, h2)
-        ctx2.rotate(30 * i * Math.PI / 180)
-        ctx2.arc(0, w2 - 15, 8, 0, 2 * Math.PI) // 绘制坐标为(0,-135)的圆形跑马灯小圆圈。
-
-        // 跑马灯第一次闪烁时与第二次闪烁时绘制相反的颜色，再配上定时器循环闪烁就可以达到跑马灯一闪一闪的效果了。
-
-        if (lamp === 0) { // 第一次闪烁时偶数奇数的跑马灯各绘制一种颜色
-          if (i % 2 === 0) {
-            ctx2.setFillStyle('#FBF1A9')
-          } else {
-            ctx2.setFillStyle('#fbb936')
-          }
-        } else { // 第二次闪烁时偶数奇数的跑马灯颜色对调。
-          if (i % 2 === 0) {
-            ctx2.setFillStyle('#fbb936')
-          } else {
-            ctx2.setFillStyle('#FBF1A9')
-          }
-        }
-        ctx2.fill()
-        ctx2.restore() // 恢复之前保存的上下文，可以将循环出来的跑马灯都保存下来。没有这一句那么每循环出一个跑马灯则上一个跑马灯绘图将被覆盖，
-      }
-      ctx2.draw()
-    },
-    Items (e) {
-      let that = this
-      let itemsArc = e // 每一分扇形的角度
-      let Num = that.itemsNum // 等分数量
-      let text = that.text // 放文字的数组
-      for (let i = 0; i < Num; i++) {
-        ctx.beginPath()
-        ctx.moveTo(w1, h1)
-        ctx.arc(w1, h1, w1 - 15, itemsArc * i * Math.PI / 180, (itemsArc + itemsArc * i) * Math.PI / 180) // 绘制扇形，注意下一个扇形比上一个扇形多一个itemsArc的角度
-        ctx.closePath()
-        if (i % 2 === 0) { // 绘制偶数扇形和奇数扇形的颜色不同
-          ctx.setFillStyle(that.color[0])
-        } else {
-          ctx.setFillStyle(that.color[1])
-        }
-        ctx.fill()
-        ctx.save()
-        ctx.beginPath()
-        ctx.setFontSize(12)
-        ctx.setFillStyle('#000')
-        ctx.setTextAlign('center')
-        ctx.setTextBaseline('middle')
-        ctx.translate(w1, h1)// 将原点移至圆形圆心位置
-        ctx.rotate((itemsArc * (i + 2)) * Math.PI / 180)// 旋转文字，从 i+2 开始，因为扇形是从数学意义上的第四象限第一个开始的，文字目前的位置是在圆心正上方，所以起始位置要将其旋转2个扇形的角度让其与第一个扇形的位置一致。
-        ctx.fillText(text[i], 0, -(h1 * 0.7))
-        ctx.restore() // 保存绘图上下文，使上一个绘制的扇形保存住。
-      }
-      // that.Images()
-      ctx.draw(true) // 参数为true的时候，保存当前画布的内容，继续绘制
-    },
-    Images () { // 绘制奖品图片，与绘制文字方法一致。
-      let that = this
-      let itemsArc = that.itemsArc
-      let Num = that.itemsNum
-      for (let i = 0; i < Num; i++) {
-        console.log('rotate')
-        ctx.save()
-        ctx.beginPath()
-        ctx.translate(w1, h1)
-        ctx.rotate(itemsArc * (i + 2) * Math.PI / 180)
-        ctx.drawImage(that.images[i], -(w1 * 0.2), -(h1 * 0.6), (w1 * 0.4), (h1 * 0.2))
-        ctx.restore()
-      }
+      this.lightDeg = this.lightDeg === 0 ? 1 : 0
     },
     scoreDecl () {
       console.log('scoreDecl')
+    },
+    prizeClicked () {
+      if (this.prizeList.length === 0) {
+        wx.showToast({
+          title: '你还没有抽到奖，赶快开始抽奖吧',
+          icon: 'none',
+          duration: 3000,
+          mask: false
+        })
+      } else {
+        wx.navigateTo({
+          url: '/pages/prizeList/main'
+        })
+      }
+    },
+    phoneChange (e) {
+      let phone = e.mp.detail.value
+      this.phone = phone
+    },
+    prizeUser () {
+      this.modalVisible = false
+      this.$store.dispatch('prizeuser', {grand: this.grade, phone: this.phone})
     }
   },
 
   onShow (option) {
-    var that = this
-    this.itemsArc = 360 / that.itemsNum // 获取大转盘每等分的角度
+    mytime = setInterval(this.light, 1000)
+  },
 
-    wx.createSelectorQuery().select('#canvas-one').boundingClientRect(function (rect) {
-      w1 = parseInt(rect.width / 2)
-      h1 = parseInt(rect.height / 2)
-      that.Items(that.itemsArc) // 每一份扇形的内部绘制
-    }).exec()
-    mytime = setInterval(that.light, 1000) // 启动跑马灯定时器
-    wx.createSelectorQuery().select('#canvas-bg').boundingClientRect(function (rect) { // 监听canvas的宽高
-      w2 = parseInt(rect.width / 2)
-      h2 = parseInt(rect.height / 2)
-      that.light()
-    }).exec()
+  onLoad () {
+    this.$store.dispatch('getScore')
   },
 
   onUnload () {
@@ -239,8 +237,8 @@ export default {
 }
 
 .canvasI{
-  width: 540rpx;
-  height: 540rpx;
+  width: 500rpx;
+  height: 500rpx;
   position: absolute;
   left: 0;
   top: 0;
@@ -261,13 +259,16 @@ export default {
 }
 .start{
   position: absolute;
-  width: 100rpx;
-  height: 100rpx;
+  width: 120rpx;
+  height: 155rpx;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   margin: auto auto;
+  display: block;
+  overflow: auto;
+  visibility: visible;
 }
 
 .lottery-desc {
@@ -304,4 +305,160 @@ export default {
   line-height: 80rpx;
 }
 
+.prize-list {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 100rpx;
+}
+
+image {
+  width: 100%;
+  height: 100%;
+}
+
+.prize-list .prize {
+  background: #DF1E14;
+  border-radius: 5rpx;
+  width: 300rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  box-shadow: 2px 2px 1px #888888;
+  display: flex;
+  justify-content: center;
+  animation:myfirst 2s infinite;
+}
+
+@keyframes myfirst
+{
+  0%   {color:white;}
+  25%  {color:yellow;}
+  50%  {color:white;}
+  100% {color:yellow;}
+}
+
+.prize-list .prize:active{
+  animation: none;
+  box-shadow: none;
+}
+
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .7);
+  z-index: 1000;
+  transition: all .2s ease-in-out;
+  opacity: 0;
+  visibility: hidden
+}
+
+.modal-mask-show {
+  opacity: 1;
+  visibility: visible
+}
+
+.modal {
+  position: fixed;
+  overflow: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  outline: 0;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  transform: translateZ(1px);
+  opacity: 0;
+  visibility: hidden
+}
+
+.modal-show {
+  visibility: visible;
+  opacity: 1
+}
+
+.modal-main {
+  width: 270px;
+  position: relative
+}
+
+.con-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  background: #f2f2f2;
+  border-radius: 30rpx;
+  padding: 45px 30rpx 20rpx 30rpx;
+}
+.con-title {
+  width: 246px;
+  height: 90px;
+  position: absolute;
+  top: -45px;
+}
+
+.con-content .text {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 32rpx;
+  color: #0c5053;
+}
+
+.con-wrapper .con-input {
+  margin-top: 20rpx;
+  width: 450rpx;
+  border-bottom: #888888 1rpx solid;
+}
+
+.con-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 20rpx;
+}
+
+.con-footer .button {
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  white-space: nowrap;
+  user-select: none;
+  font-size: 14px;
+  border-radius: 15px;
+  border: 0 !important;
+  position: relative;
+  text-decoration: none;
+  height: 30px;
+  line-height: 30px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+  color: #fff !important;
+  background: #f7f7f7 !important;
+  color: #495060 !important;
+  margin: 10px;
+  border:3rpx solid #19a1a8!important;
+  color:#19a1a8!important;
+
+}
+
+.con-footer .button.confirm {
+  background: #19a1a8
+}
 </style>

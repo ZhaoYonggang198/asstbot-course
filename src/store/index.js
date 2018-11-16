@@ -17,6 +17,7 @@ import dueros from './modules/coursetable/dueros'
 import recordStatus from './modules/recordStatus'
 import dictation from './modules/dictation/dictation'
 import skillBox from './modules/skillBox'
+import lottery from './modules/lottery/lottery'
 
 Vue.use(Vuex)
 
@@ -40,7 +41,8 @@ export default new Vuex.Store({
     dueros,
     recordStatus,
     dictation,
-    skillBox
+    skillBox,
+    lottery
   },
   strict: false
 })
