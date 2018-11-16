@@ -254,7 +254,7 @@ page{
   background-color: @s-msg-color !important;
   color: @text-on-s-color !important;
   font-size: @font-size-small;
-  margin-right:10rpx;
+  margin-right:20rpx;
   text-align:left;
   position: relative;
 }

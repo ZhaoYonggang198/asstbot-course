@@ -107,6 +107,7 @@
           if (obj.type && obj.type === 'donate') {
             this.$emit('donateclick')
           } else {
+            console.log(obj)
             this.$store.dispatch('sentRadioReply', {...obj, value: obj.value ? obj.value : obj.caption})
           }
         }
@@ -202,7 +203,7 @@
   padding:5rpx;
   margin-left: 15rpx;
   margin-right: 15rpx;
-  background-color: #f2f2f2;
+  background-color: @background-color;
 }
 .no-image>.image-box{
   display: none;
@@ -212,7 +213,7 @@
   width: 100%;
   white-space: nowrap;
   padding:6rpx 20rpx;
-  background:#f2f2f2;
+  background: @background-color;
   border:3rpx solid @select-btn-color;
   color: @select-btn-color;
   border-radius:35rpx;

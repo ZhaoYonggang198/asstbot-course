@@ -366,7 +366,7 @@ export default {
     height: 0px;
     overflow: hidden;
     width: 100%;
-    background: #fafafa;
+    background: @background-color;
   }
   .foot-bottom-bar-active{
     height: 170px;

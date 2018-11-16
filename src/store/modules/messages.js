@@ -8,7 +8,8 @@ var sceneMode = 'publish'
 
 const state = {
   creatorBotMsg: [],
-  surveybotMsg: []
+  surveybotMsg: [],
+  canTalk: ''
 }
 
 var __appendMsg = function (state, msg) {
@@ -102,6 +103,10 @@ const mutations = {
     } else {
       state.creatorBotMsg = state.surveybotMsg.map(modify)
     }
+  },
+  setCanTalk (state, data) {
+    console.log(data)
+    state.canTalk = data
   }
 }
 
@@ -243,6 +248,39 @@ const actions = {
   },
   sendGenericRequest ({commit}, {type, data}) {
     return _sendmessage(commit, type, data)
+  },
+  setVoice ({dispatch, commit}, data) {
+    return new Promise((resolve, reject) => {
+      wechat.getOpenId().then((openid) => {
+        const message = {
+          from: {
+            id: openid
+          },
+          type: 'radio-reply',
+          data
+        }
+        wx.request({
+          url,
+          data: message,
+          method: 'POST',
+          success: (response) => {
+            resolve(response)
+          },
+          fail: (err) => {
+            reject(err)
+          },
+          complete: (response) => {
+            if (!response.statusCode || response.statusCode !== 200) {
+              reject(response)
+            }
+          }
+        })
+      })
+        .catch((err) => {
+          console.error(err)
+          reject(err)
+        })
+    })
   }
 }
 

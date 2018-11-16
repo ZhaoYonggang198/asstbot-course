@@ -12,11 +12,10 @@
         </block>
         <view class="weui-flex bot-message" v-else>
           <view class="left-item">
-            <view class="avatar-wrapper">
-              <!--<image :src="bodAvatar" class="small-avatar" v-if="i==0"/>-->
-              <bot-avatar :url="survey.avatarUrl" size="30"
-                v-if="i==0 || (displayIncomingMsgs[i-1].type =='divider' && (i-1) < received )"/>
-            </view>
+            <!--<view class="avatar-wrapper">-->
+              <!--<bot-avatar :url="survey.avatarUrl" size="30"-->
+                <!--v-if="i==0 || (displayIncomingMsgs[i-1].type =='divider' && (i-1) < received )"/>-->
+            <!--</view>-->
             <view class="content">
               <bot-say-message :msg="msg" @loadDone="$emit('itemLoad')" v-if="!lastBotMsg || i < received"
                  @buttonListEvent="action" @previewImage="$store.commit('setPreviewFalse')"/>

@@ -99,7 +99,6 @@ const actions = {
     return Promise.all(arr)
   },
   getPinyinVoice ({dispatch, commit}, words) {
-    console.log(words)
     return new Promise((resolve, reject) => {
       wx.request({
         url: hostUrl + '/tts',

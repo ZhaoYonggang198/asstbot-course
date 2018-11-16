@@ -6,12 +6,12 @@
       <view class="box small-font-size">
         <view class="loader-13 s-color">
         </view>
-      </view>  
+      </view>
     </view>
   </view>
-  <view class="user-avatar" v-if="userAuthed">
-    <open-data type="userAvatarUrl" />
-  </view>
+  <!--<view class="user-avatar" v-if="userAuthed">-->
+    <!--<open-data type="userAvatarUrl" />-->
+  <!--</view>-->
 </view>
 </template>
 
@@ -37,7 +37,7 @@ export default {
   background-color:#19a1a8 !important;
   color:#ffffff !important;
   font-size:28rpx;
-  margin-right:10rpx;
+  margin-right:20rpx;
   text-align:left;
   position:relative;
 
@@ -47,7 +47,7 @@ export default {
   height: 70rpx;
   border-radius: 50%;
   margin-right: 20rpx;
-  overflow:hidden;  
+  overflow:hidden;
   display: block;
 }
 

@@ -12,7 +12,7 @@
   flex-direction: row-reverse;
 }
 .right-item{
-  max-width: 500rpx;
+  /* max-width: 500rpx; */
   min-width: 50rpx;
   /*text-align: center;*/
 }

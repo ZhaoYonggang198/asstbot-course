@@ -9,8 +9,8 @@
           bindpreviewImage="previewImage" wx:elif="{{messages.type=='radio-reply'}}" />
         <user-say-speech content="{{messages.data}}" wx:elif="{{messages.type=='speech'}}"/>
       </view>
-      <view class="user-avatar" wx:if="{{userAuthed}}">
+      <!-- <view class="user-avatar" wx:if="{{userAuthed}}">
         <open-data type="userAvatarUrl" />
-      </view>
+      </view> -->
     </view>
   </block>

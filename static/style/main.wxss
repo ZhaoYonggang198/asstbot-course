@@ -30,11 +30,11 @@
 }
 
 .incoming {
-  padding: 20rpx;
+  padding: 20rpx 40rpx;
   margin-left: 20rpx;
   color: #0c5053;
   border: solid #eaeaea 1rpx;
-  border-radius: 15px 15px 15px 0;
+  border-radius: 0 66rpx 66rpx 40rpx;
   width: auto!important;
   display: inline-block;
   font-size: 28rpx;
@@ -46,15 +46,15 @@
 }
 
 .outgoing {
-  padding:20rpx;
-  border:solid #19a1a8 1rpx;
-  border-radius:30rpx 30rpx 0 30rpx;
-  background-color: #19a1a8 !important;
-  color: #ffffff !important;
-  font-size: 28rpx;
-  margin-right:10rpx;
-  text-align:left;
-  position: relative;
+  padding:20rpx 40rpx;
+    border:solid #19a1a8 1rpx;
+    border-radius:66rpx 0 40rpx 66rpx;
+    background-color:#19a1a8 !important;
+    color:#ffffff !important;
+    font-size:28rpx;
+    margin-right:20rpx;
+    text-align:left;
+    position:relative;
 }
 
 /* Bot Message Style  */
@@ -69,7 +69,7 @@
 }
 
 .bot-message .left-item {
-  max-width: 650rpx;
+  /* max-width: 650rpx; */
   display: flex;
   width:100%;
 }
@@ -80,12 +80,12 @@
 
 
 .scroll-container {
-  margin-left: -20px;
+  /* margin-left: -20px; */
   width: 100vw;
 }
 
 .scroll-container .scroll-container__item:first-child {
-  margin-left: 50px;
+  margin-left: 10px;
 }
 
 .scroll-container__items {

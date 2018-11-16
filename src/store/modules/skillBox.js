@@ -34,7 +34,6 @@ const actions = {
             break
         }
       })
-      console.log(target)
       let endArr = []
       if (target.length) {
         while (target.length > 8) {

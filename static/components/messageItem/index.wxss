@@ -19,12 +19,13 @@
 }
 
 .bot-message .left-item{
-    max-width: 650rpx;
+    /* max-width: 650rpx; */
     display: flex;
     width:100%;
   }
 .bot-message .content{
-    width:100%
+    width:100%;
+    padding-right: 10px;
   }
   .aaa{
     margin-left: -40rpx;

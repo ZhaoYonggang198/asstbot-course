@@ -3,7 +3,11 @@
     <view class="skill-list-header" v-if="skillListShow">
       <i class="icon iconfont icon-close" @click="closeSkillList"></i>
     </view>
-    <view class="content" style="flex-direction: column">
+    <view class="content" style="flex-direction: column;position: relative">
+      <view class="voice-container" @click="setTalk">
+        <image v-if="canTalk" class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/1156bcc0-e951-11e8-b6e5-79c4537af773.png"></image>
+        <image v-else class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/154f6e30-e951-11e8-b6e5-79c4537af773.png"></image>
+      </view>
       <videoplayer :src="videoSrc" v-if="videoPlay" @videoEnded="videoPlay=false"></videoplayer>
       <scroll-view scroll-y='true' :scroll-into-view="scrollToView" style="height: 100%" v-show="!skillListShow">
         <view class="message-list">
@@ -31,10 +35,9 @@
                 <block v-if="conversation.length == 1">
                   <view class="weui-flex bot-message">
                     <view class="left-item">
-                      <view class="avatar-wrapper">
-                        <!--<image :src="bodAvatar" class="small-avatar" v-if="i==0"/>-->
-                        <bot-avatar size="30"/>
-                      </view>
+                      <!--<view class="avatar-wrapper">-->
+                        <!--<bot-avatar size="30"/>-->
+                      <!--</view>-->
                       <view class="content">
                         <bot-say-receiving/>
                       </view>
@@ -110,146 +113,7 @@ export default {
       inDonating: false,
       skillListShow: false,
       skillPosition: 0,
-      arr: [
-        {
-          caption: '1',
-          value: '1',
-          type: 'button',
-          event: 'event1'
-        },
-        {
-          caption: '2',
-          value: '2',
-          type: 'button',
-          event: 'event2'
-        },
-        {
-          caption: '3',
-          value: '3',
-          type: 'button',
-          event: 'event3'
-        },
-        {
-          caption: '4',
-          value: '4',
-          type: 'button',
-          event: 'event4'
-        },
-        {
-          caption: '5',
-          value: '5',
-          type: 'button',
-          event: 'event5'
-        },
-        {
-          caption: '6',
-          value: '6',
-          type: 'button',
-          event: 'event6'
-        },
-        {
-          caption: '7',
-          value: '7',
-          type: 'button',
-          event: 'event7'
-        },
-        {
-          caption: '8',
-          value: '8',
-          type: 'button',
-          event: 'event8'
-        },
-        {
-          caption: '9',
-          value: '9',
-          type: 'button',
-          event: 'event9'
-        },
-        {
-          caption: '10',
-          value: '10',
-          type: 'button',
-          event: 'event10'
-        },
-        {
-          caption: '11',
-          value: '11',
-          type: 'button',
-          event: 'event11'
-        },
-        {
-          caption: '12',
-          value: '12',
-          type: 'button',
-          event: 'event12'
-        },
-        {
-          caption: '13',
-          value: '13',
-          type: 'button',
-          event: 'event13'
-        },
-        {
-          caption: '14',
-          value: '14',
-          type: 'button',
-          event: 'event14'
-        },
-        {
-          caption: '15',
-          value: '15',
-          type: 'button',
-          event: 'event15'
-        },
-        {
-          caption: '16',
-          value: '16',
-          type: 'button',
-          event: 'event16'
-        },
-        {
-          caption: '17',
-          value: '17',
-          type: 'button',
-          event: 'event17'
-        },
-        {
-          caption: '18',
-          value: '18',
-          type: 'button',
-          event: 'event18'
-        },
-        {
-          caption: '19',
-          value: '19',
-          type: 'button',
-          event: 'event19'
-        },
-        {
-          caption: '20',
-          value: '20',
-          type: 'button',
-          event: 'event20'
-        },
-        {
-          caption: '21',
-          value: '21',
-          type: 'button',
-          event: 'event21'
-        },
-        {
-          caption: '22',
-          value: '22',
-          type: 'button',
-          event: 'event22'
-        },
-        {
-          caption: '23',
-          value: '23',
-          type: 'button',
-          event: 'event23'
-        }
-      ]
+      canTalk: ''
     }
   },
   props: {
@@ -345,6 +209,20 @@ export default {
       }).map((msg) => {
         return msg.tts
       })
+    },
+    aaaaaaa () {
+      if (this.activeBoxMsg && this.activeBoxMsg.items) {
+        this.activeBoxMsg.items.map(item => {
+          if (item.event === 'disable_tts') {
+            console.log('true')
+            this.$store.commit('setCanTalk', true)
+          } else if (item.event === 'enable_tts') {
+            console.log('false')
+            this.canTalk = false
+            this.$store.commit('setCanTalk', false)
+          }
+        })
+      }
     }
   },
   methods: {
@@ -372,7 +250,6 @@ export default {
       })
       if (message.length >= 1) {
         this.$store.dispatch('initBoxItem', message[0].items)
-        // this.$store.dispatch('initBoxItem', this.arr)
         return message[0]
       } else {
         return {}
@@ -517,6 +394,11 @@ export default {
           this.skillPosition = res[1].scrollTop + 200
         }
       })
+    },
+    setTalk () {
+      this.canTalk = !this.canTalk
+      let message = this.canTalk ? {event: 'enable_tts', value: '开口讲话', caption: '开口讲话'} : {event: 'disable_tts', value: '别吱声', caption: '别吱声'}
+      this.$store.dispatch('setVoice', message)
     }
   },
 
@@ -581,5 +463,22 @@ export default {
   }
   .skill-list-footer {
     height: 100rpx;
+  }
+  .voice-container{
+    position: absolute;
+    z-index: 10000000;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #bbb;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-voice-btn{
+    width: 60%;
+    height: 60%;
   }
 </style>

@@ -5,7 +5,7 @@
   min-width: 46rpx;
   white-space:nowrap;
 
-  margin-left: 10rpx;
+  margin-left: 20rpx;
 
   background:#f2f2f2;
   /*border:2rpx solid #1cb2b9;*/

@@ -11,14 +11,13 @@
         </block>
         <view class="weui-flex bot-message" wx:elif="{{msg.show}}">
           <view class="left-item">
-            <view class="avatar-wrapper">
-              <!--<image :src="bodAvatar" class="small-avatar" v-if="i==0"/>-->
+            <!-- <view class="avatar-wrapper">
               <bot-avatar url="{{survey.avatarUrl}}" size="30"
                 wx:if="{{i==0 || (displayIncomingMsgs[i-1].type =='divider' && (i-1) < received )}}"/>
-            </view>
+            </view> -->
             <view class="content">
               <bot-say-message msg="{{msg}}" bindloadDone="loadDone" wx:if="{{!lastBotMsg || i < received}}"
-                 bindbuttonListEvent="buttonListEvent" bindpreviewImage="previewImage" 
+                 bindbuttonListEvent="buttonListEvent" bindpreviewImage="previewImage"
                  bindexhibitionClick="exhibitionClick"
                  binditemRender="itemRender"
                  messageId="{{messages.id}}"

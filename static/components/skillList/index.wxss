@@ -1,6 +1,7 @@
+
 .request-wrapper {
   padding: 10rpx 30rpx;
-  background: #f2f2f2;
+  background: #ebebeb;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
