@@ -112,8 +112,7 @@ export default {
       ttsPlaying: false,
       inDonating: false,
       skillListShow: false,
-      skillPosition: 0,
-      canTalk: ''
+      skillPosition: 0
     }
   },
   props: {
@@ -163,7 +162,8 @@ export default {
       userAuthed: state => state.userProfile.authed,
       recordAuthed: state => state.recordStatus.authed,
       recordStatus: state => state.recordStatus.status,
-      footSkillArr: state => state.skillBox.boxItemArr
+      footSkillArr: state => state.skillBox.boxItemArr,
+      canTalk: state => state.messages.canTalk
     }),
 
     messageList () {
@@ -209,20 +209,6 @@ export default {
       }).map((msg) => {
         return msg.tts
       })
-    },
-    aaaaaaa () {
-      if (this.activeBoxMsg && this.activeBoxMsg.items) {
-        this.activeBoxMsg.items.map(item => {
-          if (item.event === 'disable_tts') {
-            console.log('true')
-            this.$store.commit('setCanTalk', true)
-          } else if (item.event === 'enable_tts') {
-            console.log('false')
-            this.canTalk = false
-            this.$store.commit('setCanTalk', false)
-          }
-        })
-      }
     }
   },
   methods: {
@@ -396,9 +382,10 @@ export default {
       })
     },
     setTalk () {
-      this.canTalk = !this.canTalk
-      let message = this.canTalk ? {event: 'enable_tts', value: '开口讲话', caption: '开口讲话'} : {event: 'disable_tts', value: '别吱声', caption: '别吱声'}
-      this.$store.dispatch('setVoice', message)
+      console.log('canTalk:' + this.canTalk)
+      this.$store.commit('setCanTalk', !this.canTalk)
+      console.log('canTalk:' + this.canTalk)
+      this.$store.dispatch('updateTalkTts', {tts: this.canTalk})
     }
   },
 

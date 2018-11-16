@@ -46,6 +46,7 @@ export default {
   },
 
   onShow () {
+    this.$store.dispatch('getUserTts')
     if (this.previewImageFlag) {
       this.$store.commit('talkToBotFather')
       if (this.hasLogin) {

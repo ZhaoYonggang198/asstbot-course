@@ -105,7 +105,9 @@ const mutations = {
     }
   },
   setCanTalk (state, data) {
+    console.log('this start')
     console.log(data)
+    console.log('this end')
     state.canTalk = data
   }
 }
@@ -280,6 +282,25 @@ const actions = {
           console.error(err)
           reject(err)
         })
+    })
+  },
+  updateTalkTts ({dispatch, commit}, data) {
+    return new Promise((resolve, reject) => {
+      wechat.getOpenId().then(openid => {
+        wx.request({
+          url: config.service.updateTts,
+          method: 'post',
+          data: {...data, id: openid},
+          success: function (res) {
+            console.log(res.data)
+            resolve(res.data)
+          },
+          fail: function (err) {
+            console.log(err)
+            reject(err)
+          }
+        })
+      })
     })
   }
 }

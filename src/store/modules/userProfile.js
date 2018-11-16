@@ -5,6 +5,7 @@ const url = config.service.userInfoUrl
 
 const bindingUrl = `${config.service.hostRoot}/binding`
 const unbindingUrl = `${config.service.hostRoot}/unbinding`
+const userUrl = `${config.service.userInfo}`
 
 const state = {
   userInfo: {},
@@ -165,6 +166,22 @@ const actions = {
           },
           fail: (err) => {
             reject(err)
+          }
+        })
+      })
+    })
+  },
+  getUserTts ({dispatch, commit}) {
+    return new Promise((resolve, reject) => {
+      wechat.getOpenId().then(openid => {
+        wx.request({
+          url: userUrl + '?id=' + openid,
+          method: 'get',
+          success: function (res) {
+            commit('setCanTalk', res.data.asstBot.tts)
+          },
+          fail: function (err) {
+            console.log(err)
           }
         })
       })

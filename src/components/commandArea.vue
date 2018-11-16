@@ -37,10 +37,12 @@
         <block v-for="(item, index) in bottomContainer" :key="index">
           <swiper-item class="swiper-container">
             <view class="swiper-item" v-for="(it, ix) in item" :key="ix" @click="selectItem(it)">
-              <view class="icon-skill">
-                <image :src="it.src"></image>
-              </view>
-              <text class="skill-name">{{it.value}}</text>
+              <button class="icon-button-box" formType="submit">
+                <view class="icon-skill">
+                  <image :src="it.src"></image>
+                </view>
+                <text class="skill-name">{{it.value}}</text>
+              </button>
             </view>
           </swiper-item>
         </block>
@@ -395,4 +397,15 @@ export default {
     color: #999;
     margin-top: 5px;
   }
+  .icon-button-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    margin: 0;
+    padding: 0;
+  }
+.icon-button-box:after{
+  border: none;
+}
 </style>

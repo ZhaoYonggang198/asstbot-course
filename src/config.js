@@ -3,7 +3,7 @@
  */
 
 // 此处主机域名修改成腾讯云解决方案分配的域名
-var host = 'https://xiaodamp.cn'
+var host = 'https://xiaodamp.com'
 
 var hostRoot = `${host}/asst`
 
@@ -17,6 +17,8 @@ export default {
     imageUrl: `${hostRoot}/image`,
     videoPostUrl: `${hostRoot}/vedio`,
     imagePostUrl: `${hostRoot}/image?compress=true`,
-    qrcodeUrl: `${hostRoot}/qrcode`
+    qrcodeUrl: `${hostRoot}/qrcode`,
+    userInfo: `${hostRoot}/user`,
+    updateTts: `${hostRoot}/user/asstBot/tts`
   }
 }
