@@ -18,6 +18,7 @@ import recordStatus from './modules/recordStatus'
 import dictation from './modules/dictation/dictation'
 import skillBox from './modules/skillBox'
 import lottery from './modules/lottery/lottery'
+import speaker from './modules/speaker'
 
 Vue.use(Vuex)
 
@@ -42,7 +43,8 @@ export default new Vuex.Store({
     recordStatus,
     dictation,
     skillBox,
-    lottery
+    lottery,
+    speaker
   },
   strict: false
 })

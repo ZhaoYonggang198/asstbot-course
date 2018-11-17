@@ -395,7 +395,6 @@ image {
 }
 
 .con-wrapper {
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -406,6 +405,7 @@ image {
   border-radius: 30rpx;
   padding: 45px 30rpx 20rpx 30rpx;
 }
+
 .con-title {
   width: 246px;
   height: 90px;

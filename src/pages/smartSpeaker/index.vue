@@ -17,11 +17,9 @@ view(class="page content")
       view(class="weui-cell__ft weui-cell__ft_in-access")
         block(v-if="baiduBinded") 已关联
         block(v-else) 未关联
-    navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/bindJingdong/main")
+    navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" :url="jingDongUrl")
       view(class="weui-cell__bd") 关联叮咚音箱（京东）
       view(class="weui-cell__ft weui-cell__ft_in-access")
-        block(v-if="jingdongBinded") 已关联
-        block(v-else) 未关联
 </template>
 
 <script>
@@ -31,6 +29,7 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
+      jingDongUrl: '/pages/jdSkillList/main'
     }
   },
 
@@ -53,6 +52,9 @@ export default {
   },
 
   onLoad (option) {
+    if (option.skill) {
+      this.jingDongUrl = `/pages/bindJingdong/main?skill=${option.skill}`
+    }
   },
 
   onShareAppMessage () {
