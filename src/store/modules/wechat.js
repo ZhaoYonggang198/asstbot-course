@@ -37,6 +37,9 @@ const actions = {
         resolve(state.openid)
       })
     }
+  },
+  getOpenIdSync () {
+    return state.openid
   }
 }
 
