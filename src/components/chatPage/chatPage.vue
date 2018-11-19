@@ -97,7 +97,8 @@ const urlMaping = {
   'xiaoai-no-screen': '/pages/bindXiaomi/main',
   'dueros-no-screen': '/pages/bindXiaodu/main',
   'dueros-has-screen': '/pages/xiaoduhelp/main',
-  'dingdong-no-screen': '/pages/bindJingdong/main'
+  'dingdong-no-screen': '/pages/bindJingdong/main',
+  'lucky-draw': '/pages/lottery/main'
 }
 
 export default {

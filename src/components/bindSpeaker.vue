@@ -38,6 +38,9 @@ export default {
     deviceType: {
       type: String
     },
+    skill: {
+      type: String
+    },
     unbindHint: {
       type: String
     },
@@ -60,10 +63,14 @@ export default {
   },
   computed: {
     ...mapState({
-      smartSpeakes: state => state.userProfile.smartSpeakes
+      smartSpeakes: state => state.userProfile.smartSpeakes,
+      skillList: state => state.userProfile.skillList
     }),
     speakerBinded () {
-      return this.smartSpeakes.indexOf(this.deviceType) !== -1
+      return (!this.skill && this.smartSpeakes.indexOf(this.deviceType) !== -1) ||
+        (this.skill && this.skillList.filter((item) => {
+          return item.platType === this.deviceType && item.skill === this.skill
+        }).length > 0)
     }
   },
 
@@ -80,7 +87,7 @@ export default {
         title: '正在关联',
         mask: true
       })
-      this.$store.dispatch('bindSpeaker', {bindingCode: this.code, type: this.deviceType})
+      this.$store.dispatch('bindSpeaker', {bindingCode: this.code, type: this.deviceType, skill: this.skill})
         .then(() => {
           wx.hideLoading()
           wx.showToast({
@@ -104,7 +111,7 @@ export default {
     },
     unbindSpeaker () {
       console.log('unbind speaker')
-      this.$store.dispatch('unbindSpeaker', {type: this.deviceType})
+      this.$store.dispatch('unbindSpeaker', {type: this.deviceType, skill: this.skill})
     }
   },
 

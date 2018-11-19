@@ -423,7 +423,7 @@
                 })
               } else {
                 wx.navigateTo({
-                  url: '/pages/smartSpeaker/main'
+                  url: '/pages/smartSpeaker/main?skill=dictation'
                 })
               }
             })

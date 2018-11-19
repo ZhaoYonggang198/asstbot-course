@@ -25,7 +25,9 @@
     "pages/donate/main",
     "pages/bindXiaomi/main",
     "pages/bindJingdong/main",
-    "pages/lottery/main"
+    "pages/lottery/main",
+    "pages/jdSkillList/main",
+    "pages/scoreDecl/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

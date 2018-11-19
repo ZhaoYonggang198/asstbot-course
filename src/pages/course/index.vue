@@ -174,7 +174,7 @@ export default {
     },
     bindphone () {
       wx.navigateTo({
-        url: '/pages/smartSpeaker/main'
+        url: '/pages/smartSpeaker/main?skill=course-record'
       })
     },
     editCourse (day, interval, course) {

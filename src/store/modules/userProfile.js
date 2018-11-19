@@ -5,13 +5,15 @@ const url = config.service.userInfoUrl
 
 const bindingUrl = `${config.service.hostRoot}/binding`
 const unbindingUrl = `${config.service.hostRoot}/unbinding`
+const bindingPlatUrl = `${config.service.hostRoot}/bindingPlat`
 const userUrl = `${config.service.userInfo}`
 
 const state = {
   userInfo: {},
   authed: undefined,
   loginStatus: undefined,
-  smartSpeakes: []
+  smartSpeakes: [],
+  skillList: []
 }
 
 const getters = {
@@ -32,6 +34,9 @@ const mutations = {
   },
   setSmartSpeaker (state, speakers) {
     state.smartSpeakes = speakers
+  },
+  setSkillList (state, skills) {
+    state.skillList = skills
   }
 }
 
@@ -123,6 +128,25 @@ const actions = {
       })
     })
   },
+  getSkillList ({commit}) {
+    return new Promise((resolve, reject) => {
+      wechat.getOpenId().then((openid) => {
+        wx.request({
+          url: `${bindingPlatUrl}?openId=${openid}`,
+          method: 'GET',
+          success: (response) => {
+            if (response.data.bindingTypes !== undefined) {
+              commit('setSkillList', response.data.bindingTypes)
+            }
+            resolve(response.data)
+          },
+          fail: (err) => {
+            reject(err)
+          }
+        })
+      })
+    })
+  },
   bindSpeaker ({dispatch}, data) {
     return new Promise((resolve, reject) => {
       wechat.getOpenId().then((openId) => {
@@ -134,6 +158,7 @@ const actions = {
           },
           success: (response) => {
             dispatch('getSmartSpeakers')
+            dispatch('getSkillList')
             if (response.data.result === 'success' && response.data.state) {
               resolve()
             } else {
@@ -158,6 +183,7 @@ const actions = {
           },
           success: (response) => {
             dispatch('getSmartSpeakers')
+            dispatch('getSkillList')
             if (response.data.result === 'success' && response.data.state) {
               resolve()
             } else {
