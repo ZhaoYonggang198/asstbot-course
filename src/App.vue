@@ -1,8 +1,22 @@
 <script>
+import config from './config.js'
+import wechat from './store/modules/wechat.js'
+
+const url = `${config.service.hostRoot}/loginScene`
+
 export default {
   created () {
   },
   onLaunch (option) {
+    wechat.getOpenId().then(openId => {
+      wx.request({
+        url: url,
+        method: 'POST',
+        data: {user: openId, ...option},
+        success: () => {},
+        fail: () => {}
+      })
+    })
     this.$store.dispatch('updateAuthStatus')
       .then((auth) => {
         if (!auth) {

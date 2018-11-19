@@ -629,7 +629,7 @@
       return {
         title: '词汇详情',
         path: '/pages/dictation/main?openId=' + this.openId + '&shareId=' + JSON.stringify(this.dictation) +
-          `&from=${this.openid}&scene=share-dictation`
+          `&from=${this.openId}&scene=share-dictation`
       }
     },
     onLoad (option) {
