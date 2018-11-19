@@ -9,8 +9,12 @@
     </view>
     <view class="avatar-wrapper">
       <view class="avatar">
-        <bod-avatar :url="avatarUrl" size="40"></bod-avatar>
+        <bod-avatar :url="avatarUrl" size="50"></bod-avatar>
       </view>
+    </view>
+    <view class="voice-container" @click="setTalk">
+      <image v-if="canTalk" class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/1156bcc0-e951-11e8-b6e5-79c4537af773.png"></image>
+      <image v-else class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/154f6e30-e951-11e8-b6e5-79c4537af773.png"></image>
     </view>
   </view>
 </template>
@@ -18,6 +22,7 @@
 <script>
 import returnButton from '@/components/widget/returnButton'
 import deviceTopPadding from '@/components/view/deviceTopPadding'
+import { mapState } from 'vuex'
 export default {
   props: {
     avatarUrl: {
@@ -30,6 +35,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      canTalk: state => state.messages.canTalk
+    }),
     displayUrl () {
       return this.avatarUrl || this.avatarUrl !== null ? this.avatarUrl : '../../static/image/avatar.png'
     }
@@ -37,6 +45,12 @@ export default {
   components: {
     returnButton,
     deviceTopPadding
+  },
+  methods: {
+    setTalk () {
+      this.$store.commit('setCanTalk', !this.canTalk)
+      this.$store.dispatch('updateTalkTts', {tts: this.canTalk})
+    }
   }
 }
 </script>
@@ -46,17 +60,15 @@ export default {
 .logo {
   position: absolute;
   left: 10px;
-  bottom: 5px;
-  width: 80px;
-  height: 35px;
-  /*height: 84rpx;*/
+  bottom: 10px;
+  width: 97px;
+  height: 42px;
 }
 
 .background {
   display: block;
   font-size: 0;
-  /*height: 146rpx;*/
-  height: 45px;
+  height: 70px;
   background: #2b3343;
   width: 750rpx;
 }
@@ -72,12 +84,12 @@ export default {
   /*padding: 12rpx;*/
   z-index: 500;
 
-  width:40px;
-  height:40px;
+  width:50px;
+  height:50px;
   padding:0;
-  bottom: 3px;
+  bottom: 10px;
   left:50%;
-  margin-left:-17px;
+  margin-left:-25px;
 
 
 }
@@ -104,6 +116,19 @@ export default {
 .title {
   flex: 1;
   text-align: center;
+}
+.voice-container{
+  position: absolute;
+  z-index: 10000000;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(51,51,51,.3);
+  right: 10px;
+  bottom: -80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 </style>

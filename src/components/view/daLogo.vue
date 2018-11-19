@@ -1,5 +1,5 @@
 <template>
-  <image src="../../static/image/logo.png" mode="widthFix" style="width:80px;"/>
+  <image src="../../static/image/logo.png" style="width:97px;height: 42px;"/>
 </template>
 
 <script>

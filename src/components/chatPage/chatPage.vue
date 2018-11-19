@@ -4,10 +4,10 @@
       <i class="icon iconfont icon-close" @click="closeSkillList"></i>
     </view>
     <view class="content" style="flex-direction: column;position: relative">
-      <view class="voice-container" @click="setTalk">
-        <image v-if="canTalk" class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/1156bcc0-e951-11e8-b6e5-79c4537af773.png"></image>
-        <image v-else class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/154f6e30-e951-11e8-b6e5-79c4537af773.png"></image>
-      </view>
+      <!--<view class="voice-container" @click="setTalk">-->
+        <!--<image v-if="canTalk" class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/1156bcc0-e951-11e8-b6e5-79c4537af773.png"></image>-->
+        <!--<image v-else class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/154f6e30-e951-11e8-b6e5-79c4537af773.png"></image>-->
+      <!--</view>-->
       <videoplayer :src="videoSrc" v-if="videoPlay" @videoEnded="videoPlay=false"></videoplayer>
       <scroll-view scroll-y='true' :scroll-into-view="scrollToView" style="height: 100%" v-show="!skillListShow">
         <view class="message-list">
@@ -162,8 +162,7 @@ export default {
       userAuthed: state => state.userProfile.authed,
       recordAuthed: state => state.recordStatus.authed,
       recordStatus: state => state.recordStatus.status,
-      footSkillArr: state => state.skillBox.boxItemArr,
-      canTalk: state => state.messages.canTalk
+      footSkillArr: state => state.skillBox.boxItemArr
     }),
 
     messageList () {
@@ -380,12 +379,6 @@ export default {
           this.skillPosition = res[1].scrollTop + 200
         }
       })
-    },
-    setTalk () {
-      console.log('canTalk:' + this.canTalk)
-      this.$store.commit('setCanTalk', !this.canTalk)
-      console.log('canTalk:' + this.canTalk)
-      this.$store.dispatch('updateTalkTts', {tts: this.canTalk})
     }
   },
 
@@ -450,19 +443,6 @@ export default {
   }
   .skill-list-footer {
     height: 100rpx;
-  }
-  .voice-container{
-    position: absolute;
-    z-index: 10000000;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: #bbb;
-    right: 10px;
-    top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   .icon-voice-btn{
     width: 60%;
