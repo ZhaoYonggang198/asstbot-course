@@ -2,6 +2,5 @@
   "enablePullDownRefresh": false,
   "disableScroll": true,
   "usingComponents": {
-    "i-cell": "/static/iview/cell/index"
   }
 }

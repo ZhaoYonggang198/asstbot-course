@@ -7,7 +7,8 @@ const state = {
   totalScore: 0,
   usedScore: 0,
   remainScore: 0,
-  drawTimes: 0
+  drawTimes: 0,
+  awardList: []
 }
 
 const getters = {
@@ -19,6 +20,10 @@ const mutations = {
     state.usedScore = data.usedScore
     state.remainScore = data.remainScore
     state.drawTimes = data.drawTimes
+  },
+
+  updateAwards (state, data) {
+    state.awardList = data
   }
 }
 
@@ -40,6 +45,23 @@ const actions = {
       })
     })
   },
+  getAwards ({commit}) {
+    return new Promise((resolve, reject) => {
+      wechat.getOpenId().then((openId) => {
+        wx.request({
+          url: `${hostRoot}/awards?id=${openId}`,
+          method: 'GET',
+          success: (res) => {
+            commit('updateAwards', res.data.data)
+            resolve()
+          },
+          fail: (err) => {
+            reject(err)
+          }
+        })
+      })
+    })
+  },
   luckyDraw ({dispatch}) {
     return new Promise((resolve, reject) => {
       wechat.getOpenId().then((openId) => {
@@ -49,6 +71,7 @@ const actions = {
           data: {id: openId},
           success: (res) => {
             dispatch('getScore')
+            dispatch('getAwards')
             resolve(res.data.data)
           },
           fail: (err) => {

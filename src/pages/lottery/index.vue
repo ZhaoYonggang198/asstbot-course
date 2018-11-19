@@ -13,7 +13,7 @@
       <image src="../../static/image/lottery-bottom.svg" mode="scaleToFill"
         lazy-load="false"></image>
     </view>
-    <view class='canvasI' :style="rotateDeg?'transform:rotate('+rotateDeg+'deg)':''" @>
+    <view class='canvasI' :animation="animationData">
       <view canvas-id='canvasI' id="canvas-one" class='canvasI' >
         <image src="../../static/image/lottery-disk.svg" mode="scaleToFill"
           lazy-load="false"/>
@@ -48,7 +48,7 @@
   <view class="modal-mask class-mask" :class="modalVisible ? 'modal-mask-show' : ''" @click="modalVisible=false"/>
   <view class="modal" :class="modalVisible ? 'modal-show' : ''">
     <view class="modal-main">
-      <view class="con-wrapper" v-if="true">
+      <view class="con-wrapper" v-if="!awardHistoryShow">
         <view class="con-title">
           <image src="../../static/image/congratulation.svg" mode="scaleToFill"
             lazy-load="false"/>          
@@ -62,7 +62,7 @@
             <text>输入手机号，工作人员随后会联系你</text>
           </view>
           <view class="con-footer">
-            <button class="button cancel" @click="modalVisible=false">取消</button>
+            <button class="button cancel" @click="prizeUser">取消</button>
             <button class="button confirm" :disabled="phone.length !== 11" @click="prizeUser">提交</button>
           </view>
         </block>
@@ -70,6 +70,16 @@
           <view class="con-footer">
             <button class="button cancel" @click="modalVisible=false">再逛逛</button>
           </view>          
+        </block>
+      </view>
+      <view class="con-wrapper" v-else @click="modalVisible=false">
+        <view class="con-title">
+          <image src="../../static/image/awards.svg" mode="scaleToFill" lazy-load="false"/>          
+        </view>
+        <block v-for="(award, index) in awardList" :key="index">
+          <view class="award-wrapper">
+            <view class="award-name">一台{{award.awardDesc}}</view>
+          </view>
         </block>
       </view>
     </view>
@@ -86,12 +96,14 @@ export default {
   data: {
     rotateDeg: 0,
     lightDeg: 0,
-    prizeList: [],
     modalVisible: false,
     grade: 1,
     phone: '',
     inRotate: false,
-    rotateTimer: {}
+    rotateTimer: {},
+    animation: {},
+    animationData: {},
+    awardHistoryShow: false
   },
   computed: {
     conText () {
@@ -100,7 +112,8 @@ export default {
     },
     ...mapState({
       remainScore: state => state.lottery.remainScore,
-      drawTimes: state => state.lottery.drawTimes
+      drawTimes: state => state.lottery.drawTimes,
+      awardList: state => state.lottery.awardList
     })
   },
   methods: {
@@ -120,6 +133,8 @@ export default {
 
       let rotateCircle = parseInt(this.rotateDeg / 360)
       this.rotateDeg = rotateCircle * 360 + 1440 + num * 60
+      this.animation.rotate(this.rotateDeg).step({duration: 3000})
+      this.animationData = this.animation.export()
     },
     start () {
       if (this.inRotate) {
@@ -135,7 +150,7 @@ export default {
           if (this.grade > 0) {
             this.inRotate = true
             this.rotateTimer = setTimeout(() => {
-              this.modalVisible = true
+              this.showCurrentAward()
               this.inRotate = false
             }, 3500)
           }
@@ -153,10 +168,20 @@ export default {
       this.lightDeg = this.lightDeg === 0 ? 1 : 0
     },
     scoreDecl () {
-      console.log('scoreDecl')
+      wx.navigateTo({
+        url: '/pages/scoreDecl/main'
+      })
+    },
+    showCurrentAward () {
+      this.modalVisible = true
+      this.awardHistoryShow = false
+    },
+    showHistoryAward () {
+      this.modalVisible = true
+      this.awardHistoryShow = true
     },
     prizeClicked () {
-      if (this.prizeList.length === 0) {
+      if (this.awardList.length === 0) {
         wx.showToast({
           title: '你还没有抽到奖，赶快开始抽奖吧',
           icon: 'none',
@@ -164,9 +189,7 @@ export default {
           mask: false
         })
       } else {
-        wx.navigateTo({
-          url: '/pages/prizeList/main'
-        })
+        this.showHistoryAward()
       }
     },
     phoneChange (e) {
@@ -185,6 +208,10 @@ export default {
 
   onLoad () {
     this.$store.dispatch('getScore')
+    this.$store.dispatch('getAwards')
+    this.animation = wx.createAnimation({
+      timingFunction: 'ease-in-out'
+    })
   },
 
   onUnload () {
@@ -405,7 +432,6 @@ image {
   border-radius: 30rpx;
   padding: 45px 30rpx 20rpx 30rpx;
 }
-
 .con-title {
   width: 246px;
   height: 90px;
