@@ -46,9 +46,9 @@
     </view>
   </view>
   <view class="modal-mask class-mask" :class="modalVisible ? 'modal-mask-show' : ''" @click="modalVisible=false"/>
-  <view class="modal" :class="modalVisible ? 'modal-show' : ''">
+  <view class="modal" :class="modalVisible ? 'modal-show' : ''" v-if="!awardHistoryShow">
     <view class="modal-main">
-      <view class="con-wrapper" v-if="!awardHistoryShow">
+      <view class="con-wrapper" >
         <view class="con-title">
           <image src="../../static/image/congratulation.svg" mode="scaleToFill"
             lazy-load="false"/>          
@@ -72,7 +72,12 @@
           </view>          
         </block>
       </view>
-      <view class="con-wrapper" v-else @click="modalVisible=false">
+
+    </view>
+  </view>
+  <view class="modal" :class="modalVisible ? 'modal-show' : ''" v-else  @click="modalVisible=false">
+    <view class="modal-main">
+      <view class="con-wrapper">
         <view class="con-title">
           <image src="../../static/image/awards.svg" mode="scaleToFill" lazy-load="false"/>          
         </view>

@@ -99,7 +99,7 @@ export default {
         })
         .catch(() => {
           wx.showToast({
-            title: '关联失败，验证码错误或者已过期',
+            title: '关联失败，验证码无效',
             icon: 'none',
             duration: 1500,
             mask: false

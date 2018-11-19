@@ -343,7 +343,7 @@ export default {
 
   onShareAppMessage: function () {
     return {
-      path: `/pages/sharedcourse/main?user=${this.openid}`
+      path: `/pages/sharedcourse/main?user=${this.openid}&from=${this.openid}&scene=share-course`
     }
   }
 }
