@@ -187,6 +187,7 @@
       },
       play: function () {
         if (this.processIndex < 0) {
+          this.playState = false
           this.backgroundAudioContext.title = '现在开始听写'
           this.backgroundAudioContext.src = (this.dictation.ttsSex === 0 || this.dictation.ttsSex === 'ttsFemale') ? 'https://xiaodamp.cn/asst/tts/5df1c480-e65e-11e8-9774-bd7f39b40d24.mp3' : 'https://xiaodamp.cn/asst/tts/5de2f770-e65e-11e8-9774-bd7f39b40d24.mp3'
           setTimeout(() => {
