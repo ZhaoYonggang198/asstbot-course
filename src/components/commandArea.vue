@@ -1,5 +1,6 @@
 <template>
-  <form report-submit="true" @submit="saveFormId" class="footer">
+  <form report-submit="true" @submit="saveFormId" class="footer" style="width: 100vw;display: block">
+    <trmpModal content="点击➕号，查看我的更多本领"/>
     <view class="weui-flex primary-color light">
       <view class="placeholder" @click="hideBottomBox">
         <button class="input-widget form-control primary-color" size="small" @click="changeToVoiceMode" v-if="!voiceMode">
@@ -11,7 +12,6 @@
       </view>
       <block>
         <view class="weui-flex__item"  v-if="!voiceMode">
-
           <input class="word-textarea primary-color revert textarea-style-2"  adjust-position="true" :value="currentMessage" :cursorSpacing="0"
           :maxlength="textLength" :placeholder="placehodlerText" :type="textType"
           confirm-type="send" confirm-hold="true"
@@ -55,6 +55,7 @@
 import { mapState } from 'vuex'
 import recordButton from './widget/recordButton'
 import devicePadding from './view/devicePadding'
+import trmpModal from './tempModal'
 import formId from '@/utils/formId'
 
 function getRecordAuth (showToast) {
@@ -152,7 +153,8 @@ export default {
   },
   components: {
     recordButton,
-    devicePadding
+    devicePadding,
+    trmpModal
   },
   methods: {
     valueInput (ev) {
@@ -408,4 +410,5 @@ export default {
 .icon-button-box:after{
   border: none;
 }
+
 </style>

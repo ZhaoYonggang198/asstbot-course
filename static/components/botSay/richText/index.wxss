@@ -29,3 +29,6 @@
     border-radius: 5px;
     border: 1px solid #eaeaea;
 }
+.padding-right-50{
+    padding-right: 50px;
+}

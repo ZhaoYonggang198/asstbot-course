@@ -105,7 +105,6 @@ export default {
   /*border: solid #25CEC2 6rpx;*/
   width: 100%;
   height: 100%;
-
 }
 
 .title {
@@ -123,16 +122,20 @@ export default {
 }
 .voice-container{
   position: absolute;
-  z-index: 10000000;
+  z-index: 1000;
   width: 30px;
   height: 30px;
   border-radius: 50%;
   background: rgba(51,51,51,.3);
   right: 10px;
-  bottom: -92px;
+  bottom: -100px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.icon-voice-btn{
+  width: 60%;
+  height: 60%;
 }
 
 </style>

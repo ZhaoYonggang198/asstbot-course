@@ -5,7 +5,10 @@ Component({
     properties: {
         content: {
             type: Object,
-            value: {}
+            value: {},
+            observer: function(value){
+                console.log(value)
+            }
         }
     },
 
