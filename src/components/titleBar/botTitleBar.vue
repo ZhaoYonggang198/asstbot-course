@@ -23,6 +23,7 @@
 import returnButton from '@/components/widget/returnButton'
 import deviceTopPadding from '@/components/view/deviceTopPadding'
 import { mapState } from 'vuex'
+import stop from '../../utils/audioReply'
 export default {
   props: {
     avatarUrl: {
@@ -48,6 +49,9 @@ export default {
   },
   methods: {
     setTalk () {
+      if (this.canTalk) {
+        stop.stop()
+      }
       this.$store.commit('setCanTalk', !this.canTalk)
       this.$store.dispatch('updateTalkTts', {tts: this.canTalk})
     }
@@ -125,7 +129,7 @@ export default {
   border-radius: 50%;
   background: rgba(51,51,51,.3);
   right: 10px;
-  bottom: -80px;
+  bottom: -92px;
   display: flex;
   align-items: center;
   justify-content: center;
