@@ -18,6 +18,27 @@ const mutations = {
 }
 
 const actions = {
+  initRecordAuthStatus ({commit}) {
+    return new Promise((resolve, reject) => {
+      wx.getSetting({
+        success (res) {
+          if (!res.authSetting['scope.record']) {
+            wx.authorize({
+              scope: 'scope.record',
+              success: res => {
+                console.log(res)
+                commit('initAuthStatus', true)
+                resolve()
+              }
+            })
+          } else {
+            commit('initAuthStatus', true)
+            resolve()
+          }
+        }
+      })
+    })
+  }
 }
 
 export default {

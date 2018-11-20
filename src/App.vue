@@ -7,6 +7,7 @@ const url = `${config.service.hostRoot}/loginScene`
 export default {
   created () {
   },
+
   onLaunch (option) {
     wechat.getOpenId().then(openId => {
       wx.request({
@@ -17,13 +18,24 @@ export default {
         fail: () => {}
       })
     })
-    this.$store.dispatch('updateAuthStatus')
+    this.$store.dispatch('initRecordAuthStatus')
+      .then(this.$store.dispatch('updateAuthStatus'))
       .then((auth) => {
-        if (!auth) {
-          wx.navigateTo({
-            url: '/pages/login/main'
-          })
-        }
+        return new Promise((resolve, reject) => {
+          if (!auth) {
+            wx.navigateTo({
+              url: '/pages/login/main',
+              success: () => {
+                resolve()
+              },
+              fail: () => {
+                resolve()
+              }
+            })
+          } else {
+            resolve()
+          }
+        })
       })
   }
 }

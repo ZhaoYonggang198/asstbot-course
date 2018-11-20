@@ -63,22 +63,13 @@ function getRecordAuth (showToast) {
     wx.getSetting({
       success (res) {
         if (!res.authSetting['scope.record']) {
-          wx.authorize({
-            scope: 'scope.record',
-            success () {
-              resolve()
-            },
-            fail (err) {
-              if (showToast) {
-                wx.hideLoading()
-                wx.showToast({
-                  title: '请在设置页面打开“录音功能”',
-                  icon: 'none'
-                })
-              }
-              reject(err)
-            }
-          })
+          if (showToast) {
+            wx.hideLoading()
+            wx.showToast({
+              title: '请在设置页面打开“录音功能”',
+              icon: 'none'
+            })
+          }
         } else {
           resolve()
         }

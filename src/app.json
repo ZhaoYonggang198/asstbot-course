@@ -27,7 +27,8 @@
     "pages/bindJingdong/main",
     "pages/lottery/main",
     "pages/jdSkillList/main",
-    "pages/scoreDecl/main"
+    "pages/scoreDecl/main",
+    "pages/bindHuawei/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
