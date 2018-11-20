@@ -26,7 +26,6 @@ const actions = {
             wx.authorize({
               scope: 'scope.record',
               success: res => {
-                console.log(res)
                 commit('initAuthStatus', true)
                 resolve()
               }

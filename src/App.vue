@@ -19,24 +19,15 @@ export default {
       })
     })
     this.$store.dispatch('initRecordAuthStatus')
-      .then(this.$store.dispatch('updateAuthStatus'))
-      .then((auth) => {
-        return new Promise((resolve, reject) => {
+      .then(() => this.$store.dispatch('updateAuthStatus')
+        .then((auth) => {
           if (!auth) {
             wx.navigateTo({
-              url: '/pages/login/main',
-              success: () => {
-                resolve()
-              },
-              fail: () => {
-                resolve()
-              }
+              url: '/pages/login/main'
             })
-          } else {
-            resolve()
           }
         })
-      })
+      )
   }
 }
 </script>
