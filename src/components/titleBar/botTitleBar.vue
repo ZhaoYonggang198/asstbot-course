@@ -13,7 +13,7 @@
       </view>
     </view>
     <view class="voice-container" @click="setTalk">
-      <image class="icon-voice-btn" :src="voiceObject.src"></image>
+      <image class="icon-voice-btn" :src="voiceObject.src?voiceObject.src:voiceObject.event === 'enable_tts'? 'https://xiaodamp.cn/asst/resource/v1/sound.png': 'https://xiaodamp.cn/asst/resource/v1/mute.png'"></image>
       <!--<image v-else class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/154f6e30-e951-11e8-b6e5-79c4537af773.png"></image>-->
     </view>
   </view>
