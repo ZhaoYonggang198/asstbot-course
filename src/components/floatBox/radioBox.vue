@@ -93,7 +93,7 @@
       },
       listArr: state => {
         if (state.list && state.list.items.length) {
-          let arr = state.list.items.filter(item => !item.type || item.type !== 'button')
+          let arr = state.list.items.filter(item => !item.type || (item.type !== 'button' && item.type !== 'icon'))
           return {...state.list, items: arr}
         }
       }
@@ -107,7 +107,6 @@
           if (obj.type && obj.type === 'donate') {
             this.$emit('donateclick')
           } else {
-            console.log(obj)
             this.$store.dispatch('sentRadioReply', {...obj, value: obj.value ? obj.value : obj.caption})
           }
         }

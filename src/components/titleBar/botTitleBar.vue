@@ -13,8 +13,8 @@
       </view>
     </view>
     <view class="voice-container" @click="setTalk">
-      <image v-if="canTalk" class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/1156bcc0-e951-11e8-b6e5-79c4537af773.png"></image>
-      <image v-else class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/154f6e30-e951-11e8-b6e5-79c4537af773.png"></image>
+      <image class="icon-voice-btn" :src="voiceObject.src"></image>
+      <!--<image v-else class="icon-voice-btn" src="https://xiaodamp.com/imbot/image/154f6e30-e951-11e8-b6e5-79c4537af773.png"></image>-->
     </view>
   </view>
 </template>
@@ -37,7 +37,8 @@ export default {
   },
   computed: {
     ...mapState({
-      canTalk: state => state.messages.canTalk
+      canTalk: state => state.messages.canTalk,
+      voiceObject: state => state.skillBox.voiceObject
     }),
     displayUrl () {
       return this.avatarUrl || this.avatarUrl !== null ? this.avatarUrl : '../../static/image/avatar.png'
@@ -49,11 +50,14 @@ export default {
   },
   methods: {
     setTalk () {
-      if (this.canTalk) {
+      console.log(this.voiceObject)
+      let obj = this.voiceObject
+      if (this.voiceObject.event === 'disable_tts') {
         stop.stop()
       }
-      this.$store.commit('setCanTalk', !this.canTalk)
-      this.$store.dispatch('updateTalkTts', {tts: this.canTalk})
+      this.$store.dispatch('sentRadioReply', {...obj, value: obj.value ? obj.value : obj.caption})
+      // this.$store.commit('setCanTalk', !this.canTalk)
+      // this.$store.dispatch('updateTalkTts', {tts: this.canTalk})
     }
   }
 }

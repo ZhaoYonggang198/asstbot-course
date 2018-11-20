@@ -33,7 +33,7 @@
     </view>
     </view>
     <view class="foot-bottom-bar" :style="{height: keyBoardHeight}">
-      <swiper :indicator-dots="bottomContainer.length > 1? true : false">
+      <swiper style="height: 100%;" :indicator-dots="bottomContainer.length > 1? true : false">
         <block v-for="(item, index) in bottomContainer" :key="index">
           <swiper-item class="swiper-container">
             <view class="swiper-item" v-for="(it, ix) in item" :key="ix" @click="selectItem(it)">
