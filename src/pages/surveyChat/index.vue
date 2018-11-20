@@ -79,6 +79,7 @@ export default {
 
   onShow () {
     console.log('on show')
+    console.log('this is survey chat page')
     if (!this.previewImageFlag) {
       this.$store.commit('setPreviewTrue')
       return
