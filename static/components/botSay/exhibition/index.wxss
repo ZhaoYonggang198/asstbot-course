@@ -8,6 +8,7 @@
   border:1rpx solid #dadada;
   background: #fff;
   z-index: 1;
+  overflow: hidden;
 }
 
 .image-box {

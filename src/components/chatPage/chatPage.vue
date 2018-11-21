@@ -201,6 +201,13 @@ export default {
     activeSkillList () {
       return this.activeSomeKindOfMsg(['activeSkillList'])
     },
+    activeSystemMsg () {
+      const msg = this.activeSomeKindOfMsg(['system-update'])
+      if (msg.type) {
+        this.$store.commit('setCanTalk', msg.tts)
+      }
+      return msg
+    },
     activeTtsMsg () {
       if (!this.activeMsg) {
         return []
