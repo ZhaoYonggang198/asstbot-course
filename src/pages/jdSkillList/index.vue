@@ -23,7 +23,7 @@ export default {
   computed: {
     ...mapState({
       skillList: state => state.speaker.dingDongSkillList,
-      bindSkillList: state => state.userProfile.skillList.filter((item) => {
+      bindSkillList: state => state.userProfile.smartSpeakers.filter((item) => {
         return item.platType === 'dingdong'
       }).map(item => item.skill)
     }),
@@ -46,7 +46,7 @@ export default {
 
   onLoad (option) {
     this.$store.dispatch('getDingdongSkillList')
-    this.$store.dispatch('getSkillList')
+    this.$store.dispatch('getSmartSpeakers')
   },
 
   onShareAppMessage () {

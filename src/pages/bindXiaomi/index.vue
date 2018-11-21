@@ -26,7 +26,7 @@ export default {
     bindSpeaker
   },
 
-  created () {
+  onLoad () {
     this.$store.dispatch('getSmartSpeakers')
   },
 

@@ -63,14 +63,12 @@ export default {
   },
   computed: {
     ...mapState({
-      smartSpeakes: state => state.userProfile.smartSpeakes,
-      skillList: state => state.userProfile.skillList
+      smartSpeakers: state => state.userProfile.smartSpeakers
     }),
     speakerBinded () {
-      return (!this.skill && this.smartSpeakes.indexOf(this.deviceType) !== -1) ||
-        (this.skill && this.skillList.filter((item) => {
-          return item.platType === this.deviceType && item.skill === this.skill
-        }).length > 0)
+      return this.smartSpeakers.filter(item => {
+        return this.deviceType === item.platType && (!this.skill || !item.skill || this.skill === item.skill)
+      }).length > 0
     }
   },
 
@@ -110,13 +108,13 @@ export default {
         })
     },
     unbindSpeaker () {
-      console.log('unbind speaker')
       this.$store.dispatch('unbindSpeaker', {type: this.deviceType, skill: this.skill})
     }
   },
 
   onLoad () {
     this.code = ''
+    this.$store.dispatch('')
   }
 }
 </script>

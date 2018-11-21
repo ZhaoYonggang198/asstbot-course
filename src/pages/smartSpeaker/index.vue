@@ -35,9 +35,9 @@ export default {
 
   computed: {
     ...mapState({
-      xiaoaiBinded: state => (state.userProfile.smartSpeakes.indexOf('xiaoai') !== -1),
-      baiduBinded: state => (state.userProfile.smartSpeakes.indexOf('dueros') !== -1),
-      jingdongBinded: state => (state.userProfile.smartSpeakes.indexOf('dingdong') !== -1)
+      xiaoaiBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('xiaoai') !== -1),
+      baiduBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('dueros') !== -1),
+      jingdongBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('dingdong') !== -1)
     })
   },
 
