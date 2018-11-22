@@ -6,7 +6,7 @@
         <view class="dic-edit-name-box" style="margin-top: -172px;padding-right: 40px">
           <view class="dic-edit-name">词组名</view>
           <input class="dic-edit-title" type="text" :value="dictation.title" @blur="setValue($event, 'title')" @comfirm="setValue($event, 'title')">
-          <view class="dic-words-num" v-if="dictation.words.length">{{dictation.words.length}}</view>
+          <view class="dic-words-num" v-if="dictation.words&&dictation.words.length">{{dictation.words.length}}</view>
         </view>
         <view style="display: flex;height: 42px;">
           <view class="dic-edit-name-box half-container">
@@ -48,7 +48,7 @@
             <!--<icon-com type="add" size="20" color="#333"/>-->
           <!--</view>-->
         </view>
-        <view class="dic-edit-name-box" style="border-bottom: none;height: 100%;padding-left: 0" v-if="dictation.words.length">
+        <view class="dic-edit-name-box" style="border-bottom: none;height: 100%;padding-left: 0" v-if="dictation.words&&dictation.words.length">
           <scroll-view scroll-y class="dic-edit-scroll" :scroll-into-view="scrollTop" style="height: 100%" >
             <view class="dic-edit-text-container">
               <view class="dic-edit-text-inner"  :id="'scrollTop' + (dicWords.length - index)" v-for="(text, index) in dicWords" :key="index">
@@ -118,11 +118,17 @@
         dicActiveId: state => state.id.dicActiveId
       }),
       dicWords: state => {
-        let arr = [...state.dictation.words].reverse()
-        arr.map(item => {
-          state.playState.push({value: false})
-        })
-        return arr
+        if (state.dictation && state.dictation.words) {
+          let arr = [...state.dictation.words].reverse()
+          if (arr.length) {
+            arr.map(item => {
+              state.playState.push({value: false})
+            })
+            return arr
+          } else {
+            return []
+          }
+        }
       }
     },
     methods: {
