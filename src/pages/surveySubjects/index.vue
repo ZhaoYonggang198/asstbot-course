@@ -24,7 +24,7 @@
 
                     <!--<da-text :content="subject.question"></da-text>-->
                     <view class="survey-item-title-container">
-                      <icon class="survey-item-delete" type='cancel' size='20' color='#333' @click="remove(i)"></icon>
+                      <icon class="survey-item-delete" type='cancel' size='20' color='#333' @click.stop="remove(i)"></icon>
                       <view class="survey-item-one survey-item-index">{{i+1}}</view>
                       <view class="survey-item-one survey-item-type">【{{typeNames[i]}}】</view>
                       <view class="survey-item-one survey-item-content">{{subject.question}}</view>
@@ -48,15 +48,14 @@
               </view>
 
               <view v-if="activeIndex == 1">
-                <view v-for="(conclusion, i) in conclusions" :key="conclusion" :class="activeConclusionIndex===i?'active-conclusion':''">
-                  <view @click="toggleConclusion(i)">
+                <view v-for="(conclusion, i) in conclusions" :key="conclusion" :class="activeConclusionIndex===i?'active-conclusion':''" style="margin-bottom: 10px">
+                  <view @click="toEditConclusion(i)">
                     <conclusion :surveyType="survey.type" :conclusion="conclusion" :index="i"/>
                   </view>
-                  <view :id="'conclusion-operation-'+i">
-                    <conclusion-operation :conclusion="i" v-if="activeConclusionIndex===i" @actionDone="activeConclusionIndex=-1"/>
-                  </view>
+                  <!--<view :id="'conclusion-operation-'+i">-->
+                    <!--<conclusion-operation :conclusion="i" v-if="activeConclusionIndex===i" @actionDone="activeConclusionIndex=-1"/>-->
+                  <!--</view>-->
                 </view>
-                <view class="subject-divider"></view>
                 <view class="weui-cells weui-cells_after-title clear-border" v-if="survey.type=='exam'||survey.type=='quiz'||conclusions.length == 0">
                   <view class="weui-cell">
                     <view class="weui-cell__ft" @click="addConclusion"><i class="icon iconfont icon-add"></i></view>
@@ -268,6 +267,11 @@ export default {
     remove (i) {
       this.$store.commit('deleteCurSurveySubject', i)
       this.$store.dispatch('saveCurSurvey', this.$store.state.curSurvey.survey)
+    },
+    toEditConclusion (i) {
+      wx.navigateTo({
+        url: `/pages/editconclusion/main?conclusion=${i}&action=edit`
+      })
     }
   },
 
