@@ -1,5 +1,5 @@
 <block wx:for="{{skillList}}" wx:for-index="index" wx:for-item="skill" wx:key="{{index}}">
-  <i-cell-group>
+  <i-cell-group i-class="cell-wrapper">
     <i-cell title="{{skill.name}}" label='"{{skill.request[0]}}"' bindtap="toggleActive" data-id="{{index}}">
       <i-icon type="packup" size="28" slot="footer" wx:if="{{activeIndex==index}}" bindtap="toggleActive" data-id="{{index}}"/>
       <i-icon type="unfold" size="28" slot="footer" wx:else  bindtap="toggleActive" data-id="{{index}}"/>

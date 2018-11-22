@@ -114,7 +114,6 @@ export default {
 
   onLoad () {
     this.code = ''
-    this.$store.dispatch('')
   }
 }
 </script>

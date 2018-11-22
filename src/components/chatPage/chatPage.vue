@@ -448,7 +448,7 @@ export default {
   }
 
   .skill-list-header {
-    padding: 15rpx 20rpx;
+    padding: 0rpx 20rpx;
   }
   .skill-list-footer {
     height: 100rpx;

@@ -1,6 +1,9 @@
-
+.cell-wrapper {
+  padding: 0 40rpx;
+  background: white;
+}
 .request-wrapper {
-  padding: 10rpx 30rpx;
+  padding: 10rpx 30rpx ;
   background: #ebebeb;
   display: flex;
   flex-direction: column;
