@@ -47,6 +47,7 @@
           <picker v-if="survey.type=='quiz'" @change="updateAnswerNext(index, $event.mp.detail.value)" :value="answer.next" :range="questionNames">
             <view class="weui-select height-line-92">{{displayNames[answer.next]}}</view>
           </picker>
+          <picker v-if="survey.type=='quiz'" ></picker>
           <view class="icon-item-style font-style" v-if="!answer.imageUrl" @click.stop="addMedia(index)">
             <i class="icon iconfont icon-picture font-color"></i>
           </view>
@@ -397,6 +398,7 @@ view {
   /*margin-left: 20rpx;*/
   position: relative;
   padding: 0 30rpx;
+  height: 40px;
 }
 .anwser-item.border
 {

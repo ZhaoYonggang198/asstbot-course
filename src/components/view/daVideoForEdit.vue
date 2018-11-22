@@ -46,6 +46,8 @@
     text-align: center;
     font-size: 0;
     position: relative;
+    background: #fff;
+    border-bottom: 1px solid #d8d8d8;
   }
   .videoBox{
     position: fixed;
@@ -66,6 +68,7 @@
   }
   .posterBox{
     position: relative;
+    background: #000;
   }
   .poster{
     background: #000;

@@ -10,19 +10,25 @@
             <scroll-view scroll-y='true' style="height: 100%">
               <view v-if="activeIndex == 0">
                 <view v-for="(subject, i) in subjects" :key="i" class="subject-wrapper" :class="ativeSubjectIndex===i?'active-subject':''">
-                  <view @click="toggleSubject(i)">
-                    <view class="weui-cells weui-cells_after-title clear-border" style="border-bottom:1rpx solid #dadada">
-                      <view class="weui-cell weui-cell_input subject-area subject-style font-size">
-                        <view class="weui-cell__hd subject-item-style flex-1">
-                          <view class="weui-label subject-title-style">题目 {{i+1}}</view>
-                        </view>
-                        <view class="weui-cell__ft subject-item-style">
-                          <view class="subject-hieght-line">{{typeNames[i]}}</view>
-                        </view>
-                      </view>
-                    </view>
+                  <view @click="toSurveyEdit(i)">
+                    <!--<view class="weui-cells weui-cells_after-title clear-border" style="border-bottom:1rpx solid #dadada">-->
+                      <!--<view class="weui-cell weui-cell_input subject-area subject-style font-size">-->
+                        <!--<view class="weui-cell__hd subject-item-style flex-1">-->
+                          <!--<view class="weui-label subject-title-style">题目 {{i+1}}</view>-->
+                        <!--</view>-->
+                        <!--<view class="weui-cell__ft subject-item-style">-->
+                          <!--<view class="subject-hieght-line">{{typeNames[i]}}</view>-->
+                        <!--</view>-->
+                      <!--</view>-->
+                    <!--</view>-->
 
-                    <da-text :content="subject.question"></da-text>
+                    <!--<da-text :content="subject.question"></da-text>-->
+                    <view class="survey-item-title-container">
+                      <icon class="survey-item-delete" type='cancel' size='20' color='#333' @click="remove(i)"></icon>
+                      <view class="survey-item-one survey-item-index">{{i+1}}</view>
+                      <view class="survey-item-one survey-item-type">【{{typeNames[i]}}】</view>
+                      <view class="survey-item-one survey-item-content">{{subject.question}}</view>
+                    </view>
 
                     <daVideoForList v-if="subject.urlType=='video'" :poster="subject.mediaInfo?subject.mediaInfo.poster:''"/>
                     <daAudio v-else-if="subject.urlType=='audio'" :url="subject.imageUrl" :data="subject"/>
@@ -253,6 +259,15 @@ export default {
             url: `/pages/surveyChat/main?id=${this.survey.id}&scene=test`
           })
         })
+    },
+    toSurveyEdit (i) {
+      wx.navigateTo({
+        url: `/pages/editsubject/main?subject=${i}&action=edit`
+      })
+    },
+    remove (i) {
+      this.$store.commit('deleteCurSurveySubject', i)
+      this.$store.dispatch('saveCurSurvey', this.$store.state.curSurvey.survey)
     }
   },
 
@@ -382,4 +397,24 @@ export default {
 .active-subject, .active-conclusion {
   border: solid 2rpx @s-color
 }
+  .survey-item-title-container{
+    padding: 10px 15px;
+    background: #fff;
+    border-bottom: 1px solid #d8d8d8;
+  }
+  .survey-item-one{
+    display: inline;
+  }
+  .survey-item-index{
+    color: #666666;
+  }
+  .survey-item-type{
+    color: #666666;
+  }
+  .survey-item-content{
+    font-size: 14px;
+  }
+  .survey-item-delete{
+    float: right;
+  }
 </style>

@@ -1,4 +1,7 @@
 {
   "enablePullDownRefresh": false,
-  "disableScroll": true
+  "disableScroll": true,
+  "usingComponents": {
+    "dictation-add-icon": "/static/minui/packages/wxc-icon/dist/index"
+  }
 }
