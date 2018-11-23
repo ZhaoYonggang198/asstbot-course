@@ -311,7 +311,7 @@ export default {
       if (this.subject.type === 'location') {
         value = '陕西-西安'
       }
-      if (this.subject.type === 'radio' || this.subject.type === 'checkbox') {
+      if ((this.subject.type === 'radio' || this.subject.type === 'checkbox') && this.survey.type !== 'quiz') {
         correct = false
       }
       let answers = [...this.answers]
