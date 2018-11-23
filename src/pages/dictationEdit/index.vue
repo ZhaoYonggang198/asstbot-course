@@ -418,7 +418,7 @@
                   }
                   wx.showModal({
                     title: '设置成功',
-                    content: '现在请对音箱说："打开词语听写"，开始听写吧！',
+                    content: '现在到你的音箱打开技能，开始听写吧！',
                     showCancel: false
                   })
                 }).catch(err => {
@@ -641,6 +641,14 @@
     onLoad (option) {
     },
     onUnload () {
+      if (!this.dictation) {
+        return
+      }
+
+      if (!this.dictation.words) {
+        return
+      }
+
       if (!this.dictation.words.length) {
         this.$store.dispatch('deleteDictation', this.dictation.id).then(res => {
           this.$store.dispatch('initDictation')

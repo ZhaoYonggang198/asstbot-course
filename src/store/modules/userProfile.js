@@ -180,7 +180,11 @@ const actions = {
           url: userUrl + '?id=' + openid,
           method: 'get',
           success: function (res) {
-            commit('setCanTalk', res.data.asstBot.tts)
+            if (res.data.asstBot) {
+              commit('setCanTalk', res.data.asstBot.tts)
+            } else {
+              commit('setCanTalk', true)
+            }
           },
           fail: function (err) {
             console.log(err)

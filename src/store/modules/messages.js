@@ -105,9 +105,6 @@ const mutations = {
     }
   },
   setCanTalk (state, data) {
-    console.log('this start')
-    console.log(data)
-    console.log('this end')
     state.canTalk = data
   }
 }
