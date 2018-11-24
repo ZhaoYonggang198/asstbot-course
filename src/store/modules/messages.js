@@ -66,6 +66,7 @@ const mutations = {
   talkToBotFather (state) {
     chatBot = 'bodFather'
     url = `${config.service.hostRoot}/chatbot`
+    state.surveybotMsg = []
   },
   talkToSurveyBot (state, {id, scene}) {
     state.surveybotMsg = []
