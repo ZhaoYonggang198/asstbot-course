@@ -227,6 +227,9 @@
       },
       playAudio: function () {
         const that = this
+        if (!this.backgroundAudioContext) {
+          return
+        }
         this.innerAudioContext.src = this.audioUrl
         this.innerAudioContext.play()
         this.innerAudioContext.onPlay(() => {
@@ -269,6 +272,9 @@
         })
       },
       playBackAudio: function () {
+        if (!this.backgroundAudioContext) {
+          return
+        }
         this.backgroundAudioContext.title = this.pinyinArr[this.currentIndex]
         this.backgroundAudioContext.src = (this.dictation.ttsSex === 0 || this.dictation.ttsSex === 'ttsFemale') ? this.ttsArr[this.currentIndex].ttsFemale : this.ttsArr[this.currentIndex].ttsMale
         this.backgroundAudioContext.onPlay(() => {
@@ -410,13 +416,17 @@
         }
       }
     },
+
+    onLoad () {
+      this.backgroundAudioContext = wx.getBackgroundAudioManager()
+    },
+
     onShow () {
       if (this.currentIndex > 0) {
       } else {
         if (this.$mp.query.param) {
           this.showAble = true
           // this.innerAudioContext = wx.createInnerAudioContext()
-          this.backgroundAudioContext = wx.getBackgroundAudioManager()
           this.dictation = JSON.parse(this.$mp.query.param)
           this.dictation.ttsSex = this.dictation.ttsSex === undefined ? 'ttsMale' : this.dictation.ttsSex
           if (this.dictation.playWay === 'order') {
