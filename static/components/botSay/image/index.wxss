@@ -1,6 +1,10 @@
+.imageContainer{
+    width: 100vw;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
 .image{
-  width: 400rpx;
-  margin-left: 20rpx;
+  width: 100%;
   border-radius: 20rpx;
   /*display: flex;*/
   display:inline-block;

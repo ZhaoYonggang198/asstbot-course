@@ -2,6 +2,7 @@
   "enablePullDownRefresh": false,
   "disableScroll": true,
   "usingComponents": {
-    "dictation-add-icon": "/static/minui/packages/wxc-icon/dist/index"
+    "dictation-add-icon": "/static/minui/packages/wxc-icon/dist/index",
+    "delete-modal": "/static/components/dictation/dictationItemDelModal/index"
   }
 }

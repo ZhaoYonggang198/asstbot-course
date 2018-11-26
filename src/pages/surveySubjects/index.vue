@@ -24,7 +24,7 @@
 
                     <!--<da-text :content="subject.question"></da-text>-->
                     <view class="survey-item-title-container">
-                      <icon class="survey-item-delete" type='cancel' size='20' color='#333' @click.stop="remove(i)"></icon>
+                      <!--<icon class="survey-item-delete" type='cancel' size='20' color='#333' @click.stop="remove(i, subject.question)"></icon>-->
                       <view class="survey-item-one survey-item-index">{{i+1}}</view>
                       <view class="survey-item-one survey-item-type">【{{typeNames[i]}}】</view>
                       <view class="survey-item-one survey-item-content">{{subject.question}}</view>
@@ -35,9 +35,10 @@
                     <da-image v-else :url="subject.imageUrl"/>
                     <da-answer :subjectIndex="i" :type="subject.type" :surveyType="type"></da-answer>
                   </view>
-                  <view :id="'subject-operation-'+i">
-                    <subject-operation :subject="i" v-if="ativeSubjectIndex===i" @actionDone="ativeSubjectIndex=-1"/>
-                  </view>
+                  <!--<view :id="'subject-operation-'+i">-->
+                    <!--<subject-operation :subject="i" v-if="ativeSubjectIndex===i" @actionDone="ativeSubjectIndex=-1"/>-->
+                  <!--</view>-->
+                  <subject-operation :subject="i" @remove="remove($event, subject.question)"/>
                 </view>
                 <view class="weui-cells weui-cells_after-title clear-border">
                   <view class="weui-cell">
@@ -84,6 +85,7 @@
         </view>
       </view>
     </view>
+    <delete-modal v-if="showDelModal" @dicItemDel="surveyItemDel" @hideModal="hideModal" :content="surveyDeleteItem"/>
   </movable-area>
 </template>
 
@@ -115,7 +117,9 @@ export default {
       textareaShowArray: [],
       source: 'main',
       ativeSubjectIndex: -1,
-      activeConclusionIndex: -1
+      activeConclusionIndex: -1,
+      surveyDeleteItem: {},
+      showDelModal: false
     }
   },
   computed: {
@@ -264,9 +268,22 @@ export default {
         url: `/pages/editsubject/main?subject=${i}&action=edit`
       })
     },
-    remove (i) {
-      this.$store.commit('deleteCurSurveySubject', i)
+    remove (i, item) {
+      this.surveyDeleteItem = {
+        id: i,
+        title: item
+      }
+      this.showDelModal = true
+    },
+    surveyItemDel () {
+      this.$store.commit('deleteCurSurveySubject', this.surveyDeleteItem.id)
       this.$store.dispatch('saveCurSurvey', this.$store.state.curSurvey.survey)
+      this.hideModal()
+    },
+    hideModal () {
+      this.surveyDeleteItem = {
+      }
+      this.showDelModal = false
     },
     toEditConclusion (i) {
       wx.navigateTo({
