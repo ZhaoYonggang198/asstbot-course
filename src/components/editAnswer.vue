@@ -47,6 +47,9 @@
           <picker v-if="survey.type=='quiz'" @change="updateAnswerNext(index, $event.mp.detail.value)" :value="answer.next" :range="questionNames">
             <view class="weui-select height-line-92">{{displayNames[answer.next]}}</view>
           </picker>
+          <picker v-if="survey.type=='quiz'" @change="updateAnswerScore(index, $event.mp.detail.value)" :value="answer.score" :range="scoreArr">
+            <view style="height:92rpx;line-height:92rpx;padding:0 5px;">{{answer.score || 0}}分</view>
+          </picker>
           <view class="icon-item-style font-style" v-if="!answer.imageUrl" @click.stop="addMedia(index)">
             <i class="icon iconfont icon-picture font-color"></i>
           </view>
@@ -147,7 +150,8 @@ export default {
   data () {
     return {
       region: ['广东', '广州', '海珠'],
-      customItem: '全部'
+      customItem: '全部',
+      scoreArr: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     }
   },
   props: {
@@ -232,7 +236,15 @@ export default {
       })
       this.$emit('input', answers)
     },
-
+    updateAnswerScore (index, value) {
+      let answers = [...this.answers].map((answer, i) => {
+        if (index === i) {
+          answer.score = parseInt(value)
+        }
+        return answer
+      })
+      this.$emit('input', answers)
+    },
     updateAnswerValue (index, value) {
       let answers = [...this.answers]
       let answer = answers[index]
@@ -299,7 +311,7 @@ export default {
       if (this.subject.type === 'location') {
         value = '陕西-西安'
       }
-      if (this.subject.type === 'radio' || this.subject.type === 'checkbox') {
+      if ((this.subject.type === 'radio' || this.subject.type === 'checkbox') && this.survey.type !== 'quiz') {
         correct = false
       }
       let answers = [...this.answers]
@@ -397,6 +409,7 @@ view {
   /*margin-left: 20rpx;*/
   position: relative;
   padding: 0 30rpx;
+  height: 40px;
 }
 .anwser-item.border
 {

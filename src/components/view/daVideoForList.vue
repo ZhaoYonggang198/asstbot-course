@@ -14,6 +14,7 @@
 <style scoped>
   .posterBox{
     position: relative;
+    background: #000;
   }
   .poster{
     max-width: 100%;

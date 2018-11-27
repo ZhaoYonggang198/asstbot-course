@@ -15,6 +15,7 @@
 .posterBox{
   position: relative;
   max-width: 90%;
+  background: #000;
 }
 .poster{
   max-width: 100%;

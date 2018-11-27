@@ -1,16 +1,19 @@
 <template>
   <view class="weui-flex">
-    <view class="weui-flex__item" @tap="editPage">
-      <icon-button icon="editor" title="编辑"/>
+    <!--<view class="weui-flex__item" @tap="editPage">-->
+      <!--<icon-button icon="editor" title="编辑"/>-->
+    <!--</view>-->
+    <view class="weui-flex__item border-right" @tap="moveup">
+      <!--<icon-button icon="packup" title="上移"/>-->
+      上移
     </view>
-    <view class="weui-flex__item" @tap="moveup">
-      <icon-button icon="packup" title="上移"/>
-    </view>
-    <view class="weui-flex__item" @tap="movedown">
-      <icon-button icon="unfold" title="下移"/>
+    <view class="weui-flex__item border-right" @tap="movedown">
+      下移
+      <!--<icon-button icon="unfold" title="下移"/>-->
     </view>
     <view class="weui-flex__item" @tap="remove">
-      <icon-button icon="trash" title="删除" />
+      删除
+      <!--<icon-button icon="trash" title="删除" />-->
     </view>
   </view>
 </template>
@@ -42,8 +45,9 @@ export default {
     },
     remove () {
       this.$emit('actionDone')
-      this.$store.commit('deleteCurSurveySubject', this.subject)
-      this.$store.dispatch('saveCurSurvey', this.$store.state.curSurvey.survey)
+      this.$emit('remove', this.subject)
+      // this.$store.commit('deleteCurSurveySubject', this.subject)
+      // this.$store.dispatch('saveCurSurvey', this.$store.state.curSurvey.survey)
     }
   }
 }
@@ -53,7 +57,19 @@ export default {
 @import "../../../static/base.less";
 
 .weui-flex {
-  background-color: @background-color+#050505;
-  padding-top: 20rpx;
+  background-color: #fff;
+  /*padding-top: 20rpx;*/
+  display: flex;
+  height: 40px;
+  border-top: 1px solid #d8d8d8;
 }
+  .weui-flex__item{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .border-right{
+    border-right: 1px solid #d8d8d8;
+  }
 </style>

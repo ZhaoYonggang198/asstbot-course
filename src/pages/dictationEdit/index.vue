@@ -52,7 +52,7 @@
           <scroll-view scroll-y class="dic-edit-scroll" :scroll-into-view="scrollTop" style="height: 100%" >
             <view class="dic-edit-text-container">
               <view class="dic-edit-text-inner"  :id="'scrollTop' + (dicWords.length - index)" v-for="(text, index) in dicWords" :key="index">
-                <view class="dic-edit-index">{{dicWords.length - index}}</view>
+                <view class="dic-edit-index">{{dicWords.length&&(dicWords.length - index)}}</view>
                 <dictation-word :content="text" :playState="playState[index]" :index="index" @deleteText="deleteText(index)" @changePinyin="changePinyin($event, index)" @playPinyin="playPinyin($event, index)" @stopPinyin="stopPinyin($event, index)"/>
               </view>
             </view>

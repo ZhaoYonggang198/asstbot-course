@@ -1,6 +1,6 @@
 <template>
     <view class="anwser-container">
-      <view class="checkbox anwser-item" v-for="(answer, index) in answers" :key="index">
+      <view class="checkbox anwser-item" :class="{'anwser-item-no-border': index === 0}" v-for="(answer, index) in answers" :key="index">
         <block v-if="type=='radio'">
           <view class="anwser-check-icon">
             <icon class="weui-icon-checkbox_success" type="success" size="23" color="grey" v-if="surveyType==='exam'&&answer.correct"></icon>
@@ -209,13 +209,14 @@ view {
   /*margin-left: 20rpx;*/
   position: relative;
   padding: 0 30rpx;
+  height: 40px;
 }
 .anwser-item:after{
   content: '';
   position: absolute;
-  border-bottom:1rpx solid #dadada;
+  border-bottom:1rpx solid #d8d8d8;
   left: 30rpx;
-  bottom:0;
+  top:0;
   width: 100%;
   height: 0;
 }
@@ -240,6 +241,8 @@ view {
 .add-answer-box:before{
   border-top: none;
 }
-
+.anwser-item-no-border:after{
+  border: none;
+}
 
 </style>

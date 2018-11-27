@@ -1,6 +1,9 @@
+<view class="imageContainer">
 <image bindlongpress="previewImage"
     mode="widthFix"
     class="image"
     src="{{content}}"
     mode="{{imgMode}}"
     bindload="loadDone"/>
+</view>
+

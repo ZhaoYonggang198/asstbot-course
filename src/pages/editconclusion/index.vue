@@ -30,9 +30,32 @@
               </view>
           </view>
         </block>
+        <block v-if="survey.type=='quiz'">
+          <view class="weui-cell">
+            <view class="weui-cell__hd">
+              <view class="weui-label">最少得分</view>
+            </view>
+            <view class="weui-cell__bd">
+
+            </view>
+            <view class="weui-cell__ft">
+              <input type="text" placeholder="请输入分值" @confirm="changeQuizMinNumber" @blur="changeQuizMinNumber">
+            </view>
+          </view>
+          <view class="weui-cell">
+            <view class="weui-cell__hd">
+              <view class="weui-label">最多得分</view>
+            </view>
+            <view class="weui-cell__bd">
+            </view>
+            <view class="weui-cell__ft">
+              <input type="text" placeholder="请输入分值" @confirm="changeQuizMaxNumber" @blur="changeQuizMaxNumber">
+            </view>
+          </view>
+        </block>
         <view class="weui-cell">
           <view class="weui-cell__bd">
-            <textarea class="weui-textarea" @input="updateTitleValue" placeholder="请输入结论" :value="conclusion.text" style="height: 3.3em" />
+            <textarea class="weui-textarea" maxlength="300" @input="updateTitleValue" placeholder="请输入结论" :value="conclusion.text" style="height: 3.3em" />
           </view>
         </view>
         <view class="weui-cell">
@@ -187,6 +210,12 @@ export default {
     },
     changeMaxNumber (event) {
       this.conclusion.scoreRange.max = event.number
+    },
+    changeQuizMinNumber (e) {
+      this.conclusion.scoreRange.min = parseInt(e.mp.detail.value)
+    },
+    changeQuizMaxNumber (e) {
+      this.conclusion.scoreRange.max = parseInt(e.mp.detail.value)
     },
     verifyConclusion () {
       this.isLegal = (this.conclusion.text !== '' || this.conclusion.imageUrl !== '')
