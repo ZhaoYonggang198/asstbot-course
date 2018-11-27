@@ -1,13 +1,20 @@
 <template>
   <view>
-    <view class="modal-new-skill-tip-container" @click="hideModal" v-if="showFootNew" ref="aaa" id="aaa">
+    <view class="modal-new-skill-tip-container" v-if="showFootNew || hideFootNew" ref="aaa" id="aaa">
 
     </view>
     <view class="modal-new-skill-tip" v-if="showFootNew" ref="bbb" id="bbb">
       <view class="global-modal-container">
         <view class="tri-bottom"></view>
-        <view style="font-size: 16px">{{content}}</view>
-        <view class="iknow" @click="hideModal">我知道了</view>
+        <view style="font-size: 16px">点击➕号，查看我的更多本领</view>
+        <view class="iknow" @click="hideModal('showFootNew')">我知道了</view>
+      </view>
+    </view>
+    <view class="modal-new-skill-tip" v-if="hideFootNew" ref="bbb" id="bbb">
+      <view class="global-modal-container">
+        <view class="tri-bottom"></view>
+        <view style="font-size: 16px">点击✖️号，关闭我的本领</view>
+        <view class="iknow" @click="hideModal('hideFootNew')">我知道了</view>
       </view>
     </view>
   </view>
@@ -17,7 +24,8 @@
   export default {
     data () {
       return {
-        showFootNew: false
+        showFootNew: false,
+        hideFootNew: false
       }
     },
     props: {
@@ -29,27 +37,44 @@
         type: String,
         default: 'start'
       },
-      content: {
-        type: String,
-        default: ''
-      },
       show: {
         type: Boolean,
         default: false
+      },
+      showModalOrder: {
+        type: Array,
+        default: [
+          {
+            value: '',
+            copyRight: false,
+            next: ''
+          }
+        ]
       }
     },
     computed: {
+      aa () {
+        if (this.showModalOrder && this.showModalOrder.length) {
+          const item = this.showModalOrder[0]
+          if (item.copyRight) {
+            this[item.value] = true
+          } else {
+            this[item.value] = (wx.getStorageSync(item.value) === undefined || wx.getStorageSync(item.value) === '') ? true : wx.getStorageSync(item.value)
+          }
+        }
+      }
     },
     methods: {
-      hideModal () {
-        console.log(this)
-        wx.setStorageSync('showFootNew', false)
-        this.showFootNew = false
-        console.log(this.showFootNew)
+      hideModal (value) {
+        const item = this.showModalOrder.find(item => item.value === value)
+        wx.setStorageSync(value, false)
+        this[value] = false
+        if (item.next) {
+          this[item.next] = true
+        }
       }
     },
     onLoad () {
-      this.showFootNew = (wx.getStorageSync('showFootNew') === undefined || wx.getStorageSync('showFootNew') === '') ? true : wx.getStorageSync('showFootNew')
     }
   }
 </script>
@@ -104,4 +129,3 @@
     line-height:32px;
   }
 </style>
-

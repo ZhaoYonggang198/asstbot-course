@@ -1,6 +1,6 @@
 <template>
   <form report-submit="true" @submit="saveFormId" class="footer" style="width: 100vw;display: block">
-    <trmpModal content="点击➕号，查看我的更多本领"/>
+    <trmpModal :showModalOrder="showModalOrder"/>
     <view class="weui-flex primary-color light">
       <view class="placeholder" @click="hideBottomBox">
         <button class="input-widget form-control primary-color" size="small" @click="changeToVoiceMode" v-if="!voiceMode">
@@ -85,7 +85,8 @@ export default {
       voiceMode: false,
       pullUp: false,
       showBottomBar: false,
-      keyBoardHeight: '0px'
+      keyBoardHeight: '0px',
+      showModalOrder: []
     }
   },
   computed: {
@@ -193,21 +194,6 @@ export default {
         this.$emit('keyboardUp', e.mp.detail.height)
       }
       this.showBottomBar = false
-      // const that = this
-      // wx.getSystemInfo({
-      //   success: function (res) {
-      //     let dom = wx.createSelectorQuery().select('#bottom').boundingClientRect()
-      //     dom.exec(function (resp) {
-      //       if (res.screenHeight - resp[0].bottom - 40 > e.mp.detail.height) {
-      //         that.pullUp = false
-      //         that.$emit('keyBoardUp', e.mp.detail.height * 2 + 'rpx')
-      //       } else {
-      //         that.pullUp = true
-      //         that.$emit('keyBoardUp', '0rpx')
-      //       }
-      //     })
-      //   }
-      // })
     },
     textBlur (e) {
       this.pullUp = false
@@ -240,6 +226,15 @@ export default {
     showBottomBox () {
       this.showBottomBar = !this.showBottomBar
       this.keyBoardHeight = this.showBottomBar ? '170px' : '0px'
+      if (!this.showBottomBar) {
+        this.showModalOrder = [
+          {
+            value: 'showFootNew',
+            copyRight: false,
+            next: ''
+          }
+        ]
+      }
       // setTimeout(() => {
       //   this.$emit('scollToBottom')
       // }, 500)
@@ -259,6 +254,18 @@ export default {
   },
   onLoad () {
     this.changeVoiceMode(false)
+    if (!this.userAuthed) {
+      this.showBottomBar = true
+      this.keyBoardHeight = '170px'
+      this.showModalOrder = [
+        {
+          value: 'hideFootNew',
+          mode: 'oneByOne',
+          copyRight: false,
+          next: ''
+        }
+      ]
+    }
   }
 }
 </script>

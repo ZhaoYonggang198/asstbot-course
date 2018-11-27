@@ -43,7 +43,7 @@
             新词
           </view>
           <!--<input class="dic-edit-add" v-if="dictation.words.length>0" @blur="setNew" @confirm="setNew" @focus="focus" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">-->
-          <input class="dic-edit-add" @blur="setNew" @confirm="setNew" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="请输入新的词语，按下一项添加" placeholder-style="color: #999" ref="newWord">
+          <input class="dic-edit-add" @blur="setNew" @confirm="setNew" confirm-hold confirm-type="next" type="text" :value="newWord" placeholder="输入词语，按键盘下一项添加" placeholder-style="color: #999" ref="newWord">
           <!--<view class="add-icon">-->
             <!--<icon-com type="add" size="20" color="#333"/>-->
           <!--</view>-->
@@ -187,6 +187,10 @@
               }
             })
           } else {
+            wx.showLoading({
+              title: '提交中...',
+              mask: true
+            })
             let newWordArr = []
             if (this.newWord) {
               newWordArr = [...this.newWord.replace(/，/g, ',').split(',')]
@@ -216,17 +220,20 @@
                     this.newWord = ''
                     this.activeDictation = JSON.parse(JSON.stringify(this.dictation))
                     clickFlag = true
+                    wx.hideLoading()
                   }).catch(err => {
                     clickFlag = true
                     console.log(err)
                     wx.showToast({
                       title: '添加失败'
                     })
+                    wx.hideLoading()
                   })
                 })
               })
             } else {
               clickFlag = true
+              wx.hideLoading()
             }
           }
         }
@@ -237,6 +244,7 @@
       editDictation: function (newVal, value) {
         if (clickFlag1) {
           clickFlag1 = false
+          console.log('show loading')
           switch (value) {
             case 'title':
               if (this.title === newVal) {
