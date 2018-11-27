@@ -48,7 +48,6 @@
             </view>
           </block>
         </view>
-        <view id="bottomMaxBottom"></view>
       </scroll-view>
       <scroll-view scroll-y="true" :scroll-top="skillPosition" v-if="skillListShow" style="height: 100%" id="skill-list">
         <view class="skill-list-wrapper">
@@ -64,8 +63,8 @@
       <record-status/>
       <select-box v-if="displayFinish" :messageAction="activeBoxMsg" @donateclick="donateclick"/>
       <command-area @msgSendStatus="handleMsgSendStatus"
-          :inputPromt="activeInputPromtMsg" :bottomContainer="footSkillArr"
-          :displayFinish="displayFinish" @keyboardUp="keyboardUp" @keyboardDown="keyboardDown" @scollToBottom="scrollToBottom1"
+          :inputPromt="activeInputPromtMsg" :bottomContainer="footSkillArr" :messageSource="messageSource"
+          :displayFinish="displayFinish" @keyboardUp="keyboardUp" @keyboardDown="keyboardDown"
           :needFocus="messageList.length>5"/>
     </view>
     <donate v-if="inDonating" @closeDonate="closeDonate"/>
@@ -314,16 +313,6 @@ export default {
     },
     renderUpdate () {
       this.scollToBottom()
-    },
-    scrollToBottom1 () {
-      console.log(12121212)
-      const that = this
-      this.scrollToView = ''
-      that.scrollToView = 'bottomMaxBottom'
-      setTimeout(function () {
-        that.scrollToView = ''
-        that.scrollToView = 'bottomMaxBottom'
-      }, 200)
     },
     scollToBottom () {
       const that = this

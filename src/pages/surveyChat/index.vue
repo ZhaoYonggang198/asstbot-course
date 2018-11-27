@@ -9,7 +9,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import chatPage from '@/components/chatPage/chatPageSurvey'
+import chatPage from '@/components/chatPage/chatPage'
 
 export default {
   data () {
