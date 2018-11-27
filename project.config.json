@@ -77,8 +77,8 @@
 				{
 					"id": 5,
 					"name": "调查问卷",
-					"pathName": "pages/surveySubjects/main",
-					"query": "id=0610ca30ed8f11e896126ddb40ecacc7",
+					"pathName": "pages/surveyChat/main",
+					"query": "id=063dadb0a75e11e8ae8a0d337c23ec9c",
 					"scene": "1008"
 				},
 				{
