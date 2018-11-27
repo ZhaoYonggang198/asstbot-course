@@ -10,28 +10,35 @@
             <scroll-view scroll-y='true' style="height: 100%">
               <view v-if="activeIndex == 0">
                 <view v-for="(subject, i) in subjects" :key="i" class="subject-wrapper" :class="ativeSubjectIndex===i?'active-subject':''">
-                  <view @click="toggleSubject(i)">
-                    <view class="weui-cells weui-cells_after-title clear-border" style="border-bottom:1rpx solid #dadada">
-                      <view class="weui-cell weui-cell_input subject-area subject-style font-size">
-                        <view class="weui-cell__hd subject-item-style flex-1">
-                          <view class="weui-label subject-title-style">题目 {{i+1}}</view>
-                        </view>
-                        <view class="weui-cell__ft subject-item-style">
-                          <view class="subject-hieght-line">{{typeNames[i]}}</view>
-                        </view>
-                      </view>
-                    </view>
+                  <view @click="toSurveyEdit(i)">
+                    <!--<view class="weui-cells weui-cells_after-title clear-border" style="border-bottom:1rpx solid #dadada">-->
+                      <!--<view class="weui-cell weui-cell_input subject-area subject-style font-size">-->
+                        <!--<view class="weui-cell__hd subject-item-style flex-1">-->
+                          <!--<view class="weui-label subject-title-style">题目 {{i+1}}</view>-->
+                        <!--</view>-->
+                        <!--<view class="weui-cell__ft subject-item-style">-->
+                          <!--<view class="subject-hieght-line">{{typeNames[i]}}</view>-->
+                        <!--</view>-->
+                      <!--</view>-->
+                    <!--</view>-->
 
-                    <da-text :content="subject.question"></da-text>
+                    <!--<da-text :content="subject.question"></da-text>-->
+                    <view class="survey-item-title-container">
+                      <!--<icon class="survey-item-delete" type='cancel' size='20' color='#333' @click.stop="remove(i, subject.question)"></icon>-->
+                      <view class="survey-item-one survey-item-index">{{i+1}}</view>
+                      <view class="survey-item-one survey-item-type">【{{typeNames[i]}}】</view>
+                      <view class="survey-item-one survey-item-content">{{subject.question}}</view>
+                    </view>
 
                     <daVideoForList v-if="subject.urlType=='video'" :poster="subject.mediaInfo?subject.mediaInfo.poster:''"/>
                     <daAudio v-else-if="subject.urlType=='audio'" :url="subject.imageUrl" :data="subject"/>
                     <da-image v-else :url="subject.imageUrl"/>
                     <da-answer :subjectIndex="i" :type="subject.type" :surveyType="type"></da-answer>
                   </view>
-                  <view :id="'subject-operation-'+i">
-                    <subject-operation :subject="i" v-if="ativeSubjectIndex===i" @actionDone="ativeSubjectIndex=-1"/>
-                  </view>
+                  <!--<view :id="'subject-operation-'+i">-->
+                    <!--<subject-operation :subject="i" v-if="ativeSubjectIndex===i" @actionDone="ativeSubjectIndex=-1"/>-->
+                  <!--</view>-->
+                  <subject-operation :subject="i" @remove="remove($event, subject.question)"/>
                 </view>
                 <view class="weui-cells weui-cells_after-title clear-border">
                   <view class="weui-cell">
@@ -42,15 +49,14 @@
               </view>
 
               <view v-if="activeIndex == 1">
-                <view v-for="(conclusion, i) in conclusions" :key="conclusion" :class="activeConclusionIndex===i?'active-conclusion':''">
-                  <view @click="toggleConclusion(i)">
+                <view v-for="(conclusion, i) in conclusions" :key="conclusion" :class="activeConclusionIndex===i?'active-conclusion':''" style="margin-bottom: 10px">
+                  <view @click="toEditConclusion(i)">
                     <conclusion :surveyType="survey.type" :conclusion="conclusion" :index="i"/>
                   </view>
-                  <view :id="'conclusion-operation-'+i">
-                    <conclusion-operation :conclusion="i" v-if="activeConclusionIndex===i" @actionDone="activeConclusionIndex=-1"/>
-                  </view>
+                  <!--<view :id="'conclusion-operation-'+i">-->
+                    <!--<conclusion-operation :conclusion="i" v-if="activeConclusionIndex===i" @actionDone="activeConclusionIndex=-1"/>-->
+                  <!--</view>-->
                 </view>
-                <view class="subject-divider"></view>
                 <view class="weui-cells weui-cells_after-title clear-border" v-if="survey.type=='exam'||survey.type=='quiz'||conclusions.length == 0">
                   <view class="weui-cell">
                     <view class="weui-cell__ft" @click="addConclusion"><i class="icon iconfont icon-add"></i></view>
@@ -79,6 +85,7 @@
         </view>
       </view>
     </view>
+    <delete-modal v-if="showDelModal" @dicItemDel="surveyItemDel" @hideModal="hideModal" :content="surveyDeleteItem"/>
   </movable-area>
 </template>
 
@@ -110,7 +117,9 @@ export default {
       textareaShowArray: [],
       source: 'main',
       ativeSubjectIndex: -1,
-      activeConclusionIndex: -1
+      activeConclusionIndex: -1,
+      surveyDeleteItem: {},
+      showDelModal: false
     }
   },
   computed: {
@@ -253,6 +262,33 @@ export default {
             url: `/pages/surveyChat/main?id=${this.survey.id}&scene=test`
           })
         })
+    },
+    toSurveyEdit (i) {
+      wx.navigateTo({
+        url: `/pages/editsubject/main?subject=${i}&action=edit`
+      })
+    },
+    remove (i, item) {
+      this.surveyDeleteItem = {
+        id: i,
+        title: item
+      }
+      this.showDelModal = true
+    },
+    surveyItemDel () {
+      this.$store.commit('deleteCurSurveySubject', this.surveyDeleteItem.id)
+      this.$store.dispatch('saveCurSurvey', this.$store.state.curSurvey.survey)
+      this.hideModal()
+    },
+    hideModal () {
+      this.surveyDeleteItem = {
+      }
+      this.showDelModal = false
+    },
+    toEditConclusion (i) {
+      wx.navigateTo({
+        url: `/pages/editconclusion/main?conclusion=${i}&action=edit`
+      })
     }
   },
 
@@ -382,4 +418,24 @@ export default {
 .active-subject, .active-conclusion {
   border: solid 2rpx @s-color
 }
+  .survey-item-title-container{
+    padding: 10px 15px;
+    background: #fff;
+    border-bottom: 1px solid #d8d8d8;
+  }
+  .survey-item-one{
+    display: inline;
+  }
+  .survey-item-index{
+    color: #666666;
+  }
+  .survey-item-type{
+    color: #666666;
+  }
+  .survey-item-content{
+    font-size: 14px;
+  }
+  .survey-item-delete{
+    float: right;
+  }
 </style>

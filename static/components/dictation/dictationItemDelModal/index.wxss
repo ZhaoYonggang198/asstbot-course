@@ -26,6 +26,10 @@
 }
 .modal-content{
     padding:10px 15px;
+    min-height: 60px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }
 .modal-footer{
     display:flex;

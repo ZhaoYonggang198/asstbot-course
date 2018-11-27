@@ -31,6 +31,7 @@
   .image-wrapper{
     text-align: center;
     font-size: 0;
+
   }
   .videoBox{
     position: fixed;

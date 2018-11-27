@@ -37,7 +37,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": 5,
 			"list": [
 				{
 					"id": 1,
@@ -75,10 +75,10 @@
 					"scene": "1008"
 				},
 				{
-					"id": 7,
+					"id": 5,
 					"name": "调查问卷",
-					"pathName": "pages/surveySubjects/main",
-					"query": "id=0a930f608f4711e8822ad1da1f2cded4",
+					"pathName": "pages/surveyChat/main",
+					"query": "id=063dadb0a75e11e8ae8a0d337c23ec9c",
 					"scene": "1008"
 				},
 				{

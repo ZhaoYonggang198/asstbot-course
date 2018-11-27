@@ -19,10 +19,11 @@
   }
   .textarea-text{
     width:100%;
-    line-height:64rpx;
+    line-height:30px;
     display:block;
     padding-left:30rpx;
     padding-right: 10rpx;
     box-sizing:border-box;
+    min-height: 40px;
   }
 </style>
