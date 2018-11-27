@@ -1,6 +1,6 @@
 <template>
   <form report-submit="true" @submit="saveFormId" class="footer" style="width: 100vw;display: block">
-    <trmpModal content="点击➕号，查看我的更多本领"/>
+    <trmpModal content="点击➕号，查看我的更多本领" v-if="messageSource === 'creator'"/>
     <view class="weui-flex primary-color light">
       <view class="placeholder" @click="hideBottomBox">
         <button class="input-widget form-control primary-color" size="small" @click="changeToVoiceMode" v-if="!voiceMode">
@@ -16,23 +16,22 @@
           :maxlength="textLength" :placeholder="placehodlerText" :type="textType"
           confirm-type="send" confirm-hold="true"
           @input="valueInput" @confirm="confirm" @focus="textFocus" @blur="textBlur"/>
-
         </view>
         <view class="weui-flex__item" v-else>
           <record-button @msgSendStatus="msgSendStatus"></record-button>
         </view>
       </block>
     <view class="placeholder">
-      <!--<button class="input-widget form-control secondary-color buttonSend" size="small" formType="submit" :disabled="(currentMessage=='') && !items.length">-->
-        <!--<i class="icon iconfont icon-arrows"></i>-->
-      <!--</button>-->
-      <button class="input-widget form-control buttonSend primary-color" size="small" formType="submit" @click.stop="showBottomBox">
+      <button class="input-widget form-control secondary-color buttonSend" size="small" formType="submit" :disabled="(currentMessage=='') && !items.length" v-if="messageSource === 'surveyBot'">
+        <i class="icon iconfont icon-arrows"></i>
+      </button>
+      <button v-else class="input-widget form-control buttonSend primary-color" size="small" formType="submit" @click.stop="showBottomBox">
         <i v-if="!showBottomBar" class="icon iconfont icon-add"></i>
         <i v-else class="icon iconfont icon-close"></i>
       </button>
     </view>
     </view>
-    <view class="foot-bottom-bar" :style="{height: keyBoardHeight}">
+    <view class="foot-bottom-bar" :style="{height: keyBoardHeight}" v-if="messageSource === 'creator'">
       <swiper style="height: 100%;" :indicator-dots="bottomContainer.length > 1? true : false">
         <block v-for="(item, index) in bottomContainer" :key="index">
           <swiper-item class="swiper-container">
@@ -144,6 +143,10 @@ export default {
     bottomContainer: {
       type: Array,
       default: []
+    },
+    messageSource: {
+      type: String,
+      default: ''
     }
   },
   watch: {
@@ -179,7 +182,11 @@ export default {
       }
     },
     saveFormId (ev) {
-      formId.save(ev.mp.detail.formId)
+      if (this.messageSource === 'creator') {
+        formId.save(ev.mp.detail.formId)
+      } else {
+        this.sendMessage(ev)
+      }
     },
     confirm (e) {
       if (e.mp.detail.value) {
@@ -249,16 +256,10 @@ export default {
     showBottomBox () {
       this.showBottomBar = !this.showBottomBar
       this.keyBoardHeight = this.showBottomBar ? '170px' : '0px'
-      // setTimeout(() => {
-      //   this.$emit('scollToBottom')
-      // }, 500)
     },
     hideBottomBox () {
       this.showBottomBar = false
       this.keyBoardHeight = '0px'
-      // setTimeout(() => {
-      //   this.$emit('scollToBottom')
-      // }, 500)
     },
     selectItem (obj) {
       this.$store.dispatch('sentRadioReply', {...obj, value: obj.value ? obj.value : obj.caption})
