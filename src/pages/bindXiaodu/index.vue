@@ -4,7 +4,7 @@ view(class="page")
   bind-speaker(title="关联小度音箱" 
         deviceType="dueros"
         unbindHint="你还没有和小度音箱关联"
-        bindedHint="你已经绑定成功，快到小程序里配置课程表吧"
+        bindedHint="你已经绑定成功"
         :bindSteps="bindSteps")
   //- view(class="weui-cells weui-cells_after-title")
   //-   navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/xiaoduhelp/main")

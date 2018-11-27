@@ -4,7 +4,7 @@ view(class="page")
   bind-speaker(title="关联小爱音箱" 
         deviceType="xiaoai"
         unbindHint="你还没有和小爱音箱关联"
-        bindedHint="你已经绑定成功，快到小程序里配置课程表吧"
+        bindedHint="你已经绑定成功"
         :bindSteps="bindSteps")
     
 </template>

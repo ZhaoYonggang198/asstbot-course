@@ -4,7 +4,7 @@ view(class="page")
   bind-speaker(title="关联华为音箱" 
         deviceType="huawei"
         unbindHint="你还没有和华为音箱关联"
-        bindedHint="你已经绑定成功，快到小程序里配置课程表吧"
+        bindedHint="你已经绑定成功"
         :bindSteps="bindSteps")
     
 </template>
