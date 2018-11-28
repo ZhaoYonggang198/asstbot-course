@@ -255,9 +255,9 @@ export default {
   },
   onLoad () {
     this.changeVoiceMode(false)
+    this.showBottomBar = true
+    this.keyBoardHeight = '170px'
     if (!this.userAuthed) {
-      this.showBottomBar = true
-      this.keyBoardHeight = '170px'
       this.showModalOrder = [
         {
           value: 'hideFootNew',
