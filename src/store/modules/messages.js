@@ -120,13 +120,29 @@ var _impleSendmessage = (commit, id, type, data) => {
   }
   commit('appendMessage', message)
   return new Promise((resolve, reject) => {
-    console.log(data)
     wx.request({
       url,
       data: message,
       method: 'POST',
       success: (response) => {
-        commit('appendMessage', response.data)
+        let res = response.data
+        let data = []
+        if (response.data.msgs && response.data.msgs.length) {
+          response.data.msgs.map(item => {
+            if (item.type === 'multi-text') {
+              item.items.map(msg => {
+                data.push({
+                  reply: msg,
+                  type: 'text'
+                })
+              })
+            } else {
+              data.push(item)
+            }
+          })
+        }
+        res.msgs = data
+        commit('appendMessage', res)
         resolve(response)
       },
       fail: (err) => {
