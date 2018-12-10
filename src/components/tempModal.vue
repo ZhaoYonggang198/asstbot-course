@@ -1,16 +1,16 @@
 <template>
   <view>
-    <view class="modal-new-skill-tip-container" v-if="showFootNew || hideFootNew" ref="aaa" id="aaa">
+    <view class="modal-new-skill-tip-container" v-if="showFootNew || hideFootNew">
 
     </view>
-    <view class="modal-new-skill-tip" v-if="showFootNew" ref="bbb" id="bbb">
+    <view class="modal-new-skill-tip" v-if="showFootNew">
       <view class="global-modal-container">
         <view class="tri-bottom"></view>
         <view style="font-size: 16px">点击➕号，查看我的更多本领</view>
         <view class="iknow" @click="hideModal('showFootNew')">我知道了</view>
       </view>
     </view>
-    <view class="modal-new-skill-tip" v-if="hideFootNew" ref="bbb" id="bbb">
+    <view class="modal-new-skill-tip" v-if="hideFootNew">
       <view class="global-modal-container">
         <view class="tri-bottom"></view>
         <view style="font-size: 16px">点击✖️号，关闭我的本领</view>
