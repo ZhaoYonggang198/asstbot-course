@@ -3,7 +3,7 @@
  */
 
 // 此处主机域名修改成腾讯云解决方案分配的域名
-import config from './config.js'
+import config from '@/config.js'
 const host = config.service.host
 
 export default {
