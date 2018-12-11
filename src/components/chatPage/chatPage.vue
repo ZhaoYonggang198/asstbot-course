@@ -142,7 +142,7 @@ export default {
       if (val !== 'idle') {
         audioReply.stop()
         this.ttsPlaying = false
-        this.toDoRedirect()
+        // this.toDoRedirect()
       }
     },
     localMsgSending: function (val) {
