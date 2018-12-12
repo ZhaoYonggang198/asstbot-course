@@ -1,6 +1,9 @@
-const surveyResultUrl = 'https://xiaodamp.cn/asstbot/survey/result'
-const surveyUrl = 'https://xiaodamp.cn/asstbot/survey'
-const surveyStatisticUrl = 'https://xiaodamp.cn/asstbot/survey/statistic'
+import config from '@/config.js'
+const host = config.service.host
+
+const surveyResultUrl = host + '/asstbot/survey/result'
+const surveyUrl = host + '/asstbot/survey'
+const surveyStatisticUrl = host + '/asstbot/survey/statistic'
 
 const state = {
   result: [],

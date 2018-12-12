@@ -25,12 +25,9 @@
       </view>
     </view>
     <view class="dic-footer">
-      <!--<view class="btn-footer" @click="playPreBack"><image class="play-icon icon-pre" src="https://xiaodamp.com/imbot/image/49add8b0-e0e6-11e8-b6e5-79c4537af773.png"></image></view>-->
       <view class="btn-footer" @click="playPreBack"><icon class="icon iconfont icon-return icon-footer-btn"></icon></view>
-      <view class="btn-footer btn-center" v-if="playState" @click="play"><image class="play-icon icon-play-1" src="https://xiaodamp.com/imbot/image/43be6050-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
-      <view class="btn-footer btn-center" v-else @click="stopBackAudio"><image class="play-icon" src="https://xiaodamp.com/imbot/image/3ebcca60-e0e6-11e8-b6e5-79c4537af773.png"></image></view>
-      <!--<view class="btn-footer btn-center" @click="rePlay">重播</view>-->
-      <!--<view class="btn-footer" @click="playNextBack"><image class="play-icon icon-aft" src="https://xiaodamp.com/imbot/image/398a1250-e0e6-11e8-b6e5-79c4537af773.png"></image></view>-->
+      <view class="btn-footer btn-center" v-if="playState" @click="play"><image class="play-icon icon-play-1" src="https://xiaodamp.cn/resource/mp/play.png"></image></view>
+      <view class="btn-footer btn-center" v-else @click="stopBackAudio"><image class="play-icon" src="https://xiaodamp.cn/resource/mp/pause.png"></image></view>
       <view class="btn-footer" @click="playNextBack"><icon class="icon iconfont icon-enter icon-footer-btn"></icon></view>
     </view>
   </view>

@@ -25,7 +25,7 @@
       <view class = "weui-cells__title"> 答卷列表：</view>
       <view class="content">
         <scroll-view scroll-y="true" class="responsor-list weui-cells weui-cells_after-title">
-          <navigator v-for="item in surveySummary" :url="survey.type==='quiz' ? '' : '../detail/main?resultId='+item.id+'&type=ask&score='+item.score" :key="item" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <navigator v-for="item in surveySummary" :url="'../detail/main?resultId='+item.id+'&type=ask&score='+item.score" :key="item" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__hd">
               <image :src="item.avatarUrl" class = "user-avator-icon" ></image>
             </view>

@@ -9,6 +9,7 @@ var hostRoot = `${host}/asst`
 
 export default {
   service: {
+    host,
     hostRoot,
     // 登录地址，用于建立会话
     messageUrl: `${hostRoot}/chatbot`,
