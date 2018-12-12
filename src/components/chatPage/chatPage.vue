@@ -98,7 +98,8 @@ const urlMaping = {
   'dueros-has-screen': '/pages/xiaoduhelp/main',
   'dingdong-no-screen': '/pages/jdSkillList/main',
   'huawei-no-screen': '/pages/bindHuawei/main',
-  'lucky-draw': '/pages/lottery/main'
+  'lucky-draw': '/pages/lottery/main',
+  'aligenie-no-screen': '/pages/bindTianmao/main'
 }
 
 export default {

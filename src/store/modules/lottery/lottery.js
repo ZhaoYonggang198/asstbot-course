@@ -36,7 +36,7 @@ const actions = {
           method: 'GET',
           success: (res) => {
             commit('updateScore', res.data.data)
-            resolve()
+            resolve(res.data.data)
           },
           fail: (err) => {
             reject(err)

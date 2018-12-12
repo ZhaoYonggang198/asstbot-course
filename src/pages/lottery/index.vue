@@ -37,7 +37,7 @@
     </view>
     <view class='prize'>
       <view class='level'>三等奖</view>
-      <view class='desc'>100积分</view>
+      <view class='desc'>积分</view>
     </view>
   </view>
   <view class='prize-list'>
@@ -108,15 +108,15 @@ export default {
     rotateTimer: {},
     animation: {},
     animationData: {},
-    awardHistoryShow: false
+    awardHistoryShow: false,
+    remainScore: 0
   },
   computed: {
     conText () {
-      const texts = ['很遗憾，你没有中奖，下次再来吧', '你获得了一台小度在家音箱', '你获得了一台小度智能音箱', '你获得了三等奖']
+      const texts = ['很遗憾，你没有中奖，下次再来吧', '你获得了一台小度在家音箱', '你获得了一台小度智能音箱', `你获得了三等奖,获得积分`]
       return texts[this.grade]
     },
     ...mapState({
-      remainScore: state => state.lottery.remainScore,
       drawTimes: state => state.lottery.drawTimes,
       awardList: state => state.lottery.awardList
     })
@@ -148,7 +148,6 @@ export default {
       if (this.drawTimes > 0) {
         let that = this
         clearTimeout(this.rotateTimer)
-
         this.$store.dispatch('luckyDraw').then((result) => {
           that.grade = result.grand
           that.updateRotate()
@@ -157,7 +156,10 @@ export default {
             this.rotateTimer = setTimeout(() => {
               this.showCurrentAward()
               this.inRotate = false
+              this.updateScore()
             }, 3500)
+          } else {
+            this.updateScore()
           }
         })
       } else {
@@ -204,6 +206,11 @@ export default {
     prizeUser () {
       this.modalVisible = false
       this.$store.dispatch('prizeuser', {grand: this.grade, phone: this.phone})
+    },
+    updateScore () {
+      this.$store.dispatch('getScore').then(({remainScore}) => {
+        this.remainScore = remainScore
+      })
     }
   },
 
@@ -212,7 +219,7 @@ export default {
   },
 
   onLoad () {
-    this.$store.dispatch('getScore')
+    this.updateScore()
     this.$store.dispatch('getAwards')
     this.animation = wx.createAnimation({
       timingFunction: 'ease-in-out'

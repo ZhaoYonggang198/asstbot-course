@@ -20,6 +20,11 @@ view(class="page content")
     navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" :url="jingDongUrl")
       view(class="weui-cell__bd") 关联叮咚音箱（京东）
       view(class="weui-cell__ft weui-cell__ft_in-access")
+    navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/bindTianmao/main")
+      view(class="weui-cell__bd") 关联天猫精灵
+      view(class="weui-cell__ft weui-cell__ft_in-access")
+        block(v-if="aligenieBinded") 已关联
+        block(v-else) 未关联
 </template>
 
 <script>
@@ -37,7 +42,8 @@ export default {
     ...mapState({
       xiaoaiBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('xiaoai') !== -1),
       baiduBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('dueros') !== -1),
-      jingdongBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('dingdong') !== -1)
+      jingdongBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('dingdong') !== -1),
+      aligenieBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('aligenie') !== -1)
     })
   },
 
