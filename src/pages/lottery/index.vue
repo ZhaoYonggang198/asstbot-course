@@ -206,6 +206,7 @@ export default {
     prizeUser () {
       this.modalVisible = false
       this.$store.dispatch('prizeuser', {grand: this.grade, phone: this.phone})
+      this.$store.dispatch('getAwards')
     },
     updateScore () {
       this.$store.dispatch('getScore').then(({remainScore}) => {
