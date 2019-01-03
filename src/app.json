@@ -29,7 +29,8 @@
     "pages/jdSkillList/main",
     "pages/scoreDecl/main",
     "pages/bindHuawei/main",
-    "pages/bindTianmao/main"
+    "pages/bindTianmao/main",
+    "pages/bindXiaoaiPhone/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -52,6 +52,7 @@ view(class="page content")
     button(class="button" size="small" @click="toggleEditMode") 修改课表
     button(class="button" @click="toggleShareMode") 转发给...
     button(class="button" type="primary" @click="bindphone") 关联智能音箱
+    //- button(class="button" type="primary" @click="bindxiaoai") 关联小爱同学
   view(class="bottom-button" v-else-if="editmode")
     button(class="button" type="primary" @click="toggleEditMode") 完成修改
   view(class="bottom-button" v-else)
@@ -175,6 +176,11 @@ export default {
     bindphone () {
       wx.navigateTo({
         url: '/pages/smartSpeaker/main?skill=course-record'
+      })
+    },
+    bindxiaoai () {
+      wx.navigateTo({
+        url: '/pages/bindXiaoaiPhone/main'
       })
     },
     editCourse (day, interval, course) {

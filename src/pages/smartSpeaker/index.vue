@@ -25,6 +25,11 @@ view(class="page content")
       view(class="weui-cell__ft weui-cell__ft_in-access")
         block(v-if="aligenieBinded") 已关联
         block(v-else) 未关联
+    navigator(class="weui-cell weui-cell_access" hover-class="weui-cell_active" url="/pages/bindHuawei/main")
+      view(class="weui-cell__bd") 关联华为音箱
+      view(class="weui-cell__ft weui-cell__ft_in-access")
+        block(v-if="huaweiBinded") 已关联
+        block(v-else) 未关联
 </template>
 
 <script>
@@ -43,7 +48,8 @@ export default {
       xiaoaiBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('xiaoai') !== -1),
       baiduBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('dueros') !== -1),
       jingdongBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('dingdong') !== -1),
-      aligenieBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('aligenie') !== -1)
+      aligenieBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('aligenie') !== -1),
+      huaweiBinded: state => (state.userProfile.smartSpeakers.map(item => item.platType).indexOf('huawei') !== -1)
     })
   },
 
