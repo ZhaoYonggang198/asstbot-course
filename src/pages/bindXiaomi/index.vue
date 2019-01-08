@@ -1,9 +1,9 @@
 <template lang="pug">
 view(class="page")
-  title-bar(title="关联小爱音箱")
-  bind-speaker(title="关联小爱音箱" 
+  title-bar(title="关联小爱同学")
+  bind-speaker(title="关联小爱同学" 
         deviceType="xiaoai"
-        unbindHint="你还没有和小爱音箱关联"
+        unbindHint="你还没有和小爱同学关联"
         bindedHint="你已经绑定成功"
         :bindSteps="bindSteps")
     
@@ -18,6 +18,7 @@ export default {
     return {
       bindSteps: [
         '对小爱音箱说，"小爱同学，打开幸运数字"',
+        '或者在手机上唤醒小爱同学，对小爱同学说"打开幸运数字"',
         '在这里输入听到的5位幸运数字，并点击绑定'
       ]
     }
